@@ -13,7 +13,7 @@ export default function FormInput({
   return (
     <div className="control-group relative mb-5 flex flex-col">
       <label
-        className="control-label block text-secondary text-sm font-semibold mb-1 transition ease-in duration-300"
+        className="control-label block text-secondaryLight text-sm font-semibold mb-1 transition ease-in duration-300"
         htmlFor={label}>
         {labelTxt}
       </label>

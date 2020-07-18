@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.14.0",
     "autoprefixer": "^9.8.5",
     "next": "9.4.4",
     "postcss-import": "^12.0.1",

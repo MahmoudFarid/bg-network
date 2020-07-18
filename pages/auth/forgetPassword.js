@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import FormInput from './../components/forms/formInput'
+import FormInput from '../../components/forms/formInput'
 
 export default function forgetPassword() {
   const { register, errors, handleSubmit, formState } = useForm({
@@ -17,7 +17,7 @@ export default function forgetPassword() {
   return (
     <div>
       <div className="grid grid-cols-1 gap-0 md:grid-cols-2 xl:grid-cols-3">
-        <div className="mx-8 mt-20 z-10">
+        <div className="bg-white px-8 pt-20 z-10">
           <img src="/assets/logo.svg" alt="logo" className="w-1/3" />
           {isClick ? (
             <div>
@@ -60,7 +60,7 @@ export default function forgetPassword() {
           )}
         </div>
         <div className="absolute top-0 h-screen md:relative xl:col-span-2">
-          <Link href="/signup">
+          <Link href="signup">
             <a className="absolute right-0 inline-block mt-6 mr-20 py-4 w-4/12 rounded-full bg-primary text-white text-center z-10 focus:outline-none xl:w-2/12">
               Signup
             </a>

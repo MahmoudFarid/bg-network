@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import FormInput from './formInput'
+import Router from 'next/router'
 
 export default function LoginForm() {
   const { register, errors, handleSubmit, formState } = useForm({
@@ -10,6 +11,7 @@ export default function LoginForm() {
 
   const onSubmit = (data) => {
     console.log(data)
+    Router.push('/dashboard')
   }
 
   return (
@@ -43,8 +45,8 @@ export default function LoginForm() {
         Login
       </button>
 
-      <Link href="/forgetPassword">
-        <a className="inline-block text-secondary text-center text-xs font-semibold underline w-full mt-5 hover:text-primaryText focus:outline-none">
+      <Link href="auth/forgetPassword">
+        <a className="inline-block text-secondaryLight text-center text-xs font-semibold underline w-full mt-5 hover:text-primaryText focus:outline-none">
           Forget your password?
         </a>
       </Link>
