@@ -39,11 +39,6 @@ export default function Header() {
               <a
                 href="#responsive-header"
                 className="block mt-4 mr-8 font-semibold text-secondaryLight hover:text-primaryText lg:inline-block lg:mt-0">
-                Projects
-              </a>
-              <a
-                href="#responsive-header"
-                className="block mt-4 mr-8 font-semibold text-secondaryLight hover:text-primaryText lg:inline-block lg:mt-0">
                 Plans
               </a>
               <a
@@ -64,19 +59,19 @@ export default function Header() {
                   Notification
                 </span>
               </a>
-              <a
-                href="#responsive-header"
-                className="block relative mt-4 mr-8 lg:inline-block lg:mt-0">
-                <div className="inline-block mr-12">
-                  <img
-                    src="/assets/profile-pic.png"
-                    className="profile-img rounded-full h-10 w-10 absolute top-0"
-                  />
-                </div>
-                <span className="font-semibold text-secondaryLight hover:text-primaryText">
-                  Username
-                </span>
-              </a>
+              <Link href="/profile">
+                <a className="block relative mt-4 mr-8 lg:inline-block lg:mt-0">
+                  <div className="inline-block mr-12">
+                    <img
+                      src="/assets/profile-pic.png"
+                      className="profile-img rounded-full h-10 w-10 absolute top-0"
+                    />
+                  </div>
+                  <span className="font-semibold text-secondaryLight hover:text-primaryText">
+                    Username
+                  </span>
+                </a>
+              </Link>
               <a
                 href="#responsive-header"
                 className="inline-block text-gray-400 py-1 mt-4 mr-4 transition duration-500 ease-in-out hover:text-primaryText lg:mt-0">

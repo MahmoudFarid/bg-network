@@ -19,10 +19,10 @@ export default function Dashboard() {
             />
           </div>
           <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2">
-            <CompanyCard />
-            <CompanyCard />
-            <CompanyCard />
-            <CompanyCard />
+            <CompanyCard myCompany={true} />
+            <CompanyCard myCompany={true} />
+            <CompanyCard myCompany={true} />
+            <CompanyCard myCompany={true} />
           </div>
         </div>
 
@@ -48,7 +48,7 @@ export default function Dashboard() {
                   </Link>
                 </div>
                 <div>
-                  <p className="text-secondaryLight uppercase tracking-wide mb-2">Properties</p>
+                  <p className="text-secondaryLight uppercase tracking-wide mb-2">Units</p>
                   <Link href="/">
                     <a className="focus:outline-none">
                       <div className="flex justify-start items-center">
