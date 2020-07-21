@@ -1,9 +1,9 @@
-import ProjectCard from '../components/cards/projectCard'
+import ProjectCard from '../../components/cards/projectCard'
 
 export default function Projects() {
   return (
     <div className="container-fluid my-16">
-      <div className="flex justify-between mb-6">
+      <div className="flex justify-between mb-5">
         <h2 className="text-black font-bold text-lg">Projects</h2>
         <button className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none">
           <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>

@@ -9,11 +9,13 @@ export default function FormInput({
   placeholder,
   errorMsg,
   currentPass,
+  onKeyUp,
+  req,
 }) {
   return (
     <div className="control-group relative mb-5 flex flex-col">
       <label
-        className="control-label block text-secondaryLight text-sm font-semibold mb-1 transition ease-in duration-300"
+        className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300"
         htmlFor={label}>
         {labelTxt}
       </label>
@@ -26,6 +28,7 @@ export default function FormInput({
         name={label}
         autoComplete="off"
         placeholder={placeholder}
+        onKeyUp={onKeyUp}
         ref={
           type === 'email'
             ? register({
@@ -42,9 +45,7 @@ export default function FormInput({
                 required: true,
                 validate: (value) => value === currentPass || 'The passwords is not matching',
               })
-            : register({
-                required: true,
-              })
+            : register(req === false ? { required: false } : { required: true })
         }
       />
       <p className="text-red-500 text-sm italic font-semibold">

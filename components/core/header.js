@@ -32,18 +32,18 @@ export default function Header() {
             }`}>
             <div className="text-sm lg:flex-grow">
               <Link href="/companies">
-                <a className="block mt-4 mr-8 font-semibold text-secondaryLight hover:text-primaryText lg:inline-block lg:mt-0">
+                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
                   Companies
                 </a>
               </Link>
               <a
                 href="#responsive-header"
-                className="block mt-4 mr-8 font-semibold text-secondaryLight hover:text-primaryText lg:inline-block lg:mt-0">
+                className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
                 Plans
               </a>
               <a
                 href="#responsive-header"
-                className="block mt-4 mr-8 font-semibold text-secondaryLight hover:text-primaryText lg:inline-block lg:mt-0">
+                className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
                 Brockers
               </a>
             </div>
@@ -55,7 +55,7 @@ export default function Header() {
                   <i className="fas fa-bell fa-lg"></i>
                   <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
                 </span>
-                <span className="font-semibold text-secondaryLight block hover:text-primaryText lg:hidden">
+                <span className="font-semibold text-primaryLight block hover:text-primaryText lg:hidden">
                   Notification
                 </span>
               </a>
@@ -67,7 +67,7 @@ export default function Header() {
                       className="profile-img rounded-full h-10 w-10 absolute top-0"
                     />
                   </div>
-                  <span className="font-semibold text-secondaryLight hover:text-primaryText">
+                  <span className="font-semibold text-primaryLight hover:text-primaryText">
                     Username
                   </span>
                 </a>

@@ -32,7 +32,7 @@ export default function Dashboard() {
             <div className="bg-white p-5 rounded-lg">
               <div className="flex justify-start lg:justify-between">
                 <div className="w-1/2">
-                  <p className="text-secondaryLight uppercase tracking-wide mb-2">Companies</p>
+                  <p className="text-primaryLight uppercase tracking-wide mb-2">Companies</p>
                   <Link href="/companies">
                     <a className="focus:outline-none">
                       <div className="flex justify-start items-center">
@@ -48,7 +48,7 @@ export default function Dashboard() {
                   </Link>
                 </div>
                 <div>
-                  <p className="text-secondaryLight uppercase tracking-wide mb-2">Units</p>
+                  <p className="text-primaryLight uppercase tracking-wide mb-2">Units</p>
                   <Link href="/">
                     <a className="focus:outline-none">
                       <div className="flex justify-start items-center">
@@ -70,7 +70,7 @@ export default function Dashboard() {
             <div className="flex justify-between">
               <h2 className="text-black font-bold text-lg mb-2">Suggested Companies</h2>
               <Link href="/companies">
-                <a className="text-secondaryLight text-sm underline hover:text-primaryText focus:outline-none">
+                <a className="text-primaryLight text-sm underline hover:text-primaryText focus:outline-none">
                   View All
                 </a>
               </Link>

@@ -35,7 +35,7 @@ export default function CompanyCard({ myCompany }) {
               Talaat Mustafa
             </a>
           </Link>
-          <p className="text-secondaryLight text-xs tracking-wide font-semibold mb-4 mt-1">
+          <p className="text-primaryLight text-xs tracking-wide font-semibold mb-4 mt-1">
             Best city company development in egypt has over 300 project with overthan 3,000
             employees.
           </p>

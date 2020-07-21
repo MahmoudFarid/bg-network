@@ -1,3 +1,6 @@
+import Link from 'next/link'
+import Router from 'next/router'
+
 export default function ProjectCard({ profileId }) {
   return (
     <div className="relative">
@@ -9,9 +12,11 @@ export default function ProjectCard({ profileId }) {
         {profileId ? (
           <p className="text-white text-xl font-semibold">Skyline Complex</p>
         ) : (
-          <a href="#" className="text-white text-xl font-semibold block hover:underline">
+          <button
+            className="text-white text-xl font-semibold block hover:underline focus:outline-none"
+            onClick={() => Router.push('/projects/[pid]/units', '/projects/1/units')}>
             Skyline Complex
-          </a>
+          </button>
         )}
 
         <span className="text-gray-300 font-semibold text-sm">

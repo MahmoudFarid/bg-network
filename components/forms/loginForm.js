@@ -46,7 +46,7 @@ export default function LoginForm() {
       </button>
 
       <Link href="auth/forgetPassword">
-        <a className="inline-block text-secondaryLight text-center text-xs font-semibold underline w-full mt-5 hover:text-primaryText focus:outline-none">
+        <a className="inline-block text-primaryLight text-center text-xs font-semibold underline w-full mt-5 hover:text-primaryText focus:outline-none">
           Forget your password?
         </a>
       </Link>
