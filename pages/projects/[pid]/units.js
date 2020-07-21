@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import Filter from '../../../components/features/filter'
+import Overlay from './../../../components/features/overlay'
 import ProfileSideBar from '../../../components/core/profileSideBar'
 import DropdownMenu from '../../../components/features/dropdownMenu'
+import AdvancedFilter from '../../../components/features/advancedFilter'
 
 export default function Units() {
   const {
@@ -11,6 +13,7 @@ export default function Units() {
   } = useRouter()
 
   const [inputVal, setInputVal] = useState(0)
+  const [isOverlay, setIsOverlay] = useState(false)
 
   const { register, errors, getValues } = useForm({
     mode: 'onChange',
@@ -22,10 +25,6 @@ export default function Units() {
     { id: 2, name: 'type 2' },
   ]
 
-  const onAdvancedSearch = () => {
-    console.log('hi')
-  }
-
   const itemSelectedFunc = (id, name) => {
     console.log(id, name)
   }
@@ -34,68 +33,89 @@ export default function Units() {
     const char = String.fromCharCode(e.which)
     if (!/[0-9]/.test(char)) {
       e.preventDefault()
+    }
+    else {
       setInputVal(getValues())
-    } else {
     }
     console.log(inputVal)
   }
 
-  return (
-    <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-3 lg:gap-20 lg:ml-0">
-      <ProfileSideBar />
+  const onAdvancedSearch = e => {
+    console.log(inputVal)
+    setIsOverlay(!isOverlay)
+  }
 
-      <div className="col-span-2 mt-10 mb-16">
-        <div className="flex justify-between mb-5">
-          <h2 className="text-black font-bold text-lg">Skyline Complex</h2>
-          <button className="py-2 px-3 text-secondaryLight text-xs font-bold border border-secondaryLight rounded-full transition duration-500 ease-in-out hover:bg-secondaryLight hover:text-white focus:outline-none">
-            <i className="fas fa-image fa-lg mr-5"></i>
-            Show Project Images
-          </button>
+  return (
+    <div onClick={(e) => {
+      setIsOverlay(false)
+    }}>
+      <Overlay opacity={isOverlay} />
+      {
+        isOverlay &&
+        <div onClick={(e) => {
+          e.stopPropagation()
+        }}>
+          <AdvancedFilter preventShowLetter={preventShowLetter} dropdownOptions={dropdownOptions} itemSelectedFunc={itemSelectedFunc} onAdvancedSearch={onAdvancedSearch} />
+
         </div>
-        <div className="bg-white p-5 rounded-lg w-full">
-          <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
-            <Filter
-              register={register}
-              errors={errors}
-              name="price"
-              label1="from"
-              labelTxt1="From"
-              label2="to"
-              labelTxt2="To"
-              width="w-5/12"
-              preventShowLetter={preventShowLetter}
-            />
-            <Filter
-              register={register}
-              errors={errors}
-              name="Area"
-              label1="from"
-              labelTxt1="From"
-              label2="to"
-              labelTxt2="To"
-              width="w-5/12"
-              preventShowLetter={preventShowLetter}
-            />
-            <div>
-              <p
-                className="text-black text-sm text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
-                onClick={onAdvancedSearch}>
-                Advanced Search
-              </p>
-              <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                Types
-              </p>
-              <DropdownMenu
-                order="first"
-                name="Types"
-                dropdownWidth="w-full"
-                options={dropdownOptions}
-                itemSelectedFunc={itemSelectedFunc}
-              />
+      }
+
+      <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-3 lg:gap-20 lg:ml-0">
+        <ProfileSideBar />
+
+        <div className="col-span-2 mt-10 mb-16">
+            <div className="flex justify-between mb-5">
+            <h2 className="text-black font-bold text-lg">Skyline Complex</h2>
+            <button className="py-2 px-3 text-secondaryLight text-xs font-bold border border-secondaryLight rounded-full transition duration-500 ease-in-out hover:bg-secondaryLight hover:text-white focus:outline-none">
+                <i className="fas fa-image fa-lg mr-5"></i>
+                Show Project Images
+            </button>
             </div>
-          </div>
+            <div className="bg-white p-5 rounded-lg w-full">
+            <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
+                <Filter
+                register={register}
+                errors={errors}
+                name="price"
+                label1="from"
+                labelTxt1="From"
+                label2="to"
+                labelTxt2="To"
+                width="w-5/12"
+                preventShowLetter={preventShowLetter}
+                />
+                <Filter
+                register={register}
+                errors={errors}
+                name="Area"
+                label1="from"
+                labelTxt1="From"
+                label2="to"
+                labelTxt2="To"
+                width="w-5/12"
+                preventShowLetter={preventShowLetter}
+                />
+                <div>
+                <p
+                    className="text-black text-sm text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
+                    onClick={e => { setIsOverlay(true); e.stopPropagation()}}>
+                    Advanced Search
+                </p>
+                <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                    Types
+                </p>
+                <DropdownMenu
+                    order="first"
+                    name="Types"
+                    dropdownWidth="w-full"
+                    options={dropdownOptions}
+                    itemSelectedFunc={itemSelectedFunc}
+                />
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
+        </div>
     </div>
   )
 }

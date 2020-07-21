@@ -14,7 +14,7 @@ export default function DropdownMenu({ order, name, dropdownWidth, options, item
   return (
     <div className="relative">
       <div
-        className="block appearance-none w-full py-3 px-4 rounded border cursor-pointer focus:outline-none border-gray-400"
+        className="block appearance-none w-full py-2 px-4 rounded border cursor-pointer focus:outline-none border-gray-400"
         onClick={(e) => {
           toggleDropdown(order)
           setIsOpen(!isOpen)
@@ -29,7 +29,7 @@ export default function DropdownMenu({ order, name, dropdownWidth, options, item
         {options.length > 0 ? (
           options?.map((option) => (
             <div
-              className="item block px-4 bg-white text-gray-400 border-b cursor-pointer transition duration-500 ease-in-out hover:text-primaryText"
+              className="item block px-4 py-2 bg-white text-gray-400 border-b cursor-pointer transition duration-500 ease-in-out hover:text-primaryText"
               key={option.id}
               onClick={() => onItemSelecting(option)}>
               <i className="fas fa-circle fal-lg mr-5"></i>
