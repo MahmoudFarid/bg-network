@@ -10,7 +10,7 @@ export default function Dashboard() {
           <div className="relative w-1/2 mx-auto mt-5 mb-10">
             <i className="icon fas fa-search fa-2x absolute inline-block text-gray-400"></i>
             <input
-              className="appearance-none block w-full text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-primary"
+              className="appearance-none block w-full text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
               id="search"
               type="search"
               name="search"

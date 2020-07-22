@@ -1,11 +1,33 @@
 import { useState } from 'react'
 import Link from 'next/link'
+import Router from 'next/router'
+import NavigationCard from './../cards/navigationCard'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isNavigationOpen, setIsNavigationOpen] = useState(false)
 
   return (
     <div className="bg-white p-5 mt-1">
+      {isNavigationOpen && (
+        <div className="navigation absolute top-0 right-0 z-40 w-1/3 bg-white px-2 rounded-lg shadow-lg border border-gray-200 hidden lg:block xl:w-1/4">
+          <NavigationCard />
+          <NavigationCard />
+          <NavigationCard />
+          <Link
+            href={{
+              pathname: '/followers',
+              query: { isFollowersComp: false },
+            }}
+            as="/followers">
+            <a
+              className="block text-secondary text-center font-semibold uppercase py-3 hover:text-primaryText"
+              onClick={() => setIsNavigationOpen(false)}>
+              View All Requests
+            </a>
+          </Link>
+        </div>
+      )}
       <nav className="container-fluid">
         <div className="flex items-center justify-between flex-wrap">
           <div className="flex items-center flex-shrink-0 text-white mr-6">
@@ -30,35 +52,49 @@ export default function Header() {
             className={`w-full block flex-grow pl-6 pb-6 mt-3 transition duration-300 ease-in-out lg:flex lg:items-center lg:w-auto lg:pb-0 lg:mt-0 lg:opacity-100 ${
               isOpen ? 'block' : 'hidden'
             }`}>
-            <div className="text-sm lg:flex-grow">
+            <div className="text-sm lg:flex-grow" onClick={() => setIsOpen(false)}>
               <Link href="/companies">
                 <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
                   Companies
                 </a>
               </Link>
-              <a
-                href="#responsive-header"
-                className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
-                Plans
-              </a>
-              <a
-                href="#responsive-header"
-                className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
-                Brockers
-              </a>
+              <Link href="/plans">
+                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
+                  Plans
+                </a>
+              </Link>
+              <Link
+                href={{
+                  pathname: '/followers',
+                  query: { isFollowersComp: true },
+                }}
+                as="/followers">
+                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
+                  Brockers
+                </a>
+              </Link>
             </div>
-            <div>
-              <a
-                href="#responsive-header"
-                className="block relative text-gray-400 mt-4 mr-8 py-1 transition duration-500 ease-in-out hover:text-primaryText lg:inline-block lg:mt-0">
+            <div onClick={() => setIsOpen(false)}>
+              <div
+                className="block relative text-gray-400 mt-4 mr-8 py-1 transition duration-500 ease-in-out cursor-pointer hover:text-primaryText lg:inline-block lg:mt-0"
+                onClick={() => setIsNavigationOpen(!isNavigationOpen)}>
                 <span className="hidden lg:inline">
                   <i className="fas fa-bell fa-lg"></i>
                   <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
                 </span>
-                <span className="font-semibold text-primaryLight block hover:text-primaryText lg:hidden">
-                  Notification
-                </span>
-              </a>
+              </div>
+              <Link
+                href={{
+                  pathname: '/followers',
+                  query: { isFollowersComp: false },
+                }}
+                as="/followers">
+                <a>
+                  <span className="font-semibold text-primaryLight block hover:text-primaryText lg:hidden">
+                    Notification
+                  </span>
+                </a>
+              </Link>
               <Link href="/profile">
                 <a className="block relative mt-4 mr-8 lg:inline-block lg:mt-0">
                   <div className="inline-block mr-12">
@@ -77,11 +113,11 @@ export default function Header() {
                 className="inline-block text-gray-400 py-1 mt-4 mr-4 transition duration-500 ease-in-out hover:text-primaryText lg:mt-0">
                 <i className="fas fa-cog fa-lg"></i>
               </a>
-              <a
-                href="#responsive-header"
-                className="inline-block text-gray-400 py-1 mt-4 transition duration-500 ease-in-out hover:text-danger lg:mt-0">
+              <btton
+                className="inline-block text-gray-400 py-1 mt-4 transition duration-500 ease-in-out cursor-pointer hover:text-danger focus:outline-none lg:mt-0"
+                onClick={() => Router.replace('/')}>
                 <i className="fas fa-sign-out-alt fa-lg"></i>
-              </a>
+              </btton>
             </div>
           </div>
         </div>
@@ -89,6 +125,10 @@ export default function Header() {
       <style jsx>{`
         .profile-img {
           top: -8px;
+        }
+        .navigation {
+          top: 9%;
+          right: 19%;
         }
       `}</style>
     </div>

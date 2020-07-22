@@ -18,7 +18,7 @@ export default function Projects() {
           </button>
         )}
       </div>
-      <div className="bg-white p-5 rounded-lg">
+      <div className="bg-white p-5 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <ProjectCard isAnotherCompany={isAnother} />
           <ProjectCard isAnotherCompany={isAnother} />
