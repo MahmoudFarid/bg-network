@@ -1,4 +1,4 @@
-import CompanyCard from './../components/cards/companyCard'
+import CompanyCard from '../../components/cards/companyCard'
 
 export default function Companies() {
   return (

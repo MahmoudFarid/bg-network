@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import Link from 'next/link'
+import Router from 'next/router'
 
 export default function CompanyInfo() {
   const [isPending, setIsPending] = useState(false)
@@ -15,11 +15,11 @@ export default function CompanyInfo() {
           />
         </div>
         <div className="item w-full">
-          <Link href="/profile?id=1">
-            <a className="text-secondary font-semibold text-lg hover:text-primaryText focus:outline-none">
-              Cityscape
-            </a>
-          </Link>
+          <button
+            className="text-secondary font-semibold text-lg hover:text-primaryText focus:outline-none"
+            onClick={() => Router.push('/companies/[cid]', '/companies/1')}>
+            Cityscape
+          </button>
           <p className="text-primaryLight text-xs tracking-wide font-semibold mb-4 mt-1">
             Best city company development in egypt has over 300 project with overthan 3,000
             employees.

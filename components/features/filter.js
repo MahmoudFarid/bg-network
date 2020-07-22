@@ -11,12 +11,10 @@ export default function Filter({
   width,
   preventShowLetter,
 }) {
-  
   return (
     <div>
       <h3 className="text-black text-sm font-bold mb-3">{name}</h3>
-      {
-        width !== 'w-5/12' ?
+      {width !== 'w-5/12' ? (
         <div className={`inline-block mr-5 ${width}`}>
           <FormInput
             register={register}
@@ -28,7 +26,7 @@ export default function Filter({
             onKeyUp={preventShowLetter}
           />
         </div>
-        :
+      ) : (
         <div>
           <div className={`inline-block mr-5 ${width}`}>
             <FormInput
@@ -53,7 +51,7 @@ export default function Filter({
             />
           </div>
         </div>
-      }
+      )}
     </div>
   )
 }

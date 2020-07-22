@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-export default function ProfileSideBar({ profileId }) {
+export default function ProfileSideBar({ isAnotherCompany, cid }) {
   const [isPending, setIsPending] = useState(false)
 
   return (
@@ -16,7 +16,7 @@ export default function ProfileSideBar({ profileId }) {
       <div className="text-center mt-5">
         <p className="text-black font-semibold text-lg">Talaat Mustafa</p>
         <span className="text-secondary text-sm">Cairo, Egypt</span>
-        {profileId && (
+        {isAnotherCompany && (
           <button
             className={`block py-3 mt-5 w-1/3 mx-auto text-xs font-semibold rounded-full focus:outline-none ${
               isPending
@@ -29,31 +29,23 @@ export default function ProfileSideBar({ profileId }) {
         )}
       </div>
       <div className="w-3/4 mx-auto mt-8 text-center">
-        {profileId ? (
-          <div className="flex justify-around">
-            <div>
+        <div className="flex justify-around">
+          <Link
+            href={{
+              pathname: '/projects',
+              query: { isAnotherCompany: isAnotherCompany, cid: cid },
+            }}
+            as="/projects">
+            <a className="hover:text-primaryText">
               <p className="font-bold">Projects</p>
-              <span className="text-secondary text-sm">10,000</span>
-            </div>
-            <div>
-              <p className="font-bold">Units</p>
-              <span className="text-secondary text-sm">10000,00</span>
-            </div>
-          </div>
-        ) : (
-          <div className="flex justify-around">
-            <Link href="/projects">
-              <a className="hover:text-primaryText">
-                <p className="font-bold">Projects</p>
-                <span className="text-secondary text-sm hover:text-primaryText">10,000</span>
-              </a>
-            </Link>
-            <a href="#" className="hover:text-primaryText">
-              <p className="font-bold">Units</p>
-              <span className="text-secondary text-sm hover:text-primaryText">10000,00</span>
+              <span className="text-sm hover:text-primaryText">10,000</span>
             </a>
+          </Link>
+          <div>
+            <p className="font-bold">Units</p>
+            <span className="text-sm">10000,00</span>
           </div>
-        )}
+        </div>
       </div>
       <div className="mt-8 px-8">
         <p className="font-semibold ml-2 mb-2">About</p>

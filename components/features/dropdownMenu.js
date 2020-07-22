@@ -29,7 +29,7 @@ export default function DropdownMenu({ order, name, dropdownWidth, options, item
         {options.length > 0 ? (
           options?.map((option) => (
             <div
-              className="item block px-4 py-2 bg-white text-gray-400 border-b cursor-pointer transition duration-500 ease-in-out hover:text-primaryText"
+              className="item block px-4 py-1 bg-white text-gray-400 border-b cursor-pointer transition duration-500 ease-in-out hover:text-primaryText"
               key={option.id}
               onClick={() => onItemSelecting(option)}>
               <i className="fas fa-circle fal-lg mr-5"></i>
