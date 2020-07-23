@@ -11,6 +11,7 @@ module.exports = {
         secondaryLightest: '#e9f2fe',
         bgLight: '#eee',
         danger: '#c30606',
+        success: '#0dc237',
         overlay: '#333333ad'
       },
     },

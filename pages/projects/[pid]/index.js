@@ -8,6 +8,7 @@ import Overlay from '../../../components/features/overlay'
 import ProfileSideBar from '../../../components/core/profileSideBar'
 import DropdownMenu from '../../../components/features/dropdownMenu'
 import AdvancedFilter from '../../../components/features/advancedFilter'
+import CarouselOverlay from '../../../components/features/carouselOverlay'
 
 export default function Project() {
   const {
@@ -16,6 +17,7 @@ export default function Project() {
 
   const [inputVal, setInputVal] = useState(0)
   const [isOverlay, setIsOverlay] = useState(false)
+  const [isCarouselOverlay, setIsCarouselOverlay] = useState(false)
 
   const { register, errors, getValues } = useForm({
     mode: 'onChange',
@@ -46,9 +48,18 @@ export default function Project() {
     setIsOverlay(!isOverlay)
   }
 
+  const setIsCarouselOverlayFunc = (bool) => {
+    setIsCarouselOverlay(bool)
+  }
+
   return (
-    <div onClick={() => setIsOverlay(false)}>
+    <div
+      onClick={() => {
+        setIsOverlay(false)
+        setIsCarouselOverlay(false)
+      }}>
       <Overlay opacity={isOverlay} />
+      <Overlay opacity={isCarouselOverlay} />
       {isOverlay && (
         <div onClick={(e) => e.stopPropagation()}>
           <AdvancedFilter
@@ -59,6 +70,12 @@ export default function Project() {
           />
         </div>
       )}
+      {isCarouselOverlay && (
+        <CarouselOverlay
+          sources={['project.jpg', 'company-pic.jpg', 'company-cover.jpg']}
+          setIsOverlayFunc={setIsCarouselOverlayFunc}
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-3 lg:gap-16 lg:ml-0">
         <ProfileSideBar isAnotherCompany={false} />
@@ -66,7 +83,12 @@ export default function Project() {
         <div className="col-span-2 mt-10 mb-16">
           <div className="flex justify-between mb-5">
             <h2 className="text-black font-bold text-lg">Skyline Complex</h2>
-            <button className="py-2 px-3 text-secondaryLight text-xs font-bold border border-secondaryLight rounded-full transition duration-500 ease-in-out hover:bg-secondaryLight hover:text-white focus:outline-none">
+            <button
+              className="py-2 px-3 text-secondaryLight text-xs font-bold border border-secondaryLight rounded-full transition duration-500 ease-in-out hover:bg-secondaryLight hover:text-white focus:outline-none"
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsCarouselOverlayFunc(true)
+              }}>
               <i className="fas fa-image fa-lg mr-5"></i>
               Show Project Images
             </button>
@@ -126,9 +148,12 @@ export default function Project() {
             </button>
           </div>
           <div className="grid grid-cols-1 gap-5 mt-5 md:grid-cols-2 xl:grid-cols-3">
-            <UnitCard />
-            <UnitCard />
-            <UnitCard />
+            <UnitCard pid={pid} />
+            <UnitCard pid={pid} />
+            <UnitCard pid={pid} />
+            <UnitCard pid={pid} />
+            <UnitCard pid={pid} />
+            <UnitCard pid={pid} />
           </div>
         </div>
       </div>

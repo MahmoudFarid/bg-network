@@ -1,4 +1,6 @@
-export default function UnitCard() {
+import Link from 'next/link'
+
+export default function UnitCard({ pid }) {
   return (
     <div className="bg-white border-none shadow-md rounded-lg overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
       <div className="relative h-48">
@@ -11,9 +13,16 @@ export default function UnitCard() {
         <p className="text-primaryLight text-xs tracking-wide font-semibold mb-4 mt-1">
           Nasr City Compounds, Degla Landmark
         </p>
-        <button className="text-black text-lg text-left font-semibold my-3 hover:text-primaryText focus:outline-none">
-          Degla Landmark Complex Nasr City Compounds
-        </button>
+        <Link
+          href={{
+            pathname: '/units/[uid]',
+            query: { pid: pid, uid: 3 },
+          }}
+          as="/units/3">
+          <a className="text-black text-lg text-left font-semibold my-3 hover:text-primaryText focus:outline-none">
+            Degla Landmark Complex Nasr City Compounds
+          </a>
+        </Link>
       </div>
       <div className="py-5 pl-5">
         <div className="flex justify-start">

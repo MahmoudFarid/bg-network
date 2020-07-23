@@ -54,12 +54,12 @@ export default function Header() {
             }`}>
             <div className="text-sm lg:flex-grow" onClick={() => setIsOpen(false)}>
               <Link href="/companies">
-                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
+                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
                   Companies
                 </a>
               </Link>
               <Link href="/plans">
-                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
+                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
                   Plans
                 </a>
               </Link>
@@ -69,7 +69,7 @@ export default function Header() {
                   query: { isFollowersComp: true },
                 }}
                 as="/followers">
-                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0">
+                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
                   Brockers
                 </a>
               </Link>
@@ -96,7 +96,7 @@ export default function Header() {
                 </a>
               </Link>
               <Link href="/profile">
-                <a className="block relative mt-4 mr-8 lg:inline-block lg:mt-0">
+                <a className="block relative mt-4 mr-8 lg:inline-block lg:mt-0 focus:outline-none">
                   <div className="inline-block mr-12">
                     <img
                       src="/assets/profile-pic.png"
@@ -110,14 +110,14 @@ export default function Header() {
               </Link>
               <a
                 href="#responsive-header"
-                className="inline-block text-gray-400 py-1 mt-4 mr-4 transition duration-500 ease-in-out hover:text-primaryText lg:mt-0">
+                className="inline-block text-gray-400 py-1 mt-4 mr-4 transition duration-500 ease-in-out hover:text-primaryText lg:mt-0 focus:outline-none">
                 <i className="fas fa-cog fa-lg"></i>
               </a>
-              <btton
+              <button
                 className="inline-block text-gray-400 py-1 mt-4 transition duration-500 ease-in-out cursor-pointer hover:text-danger focus:outline-none lg:mt-0"
                 onClick={() => Router.replace('/')}>
                 <i className="fas fa-sign-out-alt fa-lg"></i>
-              </btton>
+              </button>
             </div>
           </div>
         </div>
