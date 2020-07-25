@@ -10,8 +10,7 @@ export const Login = (account) => async (dispatch) => {
       Router.push('/dashboard')
       localStorage.setItem('accessToken', res.data.auth_token)
       localStorage.setItem('isBroker', res.data.is_broker)
-      localStorage.setItem('username', res.data.name)
-
+      
       dispatch({
         type: types.AUTHENTICATE,
         payload: { token: res.data.auth_token, isBroker: res.data.is_broker },
@@ -27,7 +26,6 @@ export const Signup = (account, isDeveloper) => async (dispatch) => {
   isDeveloper ? (type = 'reds/') : (type = 'brokers/')
   const acc = await API.post(type, account)
     .then((res) => {
-      localStorage.setItem('username', account.name)
       dispatch({
         type: types.SIGNUP,
         payload: account,
@@ -65,5 +63,4 @@ export const Logout = () => async (dispatch) => {
   Router.push('/')
   localStorage.removeItem('accessToken')
   localStorage.removeItem('isBroker')
-  localStorage.removeItem('username')
 }

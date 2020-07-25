@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import API from '../../api'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { Logout } from '../../redux/actions/authActions'
@@ -7,7 +8,7 @@ import NavigationCard from './../cards/navigationCard'
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [isNavigationOpen, setIsNavigationOpen] = useState(false)
-  const [username, setUsername] = useState('')
+  const [account, setAccount] = useState({})
   const dispatch = useDispatch()
 
   const logout = () => {
@@ -15,8 +16,11 @@ export default function Header() {
   }
 
   useEffect(() => {
-    const username = localStorage.getItem('username')
-    setUsername(username)
+    async function fetchAccount() {
+      const { data } = await API.get('users/me/')
+      setAccount(data)
+    }
+    fetchAccount()
   }, [])
 
   return (
@@ -111,12 +115,12 @@ export default function Header() {
                 <a className="block relative mt-4 mr-8 lg:inline-block lg:mt-0 focus:outline-none">
                   <div className="inline-block mr-12">
                     <img
-                      src="/assets/profile-pic.png"
+                      src={account.avatar ? account.avatar : '/assets/profile-pic.png'}
                       className="profile-img rounded-full h-10 w-10 absolute top-0"
                     />
                   </div>
                   <span className="font-semibold text-primaryLight hover:text-primaryText">
-                    {username}
+                    {account.name}
                   </span>
                 </a>
               </Link>

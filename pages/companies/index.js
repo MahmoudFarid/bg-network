@@ -1,6 +1,20 @@
+import { useState, useEffect } from 'react'
+import API from '../../api'
 import CompanyCard from '../../components/cards/companyCard'
 
 export default function Companies() {
+  const [companies, setCompanies] = useState([])
+
+  useEffect(() => {
+    async function fetchCompanies() {
+      const {
+        data: { results },
+      } = await API.get('reds/')
+      setCompanies(results)
+    }
+    fetchCompanies()
+  }, [])
+
   return (
     <div className="container-fluid mb-16">
       <div className="relative w-2/3 mx-auto my-10 md:w-1/2 lg:w-5/12">
@@ -17,10 +31,9 @@ export default function Companies() {
 
       <div className="bg-white p-5 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          <CompanyCard />
-          <CompanyCard />
-          <CompanyCard />
-          <CompanyCard />
+          {companies.map((company) => (
+            <CompanyCard company={company} key={company.id} />
+          ))}
         </div>
       </div>
       <style jsx>{`

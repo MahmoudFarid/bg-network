@@ -12,7 +12,7 @@ import CarouselOverlay from '../../../components/features/carouselOverlay'
 
 export default function Project() {
   const {
-    query: { pid },
+    query: { pid, cid },
   } = useRouter()
 
   const [inputVal, setInputVal] = useState(0)
@@ -78,7 +78,7 @@ export default function Project() {
       )}
 
       <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-3 lg:gap-16 lg:ml-0">
-        <ProfileSideBar isAnotherCompany={false} />
+        <ProfileSideBar cid={cid} />
 
         <div className="col-span-2 mt-10 mb-16">
           <div className="flex justify-between mb-5">
