@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import Router from 'next/router'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import API from '../../../api'
+import Router from 'next/router'
 import Filter from '../../../components/features/filter'
 import UnitCard from '../../../components/cards/unitCard'
 import Overlay from '../../../components/features/overlay'
@@ -18,6 +19,7 @@ export default function Project() {
   const [inputVal, setInputVal] = useState(0)
   const [isOverlay, setIsOverlay] = useState(false)
   const [isCarouselOverlay, setIsCarouselOverlay] = useState(false)
+  const [units, setUnits] = useState([])
 
   const { register, errors, getValues } = useForm({
     mode: 'onChange',
@@ -51,6 +53,19 @@ export default function Project() {
   const setIsCarouselOverlayFunc = (bool) => {
     setIsCarouselOverlay(bool)
   }
+
+  useEffect(() => {
+    if (cid) {
+      async function fetchUnits() {
+        const {
+          data: { results },
+        } = await API.get(`reds/${cid}/projects/${pid}/units/`)
+        setUnits(results)
+      }
+      fetchUnits()
+    }
+  }, [cid])
+  console.log(units)
 
   return (
     <div

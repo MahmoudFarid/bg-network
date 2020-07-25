@@ -1,29 +1,30 @@
 import Link from 'next/link'
 
-export default function ProjectCard({ cid }) {
+export default function ProjectCard({ cid, project }) {
+
   return (
     <div className="relative">
       <div className="absolute top-0 bg-overlay h-full w-full opacity-75 rounded-md hover:shadow-2xl"></div>
 
       <div className="h-64 overflow-hidden">
-        <img src="/assets/project.jpg" alt="project" className="w-full h-full rounded-md" />
+        <img src={project.cover_image} alt="project" className="w-full h-full rounded-md" />
       </div>
 
       <div className="absolute bottom-0 ml-5 mb-3">
         <Link
           href={{
             pathname: '/projects/[pid]',
-            query: { cid: cid },
+            query: { pid: project.id, cid: cid },
           }}
-          as="/projects/2">
+          as={`/projects/${project.id}`}>
           <a className="text-white text-xl font-semibold block hover:underline focus:outline-none">
-            Skyline Complex
+            {project.name}
           </a>
         </Link>
 
         <span className="text-gray-300 font-semibold text-sm">
           <i className="fas fa-home fa-sm text-white mr-3"></i>
-          24 Units
+          {project.units_count} {project.units_count <= 1 ? 'Unit' : 'Units'}
         </span>
       </div>
     </div>

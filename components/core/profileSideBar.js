@@ -26,7 +26,7 @@ export default function ProfileSideBar({ cid }) {
       fetchCount()
       fetchProfile()
     }
-  }, [])
+  }, [cid])
 
   return (
     <div className="bg-bgLight py-12 pt-24">
