@@ -8,13 +8,11 @@ export default function SignUp() {
   return (
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
-        <div className="bg-white px-8 pt-20 z-10">
+        <div className="px-8 pt-20 z-10 md:bg-white">
           <img src="/assets/logo.svg" alt="logo" className="w-1/3" />
           <h1 className="mt-3 mb-10 text-3xl font-extrabold">Create your account</h1>
           <div className="flex justify-start mb-10">
-            <div
-              className="w-5/12 mr-3 cursor-pointer"
-              onClick={() => setIsDeveloper(!isDeveloper)}>
+            <div className="w-5/12 mr-3 cursor-pointer" onClick={() => setIsDeveloper(true)}>
               {isDeveloper ? (
                 <img src="/assets/developer-active.png" alt="developer-active" className="w-full" />
               ) : (
@@ -25,7 +23,7 @@ export default function SignUp() {
                 />
               )}
             </div>
-            <div className="w-5/12 cursor-pointer" onClick={() => setIsDeveloper(!isDeveloper)}>
+            <div className="w-5/12 cursor-pointer" onClick={() => setIsDeveloper(false)}>
               {isDeveloper ? (
                 <img src="/assets/broker-inactive.png" alt="broker-inactive" className="w-full" />
               ) : (
@@ -33,7 +31,7 @@ export default function SignUp() {
               )}
             </div>
           </div>
-          <SignUpForm />
+          <SignUpForm isDeveloper={isDeveloper} />
         </div>
         <div className="absolute top-0 min-h-screen md:relative xl:col-span-2">
           <Link href="/">

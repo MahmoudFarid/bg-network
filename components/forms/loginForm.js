@@ -1,17 +1,17 @@
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { Login } from './../../redux/actions/authActions'
 import FormInput from './formInput'
-import Router from 'next/router'
 
 export default function LoginForm() {
-  const { register, errors, handleSubmit, formState } = useForm({
+  const { register, errors, handleSubmit } = useForm({
     mode: 'onBlur',
   })
-  const { isValid } = formState
+  const dispatch = useDispatch()
 
   const onSubmit = (data) => {
-    console.log(data)
-    Router.push('/dashboard')
+    dispatch(Login(data))
   }
 
   return (
@@ -22,7 +22,7 @@ export default function LoginForm() {
         label="email"
         labelTxt="Email"
         errorMsg="Email is required"
-        type="email"
+        type="text"
         placeholder="Enter your Email"
       />
 
@@ -37,11 +37,8 @@ export default function LoginForm() {
       />
 
       <button
-        className={`py-3 px-4 rounded-full w-full mt-8 focus:outline-none ${
-          isValid ? 'bg-primary text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-        }`}
-        type="submit"
-        disabled={!isValid}>
+        className="py-3 px-4 rounded-full w-full mt-8 focus:outline-none bg-primary text-white"
+        type="submit">
         Login
       </button>
 

@@ -1,23 +1,26 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { ResetPassword } from './../../redux/actions/authActions'
 import FormInput from '../../components/forms/formInput'
 
 export default function forgetPassword() {
-  const { register, errors, handleSubmit, formState } = useForm({
+  const { register, errors, handleSubmit } = useForm({
     mode: 'onBlur',
   })
-  const { isValid } = formState
   const [isClick, setIsClick] = useState(false)
+  const dispatch = useDispatch()
 
   const onSubmit = (data) => {
-    console.log(data)
+    setIsClick(true)
+    dispatch(ResetPassword(data))
   }
 
   return (
     <div>
       <div className="grid grid-cols-1 gap-0 md:grid-cols-2 xl:grid-cols-3">
-        <div className="bg-white px-8 pt-20 z-10">
+        <div className="px-8 pt-20 z-10 md:bg-white">
           <img src="/assets/logo.svg" alt="logo" className="w-1/3" />
           {isClick ? (
             <div>
@@ -41,19 +44,13 @@ export default function forgetPassword() {
                   label="email"
                   labelTxt="Email"
                   errorMsg="Email is required"
-                  type="email"
+                  type="text"
                   placeholder="Enter your Email"
                 />
                 <button
-                  className={`py-3 px-4 rounded-full w-full mt-8 focus:outline-none ${
-                    isValid
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                  type="submit"
-                  disabled={!isValid}
-                  onClick={() => setIsClick(true)}>
-                  Login
+                  className="py-3 px-4 rounded-full w-full mt-8 focus:outline-none bg-primary text-white"
+                  type="submit">
+                  Send
                 </button>
               </form>
             </div>

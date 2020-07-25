@@ -1,7 +1,9 @@
 import * as types from '../types'
 
 const initialState = {
-  token: null
+  login: null,
+  account: null,
+  resetEmail: null,
 }
 
 export default (state = initialState, action) => {
@@ -9,7 +11,17 @@ export default (state = initialState, action) => {
     case types.AUTHENTICATE:
       return {
         ...state,
-        token: action.payload,
+        login: action.payload,
+      }
+    case types.SIGNUP:
+      return {
+        ...state,
+        account: action.payload,
+      }
+    case types.RESET_PASS:
+      return {
+        ...state,
+        resetEmail: action.payload,
       }
     default:
       return state

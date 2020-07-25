@@ -1,11 +1,23 @@
-import { useState } from 'react'
 import Link from 'next/link'
-import Router from 'next/router'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { Logout } from '../../redux/actions/authActions'
 import NavigationCard from './../cards/navigationCard'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const [isNavigationOpen, setIsNavigationOpen] = useState(false)
+  const [username, setUsername] = useState('')
+  const dispatch = useDispatch()
+
+  const logout = () => {
+    dispatch(Logout())
+  }
+
+  useEffect(() => {
+    const username = localStorage.getItem('username')
+    setUsername(username)
+  }, [])
 
   return (
     <div className="bg-white p-5 mt-1">
@@ -104,7 +116,7 @@ export default function Header() {
                     />
                   </div>
                   <span className="font-semibold text-primaryLight hover:text-primaryText">
-                    Username
+                    {username}
                   </span>
                 </a>
               </Link>
@@ -115,7 +127,7 @@ export default function Header() {
               </a>
               <button
                 className="inline-block text-gray-400 py-1 mt-4 transition duration-500 ease-in-out cursor-pointer hover:text-danger focus:outline-none lg:mt-0"
-                onClick={() => Router.replace('/')}>
+                onClick={logout}>
                 <i className="fas fa-sign-out-alt fa-lg"></i>
               </button>
             </div>

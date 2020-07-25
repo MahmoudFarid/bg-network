@@ -20,6 +20,7 @@
     "react-hook-form": "^6.0.6",
     "react-player": "^2.5.0",
     "react-redux": "^7.2.0",
+    "react-toastify": "^6.0.8",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",

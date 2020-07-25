@@ -30,7 +30,7 @@ export default function FormInput({
         placeholder={placeholder}
         onKeyUp={onKeyUp}
         ref={
-          type === 'email'
+          label === 'email'
             ? register({
                 required: true,
                 pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
@@ -38,12 +38,12 @@ export default function FormInput({
             : label === 'password'
             ? register({
                 required: true,
-                minLength: 6,
+                minLength: 8,
               })
-            : label === 'passwordConf'
+            : label === 'confirm_password'
             ? register({
                 required: true,
-                validate: (value) => value === currentPass || 'The passwords is not matching',
+                validate: (value) => value === currentPass || 'The password is not matching',
               })
             : register(req === false ? { required: false } : { required: true })
         }
@@ -57,8 +57,8 @@ export default function FormInput({
         {label === 'password' &&
           errors.password &&
           errors.password.type === 'minLength' &&
-          'Password must be at least 6 characters'}
-        {label === 'passwordConf' && errors.passwordConf && errors.passwordConf.message}
+          'Password must be at least 8 characters'}
+        {label === 'confirm_password' && errors.confirm_password && errors.confirm_password.message}
       </p>
       <style jsx>{`
         .control-group:focus-within .control-label {

@@ -1,17 +1,19 @@
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { Signup } from '../../redux/actions/authActions'
 import FormInput from './formInput'
 
-export default function SignUpForm() {
-  const { register, errors, handleSubmit, formState, watch } = useForm({
+export default function SignUpForm({ isDeveloper }) {
+  const { register, errors, handleSubmit, watch } = useForm({
     mode: 'onBlur',
   })
   const password = useRef({})
   password.current = watch('password', '')
-  const { isValid } = formState
+  const dispatch = useDispatch()
 
   const onSubmit = (data) => {
-    console.log(data)
+    dispatch(Signup(data, isDeveloper))
   }
 
   return (
@@ -32,7 +34,7 @@ export default function SignUpForm() {
         label="email"
         labelTxt="Email"
         errorMsg="Email is required"
-        type="email"
+        type="text"
         placeholder="Enter your Email"
       />
 
@@ -49,7 +51,7 @@ export default function SignUpForm() {
       <FormInput
         register={register}
         errors={errors}
-        label="passwordConf"
+        label="confirm_password"
         labelTxt="Password Confirmation"
         errorMsg="Password Confirmation is required"
         type="password"
@@ -58,11 +60,8 @@ export default function SignUpForm() {
       />
 
       <button
-        className={`py-3 px-4 rounded-full w-full mt-8 focus:outline-none ${
-          isValid ? 'bg-primary text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-        }`}
-        type="submit"
-        disabled={!isValid}>
+        className="py-3 px-4 rounded-full w-full mt-8 focus:outline-none bg-primary text-white"
+        type="submit">
         Sign up
       </button>
 
