@@ -1,7 +1,6 @@
 import Link from 'next/link'
 
-export default function ProjectCard({ cid, project }) {
-
+export default function ProjectCard({ project }) {
   return (
     <div className="relative">
       <div className="absolute top-0 bg-overlay h-full w-full opacity-75 rounded-md hover:shadow-2xl"></div>
@@ -14,7 +13,7 @@ export default function ProjectCard({ cid, project }) {
         <Link
           href={{
             pathname: '/projects/[pid]',
-            query: { pid: project.id, cid: cid },
+            query: { pid: project.id },
           }}
           as={`/projects/${project.id}`}>
           <a className="text-white text-xl font-semibold block hover:underline focus:outline-none">

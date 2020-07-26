@@ -14,7 +14,7 @@ export default function ProfileSideBar({ cid }) {
         setProfile(data)
       }
       fetchCompany()
-    } else {
+    } else if (cid == 0) {
       async function fetchProfile() {
         const { data } = await API.get('users/me/')
         setProfile(data)
@@ -61,19 +61,12 @@ export default function ProfileSideBar({ cid }) {
                 {count.friends_count ? count.friends_count : '0'}
               </span>
             </div>
-            <Link
-              href={{
-                pathname: '/projects',
-                query: { cid: cid },
-              }}
-              as="/projects">
-              <a className="hover:text-primaryText">
-                <p className="font-bold">Projects</p>
-                <span className="text-sm">
-                  {count.friends_projects_count ? count.friends_projects_count : '0'}
-                </span>
-              </a>
-            </Link>
+            <div>
+              <p className="font-bold">Projects</p>
+              <span className="text-sm">
+                {count.friends_projects_count ? count.friends_projects_count : '0'}
+              </span>
+            </div>
           </div>
         ) : (
           <div className="flex justify-around">

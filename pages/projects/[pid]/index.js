@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import API from '../../../api'
-import Router from 'next/router'
+import Link from 'next/link'
 import Filter from '../../../components/features/filter'
 import UnitCard from '../../../components/cards/unitCard'
 import Overlay from '../../../components/features/overlay'
@@ -13,12 +13,13 @@ import CarouselOverlay from '../../../components/features/carouselOverlay'
 
 export default function Project() {
   const {
-    query: { pid, cid },
+    query: { pid },
   } = useRouter()
 
   const [inputVal, setInputVal] = useState(0)
   const [isOverlay, setIsOverlay] = useState(false)
   const [isCarouselOverlay, setIsCarouselOverlay] = useState(false)
+  const [cid, setCid] = useState()
   const [units, setUnits] = useState([])
 
   const { register, errors, getValues } = useForm({
@@ -55,7 +56,12 @@ export default function Project() {
   }
 
   useEffect(() => {
-    if (cid) {
+    const cid = localStorage.getItem('CID')
+    setCid(cid)
+
+    if (pid) {
+      console.log('company -> ', cid, ' with project -> ', pid)
+
       async function fetchUnits() {
         const {
           data: { results },
@@ -64,8 +70,7 @@ export default function Project() {
       }
       fetchUnits()
     }
-  }, [cid])
-  console.log(units)
+  }, [pid])
 
   return (
     <div
@@ -155,20 +160,22 @@ export default function Project() {
             </div>
           </div>
           <div className="overflow-hidden">
-            <button
-              className="text-secondaryLight font-semibold mt-4 mr-4 float-right hover:text-primaryText focus:outline-none"
-              onClick={() => Router.push('/projects/[pid]/units', '/projects/2/units')}>
-              See all units
-              <i className="fas fa-angle-right ml-2"></i>
-            </button>
+            <Link
+              href={{
+                pathname: '/projects/[pid]/units',
+                query: { pid: pid },
+              }}
+              as={`/projects/${pid}/units`}>
+              <a className="text-secondaryLight font-semibold mt-4 mr-4 float-right hover:text-primaryText focus:outline-none">
+                See all units
+                <i className="fas fa-angle-right ml-2"></i>
+              </a>
+            </Link>
           </div>
           <div className="grid grid-cols-1 gap-5 mt-5 md:grid-cols-2 xl:grid-cols-3">
-            <UnitCard pid={pid} />
-            <UnitCard pid={pid} />
-            <UnitCard pid={pid} />
-            <UnitCard pid={pid} />
-            <UnitCard pid={pid} />
-            <UnitCard pid={pid} />
+            {units.map((unit) => (
+              <UnitCard key={unit.id} unit={unit} pid={pid} />
+            ))}
           </div>
         </div>
       </div>

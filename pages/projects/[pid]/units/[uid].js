@@ -1,17 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import ReactPlayer from 'react-player'
-import PlanCard from '../../../components/cards/planCard'
-import GoogleMap from '../../../components/features/googleMap'
-import Carousel from './../../../components/features/carousel'
-import Carousel2 from './../../../components/features/carousel2'
+import API from '../../../../api'
+import PlanCard from '../../../../components/cards/planCard'
+import GoogleMap from '../../../../components/features/googleMap'
+import Carousel from '../../../../components/features/carousel'
+import Carousel2 from '../../../../components/features/carousel2'
 
 export default function Unit() {
   const {
     query: { pid, uid },
   } = useRouter()
+
   const [isOverlay, setIsOverlay] = useState(false)
   const [isOverlay2, setIsOverlay2] = useState(false)
+  const [unit, setUnit] = useState({})
 
   const setIsOverlayFunc = (bool) => {
     setIsOverlay(bool)
@@ -20,6 +23,19 @@ export default function Unit() {
   const setIsOverlayFunc2 = (bool) => {
     setIsOverlay2(bool)
   }
+
+  useEffect(() => {
+    const cid = localStorage.getItem('CID')
+
+    if ((pid, uid)) {
+      console.log('company -> ', cid, ' in project -> ', pid, ' in unit -> ', uid)
+      async function fetchUnit() {
+        const { data } = await API.get(`reds/${cid}/projects/${pid}/units/${uid}`)
+        setUnit(data)
+      }
+      fetchUnit()
+    }
+  }, [pid, uid])
 
   return (
     <div
@@ -38,9 +54,7 @@ export default function Unit() {
       </div>
       <div className="flex justify-between flex-wrap">
         <div className="w-full mt-5 lg:w-5/12">
-          <h2 className="text-black font-bold text-3xl">
-            Degla Landmark Complex Nasr City Compounds:
-          </h2>
+          <h2 className="text-black font-bold text-3xl">{unit.name}</h2>
           <p className="text-primary my-4 w-11/12">
             Talaat Mustafa Group (TMG) Holding is the leading community real estate developer in
             Egypt, with a land bank of 50 million square meters. The group has a strong track record

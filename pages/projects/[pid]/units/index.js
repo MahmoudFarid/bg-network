@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import Filter from '../../../components/features/filter'
-import UnitCard from '../../../components/cards/unitCard'
-import Overlay from '../../../components/features/overlay'
-import DropdownMenu from '../../../components/features/dropdownMenu'
-import AdvancedFilter from '../../../components/features/advancedFilter'
+import API from '../../../../api'
+import Filter from '../../../../components/features/filter'
+import Overlay from '../../../../components/features/overlay'
+import UnitCard from '../../../../components/cards/unitCard'
+import DropdownMenu from '../../../../components/features/dropdownMenu'
+import AdvancedFilter from '../../../../components/features/advancedFilter'
 
 export default function Units() {
   const {
@@ -14,6 +15,7 @@ export default function Units() {
 
   const [inputVal, setInputVal] = useState(0)
   const [isOverlay, setIsOverlay] = useState(false)
+  const [units, setUnits] = useState([])
 
   const { register, errors, getValues } = useForm({
     mode: 'onChange',
@@ -43,6 +45,22 @@ export default function Units() {
     console.log(inputVal)
     setIsOverlay(!isOverlay)
   }
+
+  useEffect(() => {
+    const cid = localStorage.getItem('CID')
+
+    if (pid) {
+      console.log('units of company id -> ', cid, ' in project id -> ', pid)
+
+      async function fetchUnits() {
+        const {
+          data: { results },
+        } = await API.get(`reds/${cid}/projects/${pid}/units/`)
+        setUnits(results)
+      }
+      fetchUnits()
+    }
+  }, [pid])
 
   return (
     <div className="container-fluid my-16" onClick={() => setIsOverlay(false)}>
@@ -123,14 +141,9 @@ export default function Units() {
         </div>
       </div>
       <div className="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
-        <UnitCard />
+        {units.map((unit) => (
+          <UnitCard key={unit.id} unit={unit} pid={pid} />
+        ))}
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export default function UnitCard({ pid }) {
+export default function UnitCard({ unit, pid }) {
   return (
     <div className="bg-white border-none shadow-md rounded-lg overflow-hidden transition duration-300 ease-in-out hover:shadow-2xl">
       <div className="relative h-48">
@@ -15,10 +15,10 @@ export default function UnitCard({ pid }) {
         </p>
         <Link
           href={{
-            pathname: '/units/[uid]',
-            query: { pid: pid, uid: 3 },
+            pathname: '/projects/[pid]/units/[uid]',
+            query: { pid: pid, uid: unit.id },
           }}
-          as="/units/3">
+          as={`/projects/${pid}/units/${unit.id}`}>
           <a className="text-black text-lg text-left font-semibold my-3 hover:text-primaryText focus:outline-none">
             Degla Landmark Complex Nasr City Compounds
           </a>
