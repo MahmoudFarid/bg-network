@@ -1,8 +1,16 @@
 import { useState } from 'react'
 import Router from 'next/router'
+import { useDispatch } from 'react-redux'
+import { SendRequest } from '../../redux/actions/requestsActions'
 
 export default function CompanyCard({ company }) {
   const [isPending, setIsPending] = useState(false)
+  const dispatch = useDispatch()
+
+  const onSendRequest = () => {
+    setIsPending(!isPending)
+    if (!isPending) dispatch(SendRequest(company.id))
+  }
 
   return (
     <div className="bg-white border-none shadow-md rounded-lg overflow-hidden">
@@ -16,7 +24,7 @@ export default function CompanyCard({ company }) {
                   ? 'bg-gray-400 text-gray-600 italic'
                   : 'bg-white text-primaryText hover:bg-primaryText hover:text-white'
               }`}
-              onClick={() => setIsPending(!isPending)}>
+              onClick={onSendRequest}>
               {company.friend_status === 'Pending' || isPending ? 'Pending' : 'Send'}
             </button>
           )}

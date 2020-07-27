@@ -1,10 +1,11 @@
 import Link from 'next/link'
+import Router from 'next/router'
 import { useState, useEffect } from 'react'
 import { useDispatch, connect } from 'react-redux'
 import API from '../../api'
-import NotificationCard from './../cards/notificationCard'
 import { Logout } from '../../redux/actions/authActions'
 import { GetRequests } from './../../redux/actions/requestsActions'
+import NotificationCard from './../cards/notificationCard'
 
 function Header({ requests }) {
   const [isOpen, setIsOpen] = useState(false)
@@ -16,19 +17,19 @@ function Header({ requests }) {
     dispatch(Logout())
   }
 
-  const getNotification = () => {
-    setIsNavigationOpen(!isNavigationOpen)
-    dispatch(GetRequests())
-  }
-
   useEffect(() => {
     async function fetchAccount() {
       const { data } = await API.get('users/me/')
       setAccount(data)
     }
     fetchAccount()
+
+    dispatch(GetRequests())
+    const end = () => {
+      dispatch(GetRequests())
+    }
+    Router.events.on('routeChangeEnd', end)
   }, [])
-  console.log(requests)
 
   return (
     <div className="bg-white p-5 mt-1">
@@ -81,14 +82,19 @@ function Header({ requests }) {
             <div className="text-sm lg:flex-grow" onClick={() => setIsOpen(false)}>
               <Link href="/companies">
                 <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
-                  Companies
+                  All Companies
                 </a>
               </Link>
-              <Link href="/plans">
+              <Link href="/projects">
+                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                  My Projects
+                </a>
+              </Link>
+              {/* <Link href="/plans">
                 <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
                   Plans
                 </a>
-              </Link>
+              </Link> */}
               <Link href="/requests">
                 <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
                   Requests
@@ -98,10 +104,12 @@ function Header({ requests }) {
             <div onClick={() => setIsOpen(false)}>
               <div
                 className="block relative text-gray-400 mt-4 mr-8 py-1 transition duration-500 ease-in-out cursor-pointer hover:text-primaryText lg:inline-block lg:mt-0"
-                onClick={getNotification}>
+                onClick={() => setIsNavigationOpen(!isNavigationOpen)}>
                 <span className="hidden lg:inline">
                   <i className="fas fa-bell fa-lg"></i>
-                  <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
+                  {requests?.length !== 0 && (
+                    <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
+                  )}
                 </span>
               </div>
               <Link href="/requests">
