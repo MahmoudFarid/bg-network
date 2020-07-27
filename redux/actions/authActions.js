@@ -10,7 +10,7 @@ export const Login = (account) => async (dispatch) => {
       Router.push('/dashboard')
       localStorage.setItem('accessToken', res.data.auth_token)
       localStorage.setItem('isBroker', res.data.is_broker)
-      
+
       dispatch({
         type: types.AUTHENTICATE,
         payload: { token: res.data.auth_token, isBroker: res.data.is_broker },

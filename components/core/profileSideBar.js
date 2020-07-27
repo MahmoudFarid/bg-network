@@ -43,12 +43,18 @@ export default function ProfileSideBar({ cid }) {
         {cid && (
           <button
             className={`block py-3 mt-5 w-1/3 mx-auto text-xs font-semibold rounded-full focus:outline-none ${
-              isPending
+              profile.friend_status === 'Pending' || isPending
                 ? 'bg-gray-400 text-gray-600 italic'
+                : profile.friend_status === 'Friends'
+                ? 'bg-success text-white italic'
                 : 'bg-primary text-gray-400 hover:text-white'
             }`}
             onClick={() => setIsPending(!isPending)}>
-            {isPending ? 'Pending' : 'Send a request'}
+            {profile.friend_status === 'Pending' || isPending
+              ? 'Pending'
+              : profile.friend_status === 'Friends'
+              ? 'Following'
+              : 'Send a request'}
           </button>
         )}
       </div>

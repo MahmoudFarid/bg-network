@@ -3,20 +3,20 @@ import { format } from 'date-fns'
 import { connect } from 'react-redux'
 import { AcceptRequest, RejectRequest } from '../../redux/actions/requestsActions'
 
-function FollowCard({ account, request, acceptRequest, rejectRequest }) {
+function NotificationCard({ account, request, acceptRequest, rejectRequest }) {
   const date = new Date(request.created)
   const formattedDate = format(date, 'MMMM dd, yyy H:mma')
 
   return (
-    <div className="grid grid-cols-9 lg:grid-cols-11 border-b border-gray-300 py-4">
-      <div className="w-24 h-16 mr-2 mt-2">
+    <div className="grid grid-cols-4 border-b border-gray-300 py-2">
+      <div className="mt-3">
         <img
-          src={account.avatar}
-          alt="avatar"
-          className="block w-10/12 h-full rounded-full mx-auto"
+          src="/assets/user.jpg"
+          alt="user"
+          className="block w-7/12 h-full rounded-full mx-auto"
         />
       </div>
-      <div className="col-span-7 text-primary text-lg self-center ml-16 hover:text-primaryText lg:col-span-6 xl:ml-0">
+      <div className="col-span-3 text-primary text-sm self-center hover:text-primaryText">
         <Link href="companies/[cid]" as={`companies/${account.id}`}>
           <a>
             <span className="font-bold">{account.name}</span>
@@ -24,18 +24,15 @@ function FollowCard({ account, request, acceptRequest, rejectRequest }) {
           </a>
         </Link>
       </div>
-      <div className="btn col-span-9 self-center lg:col-span-4">
+      <div className="btn col-span-4 self-center">
         <div>
-          <span className="text-primaryLight italic mr-4 lg:block xl:inline-block">
-            {formattedDate}
-          </span>
           <button
-            className="py-2 px-8 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+            className="py-2 px-5 mr-2 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
             onClick={() => rejectRequest(request.id)}>
             Ignore
           </button>
           <button
-            className="py-2 px-8 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
+            className="py-2 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
             onClick={() => acceptRequest(request.id)}>
             Accept
           </button>
@@ -55,4 +52,4 @@ const mapDispatchToProps = (dispatch) => ({
   acceptRequest: (id) => dispatch(AcceptRequest(id)),
 })
 
-export default connect(null, mapDispatchToProps)(FollowCard)
+export default connect(null, mapDispatchToProps)(NotificationCard)

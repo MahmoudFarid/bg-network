@@ -9,15 +9,15 @@ export default function CompanyCard({ company }) {
       <div className="transition duration-1000 ease-in-out transform hover:-translate-y-1 hover:scale-105">
         <div className="relative">
           <img src="/assets/company-cover.jpg" alt="company" />
-          {company.friend_status === 'Not Friends' && (
+          {company.friend_status !== 'Friends' && (
             <button
               className={`absolute bottom-0 right-0 py-1 mb-3 mr-5 w-1/4 text-sm rounded-full ransition duration-700 ease-in-out focus:outline-none ${
-                isPending
+                company.friend_status === 'Pending' || isPending
                   ? 'bg-gray-400 text-gray-600 italic'
                   : 'bg-white text-primaryText hover:bg-primaryText hover:text-white'
               }`}
               onClick={() => setIsPending(!isPending)}>
-              {isPending ? 'Pending' : 'Send'}
+              {company.friend_status === 'Pending' || isPending ? 'Pending' : 'Send'}
             </button>
           )}
         </div>

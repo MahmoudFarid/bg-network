@@ -1,11 +1,12 @@
 import Link from 'next/link'
-import API from '../../api'
 import { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
+import API from '../../api'
+import NotificationCard from './../cards/notificationCard'
 import { Logout } from '../../redux/actions/authActions'
-import NavigationCard from './../cards/navigationCard'
+import { GetRequests } from './../../redux/actions/requestsActions'
 
-export default function Header() {
+function Header({ requests }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isNavigationOpen, setIsNavigationOpen] = useState(false)
   const [account, setAccount] = useState({})
@@ -15,6 +16,11 @@ export default function Header() {
     dispatch(Logout())
   }
 
+  const getNotification = () => {
+    setIsNavigationOpen(!isNavigationOpen)
+    dispatch(GetRequests())
+  }
+
   useEffect(() => {
     async function fetchAccount() {
       const { data } = await API.get('users/me/')
@@ -22,26 +28,30 @@ export default function Header() {
     }
     fetchAccount()
   }, [])
+  console.log(requests)
 
   return (
     <div className="bg-white p-5 mt-1">
       {isNavigationOpen && (
         <div className="navigation absolute top-0 right-0 z-40 w-1/3 bg-white px-2 rounded-lg shadow-lg border border-gray-200 hidden lg:block xl:w-1/4">
-          <NavigationCard />
-          <NavigationCard />
-          <NavigationCard />
-          <Link
-            href={{
-              pathname: '/followers',
-              query: { isFollowersComp: false },
-            }}
-            as="/followers">
-            <a
-              className="block text-secondary text-center font-semibold uppercase py-3 hover:text-primaryText"
-              onClick={() => setIsNavigationOpen(false)}>
-              View All Requests
-            </a>
-          </Link>
+          {requests?.length === 0 || !requests ? (
+            <div className="text-primary text-xl text-center mx-auto py-8">
+              You don't have any Requests
+            </div>
+          ) : (
+            <div>
+              {requests?.map((request) => (
+                <NotificationCard key={request.id} account={request.from_user} request={request} />
+              ))}
+              <Link href="/requests">
+                <a
+                  className="block text-secondary text-center font-semibold uppercase py-3 hover:text-primaryText"
+                  onClick={() => setIsNavigationOpen(false)}>
+                  View All Requests
+                </a>
+              </Link>
+            </div>
+          )}
         </div>
       )}
       <nav className="container-fluid">
@@ -79,32 +89,22 @@ export default function Header() {
                   Plans
                 </a>
               </Link>
-              <Link
-                href={{
-                  pathname: '/followers',
-                  query: { isFollowersComp: true },
-                }}
-                as="/followers">
+              <Link href="/requests">
                 <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
-                  Brockers
+                  Requests
                 </a>
               </Link>
             </div>
             <div onClick={() => setIsOpen(false)}>
               <div
                 className="block relative text-gray-400 mt-4 mr-8 py-1 transition duration-500 ease-in-out cursor-pointer hover:text-primaryText lg:inline-block lg:mt-0"
-                onClick={() => setIsNavigationOpen(!isNavigationOpen)}>
+                onClick={getNotification}>
                 <span className="hidden lg:inline">
                   <i className="fas fa-bell fa-lg"></i>
                   <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
                 </span>
               </div>
-              <Link
-                href={{
-                  pathname: '/followers',
-                  query: { isFollowersComp: false },
-                }}
-                as="/followers">
+              <Link href="/requests">
                 <a>
                   <span className="font-semibold text-primaryLight block hover:text-primaryText lg:hidden">
                     Notification
@@ -144,9 +144,15 @@ export default function Header() {
         }
         .navigation {
           top: 9%;
-          right: 19%;
+          right: 18%;
         }
       `}</style>
     </div>
   )
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  requests: state.requests.data,
+})
+
+export default connect(mapStateToProps)(Header)

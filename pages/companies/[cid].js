@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import API from '../../../api'
-import ProjectCard from '../../../components/cards/projectCard'
-import ProfileSideBar from '../../../components/core/profileSideBar'
+import API from '../../api'
+import ProjectCard from '../../components/cards/projectCard'
+import ProfileSideBar from '../../components/core/profileSideBar'
 
 export default function Company() {
   const [projects, setProjects] = useState([])

@@ -1,8 +1,16 @@
 import { useState } from 'react'
 import Router from 'next/router'
+import { useDispatch } from 'react-redux'
+import { SendRequest } from './../../redux/actions/requestsActions'
 
 export default function CompanyInfo({ company }) {
   const [isPending, setIsPending] = useState(false)
+  const dispatch = useDispatch()
+
+  const onSendRequest = () => {
+    setIsPending(!isPending)
+    if (!isPending) dispatch(SendRequest(company.id))
+  }
 
   return (
     <div>
@@ -37,12 +45,12 @@ export default function CompanyInfo({ company }) {
           </div>
           <button
             className={`block py-1 mt-1 w-1/3 text-xs font-semibold rounded-full focus:outline-none ${
-              isPending
+              company.friend_status === 'Pending' || isPending
                 ? 'bg-gray-400 text-gray-600 italic'
                 : 'bg-primary text-gray-400 hover:text-white'
             }`}
-            onClick={() => setIsPending(!isPending)}>
-            {isPending ? 'Pending' : 'Send'}
+            onClick={onSendRequest}>
+            {company.friend_status === 'Pending' || isPending ? 'Pending' : 'Send'}
           </button>
         </div>
       </div>
