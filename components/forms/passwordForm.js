@@ -1,18 +1,19 @@
 import { useRef } from 'react'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
+import { changePassword } from '../../redux/actions/profileActions'
 import FormInput from './formInput'
 
-export default function PasswordForm({ profile }) {
+export default function PasswordForm() {
   const { register, errors, handleSubmit, watch } = useForm({
     mode: 'onBlur',
   })
   const new_password = useRef({})
   new_password.current = watch('new_password', '')
+  const dispatch = useDispatch()
 
   const onSubmit = (data) => {
-    const token = localStorage.getItem('accessToken')
-    const result = { new_password: data.new_password, uid: profile.id, token: token }
-    console.log(result)
+    dispatch(changePassword(data))
   }
 
   return (
@@ -21,9 +22,18 @@ export default function PasswordForm({ profile }) {
         <FormInput
           register={register}
           errors={errors}
+          label="current_password"
+          labelTxt="Current Password"
+          errorMsg="Current Password is required"
+          type="password"
+        />
+
+        <FormInput
+          register={register}
+          errors={errors}
           label="new_password"
           labelTxt="New Password"
-          errorMsg="Password is required"
+          errorMsg="New Password is required"
           type="password"
         />
 

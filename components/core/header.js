@@ -27,8 +27,15 @@ function Header({ requests }) {
     dispatch(GetRequests())
     const end = () => {
       dispatch(GetRequests())
+      async function fetchAccount() {
+        const { data } = await API.get('users/me/')
+        setAccount(data)
+      }
+      fetchAccount()
     }
+
     Router.events.on('routeChangeEnd', end)
+    Router.events.on('routeChangeStart', end)
   }, [])
 
   return (

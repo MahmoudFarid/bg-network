@@ -2,14 +2,17 @@ import { theme } from '../../tailwind.config'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { useForm } from 'react-hook-form'
+import { useDispatch } from 'react-redux'
 import Dropzone from 'react-dropzone-uploader'
 import FormInput from './formInput'
+import { PatchProfile } from './../../redux/actions/profileActions'
 
 export default function BasicDataForm({ profile }) {
   const { register, errors, handleSubmit } = useForm({
     mode: 'onBlur',
   })
   const [uploadImg, setUploadImg] = useState({})
+  const dispatch = useDispatch()
 
   const getUploadParams = () => {
     return { url: 'https://httpbin.org/post' }
@@ -27,7 +30,7 @@ export default function BasicDataForm({ profile }) {
 
   const onSubmit = (data) => {
     console.log(uploadImg)
-    console.log(data)
+    dispatch(PatchProfile(data))
   }
 
   return (
@@ -56,6 +59,7 @@ export default function BasicDataForm({ profile }) {
         <FormInput
           register={register}
           errors={errors}
+          defaultValue={profile.description}
           label="description"
           labelTxt="About"
           controlType="textarea"

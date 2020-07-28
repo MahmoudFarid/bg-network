@@ -29,6 +29,7 @@ export default function FormInput({
           }`}
           id={label}
           name={label}
+          defaultValue={defaultValue}
           placeholder={placeholder}
           ref={register(req === false ? { required: false } : { required: true })}></textarea>
       ) : (
@@ -49,15 +50,15 @@ export default function FormInput({
                   required: true,
                   pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
                 })
-              : label === 'password'
-              ? register({
-                  required: true,
-                  minLength: 8,
-                })
               : label === 'confirm_password'
               ? register({
                   required: true,
                   validate: (value) => value === currentPass || 'The password is not matching',
+                })
+              : type === 'password'
+              ? register({
+                  required: true,
+                  minLength: 8,
                 })
               : register(req === false ? { required: false } : { required: true })
           }
@@ -69,9 +70,9 @@ export default function FormInput({
           errors.email &&
           errors.email.type === 'pattern' &&
           "It's not valid email"}
-        {label === 'password' &&
-          errors.password &&
-          errors.password.type === 'minLength' &&
+        {type === 'password' &&
+          errors[label] &&
+          errors[label].type === 'minLength' &&
           'Password must be at least 8 characters'}
         {label === 'confirm_password' && errors.confirm_password && errors.confirm_password.message}
       </p>
