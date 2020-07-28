@@ -10,9 +10,10 @@ module.exports = {
         secondaryLight: '#1c95ec',
         secondaryLightest: '#e9f2fe',
         bgLight: '#eee',
+        bgLightest: '#f4f4f4',
         danger: '#c30606',
         success: '#0dc237',
-        overlay: '#333333ad'
+        overlay: '#333333ad',
       },
     },
   },

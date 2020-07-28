@@ -132,11 +132,11 @@ function Header({ requests }) {
                   </span>
                 </a>
               </Link>
-              <a
-                href="#responsive-header"
-                className="inline-block text-gray-400 py-1 mt-4 mr-4 transition duration-500 ease-in-out hover:text-primaryText lg:mt-0 focus:outline-none">
-                <i className="fas fa-cog fa-lg"></i>
-              </a>
+              <Link href="/settings">
+                <a className="inline-block text-gray-400 py-1 mt-4 mr-4 transition duration-500 ease-in-out hover:text-primaryText lg:mt-0 focus:outline-none">
+                  <i className="fas fa-cog fa-lg"></i>
+                </a>
+              </Link>
               <button
                 className="inline-block text-gray-400 py-1 mt-4 transition duration-500 ease-in-out cursor-pointer hover:text-danger focus:outline-none lg:mt-0"
                 onClick={logout}>

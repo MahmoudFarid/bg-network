@@ -7,10 +7,12 @@ export default function FormInput({
   label,
   labelTxt,
   placeholder,
+  defaultValue,
   errorMsg,
   currentPass,
   onKeyUp,
   req,
+  controlType,
 }) {
   return (
     <div className="control-group relative mb-5 flex flex-col">
@@ -19,35 +21,48 @@ export default function FormInput({
         htmlFor={label}>
         {labelTxt}
       </label>
-      <input
-        className={`appearance-none block w-full border border-gray-400 rounded py-2 px-4 focus:border-primaryText focus:outline-none ${
-          Object.keys(errors).includes(label) ? 'border-red-400' : 'border-gray-400'
-        }`}
-        type={type}
-        id={label}
-        name={label}
-        autoComplete="off"
-        placeholder={placeholder}
-        onKeyUp={onKeyUp}
-        ref={
-          label === 'email'
-            ? register({
-                required: true,
-                pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-              })
-            : label === 'password'
-            ? register({
-                required: true,
-                minLength: 8,
-              })
-            : label === 'confirm_password'
-            ? register({
-                required: true,
-                validate: (value) => value === currentPass || 'The password is not matching',
-              })
-            : register(req === false ? { required: false } : { required: true })
-        }
-      />
+      {controlType === 'textarea' ? (
+        <textarea
+          rows="6"
+          className={`appearance-none block w-full border border-gray-400 rounded py-2 px-4 focus:border-primaryText focus:outline-none ${
+            Object.keys(errors).includes(label) ? 'border-red-400' : 'border-gray-400'
+          }`}
+          id={label}
+          name={label}
+          placeholder={placeholder}
+          ref={register(req === false ? { required: false } : { required: true })}></textarea>
+      ) : (
+        <input
+          className={`appearance-none block w-full border border-gray-400 rounded py-2 px-4 focus:border-primaryText focus:outline-none ${
+            Object.keys(errors).includes(label) ? 'border-red-400' : 'border-gray-400'
+          }`}
+          type={type}
+          id={label}
+          name={label}
+          defaultValue={defaultValue}
+          autoComplete="off"
+          placeholder={placeholder}
+          onKeyUp={onKeyUp}
+          ref={
+            label === 'email' && req !== false
+              ? register({
+                  required: true,
+                  pattern: /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
+                })
+              : label === 'password'
+              ? register({
+                  required: true,
+                  minLength: 8,
+                })
+              : label === 'confirm_password'
+              ? register({
+                  required: true,
+                  validate: (value) => value === currentPass || 'The password is not matching',
+                })
+              : register(req === false ? { required: false } : { required: true })
+          }
+        />
+      )}
       <p className="text-red-500 text-sm italic font-semibold">
         {errors[label] && errors[label].type === 'required' && errorMsg}
         {label === 'email' &&
