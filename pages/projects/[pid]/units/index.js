@@ -17,6 +17,7 @@ export default function Units() {
   const [isLoading, setIsLoading] = useState(true)
   const [inputVal, setInputVal] = useState(0)
   const [isOverlay, setIsOverlay] = useState(false)
+  const [isBroker, setIsBroker] = useState()
   const [units, setUnits] = useState([])
 
   const { register, errors, getValues } = useForm({
@@ -50,6 +51,8 @@ export default function Units() {
 
   useEffect(() => {
     const cid = localStorage.getItem('CID')
+    const isBroker = localStorage.getItem('isBroker')
+    setIsBroker(isBroker)
 
     if (pid) {
       console.log('units of company id -> ', cid, ' in project id -> ', pid)
@@ -83,10 +86,12 @@ export default function Units() {
           )}
           <div className="flex justify-between mb-5">
             <h2 className="text-black font-bold text-lg">Skyline Complex</h2>
-            <button className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none">
-              <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
-              Add Unit
-            </button>
+            {!isBroker && (
+              <button className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none">
+                <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
+                Add Unit
+              </button>
+            )}
           </div>
           <div className="bg-white p-5 rounded-lg w-full">
             <div className="grid grid-cols-1 col-gap-8 row-gap-5 sm:grid-cols-2 xl:grid-cols-4">

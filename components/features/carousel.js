@@ -44,11 +44,7 @@ export default function Carousel({ sources, isOverlay, setIsOverlayFunc }) {
             className="leftArrow absolute fas fa-angle-left fa-5x text-white cursor-pointer"
             onClick={previousImg}></i>
         </div>
-        <img
-          src={`/assets/${sources[index]}`}
-          alt="project image"
-          className="w-full h-full rounded-md"
-        />
+        <img src={sources[index].image} alt="project image" className="w-full h-full rounded-md" />
       </div>
 
       <style jsx>{`

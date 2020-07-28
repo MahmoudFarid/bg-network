@@ -42,11 +42,7 @@ export default function Carousel2({ sources2, isOverlay2, setIsOverlayFunc2, ord
             className="fas fa-angle-right px-4 fa-lg text-white cursor-pointer"
             onClick={nextImg}></i>
         </div>
-        <img
-          src={`/assets/${sources2[index]}`}
-          alt="project image"
-          className="w-full h-full rounded-md"
-        />
+        <img src={sources2[index].image} alt="project image" className="w-full h-full rounded-md" />
       </div>
     </div>
   )
