@@ -7,10 +7,10 @@ export const Login = (account) => async (dispatch) => {
   const acc = await API.post('auth/token/login/', account)
     .then((res) => {
       toast.success('You logged in successfully')
-      Router.push('/dashboard')
+      // Router.push('/dashboard')
+      Router.push('/profile')
       localStorage.setItem('accessToken', res.data.auth_token)
       localStorage.setItem('isBroker', res.data.is_broker)
-
       dispatch({
         type: types.AUTHENTICATE,
         payload: { token: res.data.auth_token, isBroker: res.data.is_broker },
@@ -59,8 +59,10 @@ export const ResetPassword = (email) => async (dispatch) => {
 }
 
 export const Logout = () => async (dispatch) => {
-  await API.post('auth/token/destroy/')
   Router.push('/')
-  localStorage.removeItem('accessToken')
-  localStorage.removeItem('isBroker')
+  // await API.post('auth/token/destroy/')
+  setTimeout(() => {
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('isBroker')
+  }, 1000);
 }

@@ -87,21 +87,31 @@ function Header({ requests }) {
               isOpen ? 'block' : 'hidden'
             }`}>
             <div className="text-sm lg:flex-grow" onClick={() => setIsOpen(false)}>
-              <Link href="/companies">
-                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
-                  All Companies
-                </a>
-              </Link>
+              {account.is_broker ? (
+                <Link href="/companies">
+                  <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                    All Companies
+                  </a>
+                </Link>
+              ) : (
+                <Link href="/brokers">
+                  <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                    All Brokers
+                  </a>
+                </Link>
+              )}
               <Link href="/projects">
                 <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
                   My Projects
                 </a>
               </Link>
-              {/* <Link href="/plans">
-                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
-                  Plans
-                </a>
-              </Link> */}
+              {!account.is_broker && (
+                <Link href="/plans">
+                  <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                    My Plans
+                  </a>
+                </Link>
+              )}
               <Link href="/requests">
                 <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
                   Requests

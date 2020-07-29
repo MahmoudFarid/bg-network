@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import API from '../../api'
 import { useDispatch } from 'react-redux'
 import { SendRequest } from '../../redux/actions/requestsActions'
-import Loading from './loading'
 
 export default function ProfileSideBar({ cid }) {
   const [isLoading, setIsLoading] = useState(true)
@@ -18,6 +16,8 @@ export default function ProfileSideBar({ cid }) {
   }
 
   useEffect(() => {
+    const isBroker = localStorage.getItem('isBroker')
+
     if (cid) {
       async function fetchCompany() {
         await API.get(`reds/${cid}/`).then((res) => {
@@ -27,19 +27,21 @@ export default function ProfileSideBar({ cid }) {
       }
       fetchCompany()
     } else if (cid == 0) {
+      if (isBroker == 'true') {
+        async function fetchCount() {
+          await API.get('reds/count').then((res) => {
+            setCount(res.data)
+            setIsLoading(false)
+          })
+        }
+        fetchCount()
+      }
       async function fetchProfile() {
         await API.get('users/me/').then((res) => {
           setProfile(res.data)
           setIsLoading(false)
         })
       }
-      async function fetchCount() {
-        await API.get('reds/count').then((res) => {
-          setCount(res.data)
-          setIsLoading(false)
-        })
-      }
-      fetchCount()
       fetchProfile()
     }
   }, [cid])
@@ -58,7 +60,7 @@ export default function ProfileSideBar({ cid }) {
           <div className="text-center mt-5">
             <p className="text-black font-semibold text-lg">{profile.name}</p>
             <span className="text-secondary text-sm">Cairo, Egypt</span>
-            {cid && (
+            {cid && !profile.is_broker && (
               <button
                 className={`block py-3 mt-5 w-1/3 mx-auto text-xs font-semibold rounded-full focus:outline-none ${
                   profile.friend_status === 'Pending' || isPending
@@ -77,7 +79,7 @@ export default function ProfileSideBar({ cid }) {
             )}
           </div>
           <div className="w-3/4 mx-auto mt-8 text-center">
-            {profile.is_broker ? (
+            {profile.is_broker && (
               <div className="flex justify-around">
                 <div>
                   <p className="font-bold">Companies</p>
@@ -89,21 +91,6 @@ export default function ProfileSideBar({ cid }) {
                   <p className="font-bold">Projects</p>
                   <span className="text-sm">
                     {count.friends_projects_count ? count.friends_projects_count : '0'}
-                  </span>
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-around">
-                <div>
-                  <p className="font-bold">Projects</p>
-                  <span className="text-sm">
-                    {profile.projects_count ? profile.projects_count : '0'}
-                  </span>
-                </div>
-                <div>
-                  <p className="font-bold">Units</p>
-                  <span className="text-sm hover:text-primaryText">
-                    {profile.units_count ? profile.units_count : '0'}
                   </span>
                 </div>
               </div>
