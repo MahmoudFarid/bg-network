@@ -4,10 +4,11 @@ import ReactPlayer from 'react-player'
 import NumberFormat from 'react-number-format'
 import API from '../../../../api'
 import Loading from '../../../../components/core/loading'
-import PlanCard from '../../../../components/cards/planCard'
+import PlanDetails from '../../../../components/cards/planDetails'
 import GoogleMap from '../../../../components/features/googleMap'
 import Carousel from '../../../../components/features/carousel'
 import Carousel2 from '../../../../components/features/carousel2'
+import Overlay from './../../../../components/features/overlay'
 
 export default function Unit() {
   const {
@@ -17,6 +18,8 @@ export default function Unit() {
   const [isLoading, setIsLoading] = useState(true)
   const [isOverlay, setIsOverlay] = useState(false)
   const [isOverlay2, setIsOverlay2] = useState(false)
+  const [isPlanOverlay, setIsPlanOverlay] = useState(false)
+  const [plan, setPlan] = useState({})
   const [unit, setUnit] = useState({})
 
   const setIsOverlayFunc = (bool) => {
@@ -53,7 +56,10 @@ export default function Unit() {
           onClick={() => {
             setIsOverlay(false)
             setIsOverlay2(false)
+            setIsPlanOverlay(false)
           }}>
+          <Overlay opacity={isPlanOverlay} />
+          {isPlanOverlay && <PlanDetails plan={plan} />}
           <div className="mb-5 overflow-hidden">
             <button className="py-3 px-6 float-right text-secondaryLight text-xs font-bold border border-secondaryLight rounded-lg transition duration-500 ease-in-out focus:outline-none hover:bg-secondaryLight hover:text-white">
               Share with your Brokers
@@ -192,7 +198,18 @@ export default function Unit() {
           <div className="mb-8">
             <h2 className="text-black text-lg font-bold mb-2">Plans ({unit.plans.length} Plan)</h2>
             {unit.plans.map((plan, index) => (
-              <PlanCard plan={plan} key={plan.id} index={index} />
+              <div className="bg-white mb-5 p-5">
+                <p
+                  className="text-primaryText font-semibold text-lg cursor-pointer hover:text-secondaryLight"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setIsPlanOverlay(true)
+                    setPlan(plan)
+                  }}>
+                  <span className="font-bold">{index + 1}- </span>
+                  {plan.name}
+                </p>
+              </div>
             ))}
           </div>
 

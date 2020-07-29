@@ -2,12 +2,16 @@ import { theme } from '../../tailwind.config'
 import { useState, useEffect } from 'react'
 import API from '../../api'
 import Loading from '../../components/core/loading'
+import Overlay from './../../components/features/overlay'
+import PlanDetails from '../../components/cards/planDetails'
 
 export default function Plans() {
-  const [isOpen, setIsOpen] = useState(false)
   const [rowId, setRowId] = useState(0)
+  const [isOpen, setIsOpen] = useState(false)
+  const [isOverlay, setIsOverlay] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [plans, setPlans] = useState([])
+  const [plan, setPlan] = useState()
 
   useEffect(() => {
     async function fetchPlans() {
@@ -18,13 +22,20 @@ export default function Plans() {
     }
     fetchPlans()
   }, [])
-  console.log(plans)
+
   return (
     <div>
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container-fluid my-16">
+        <div
+          className="container-fluid my-16"
+          onClick={(e) => {
+            e.stopPropagation()
+            setIsOverlay(false)
+          }}>
+          <Overlay opacity={isOverlay} />
+          {isOverlay && <PlanDetails plan={plan} />}
           <div className="flex justify-between mb-5">
             <h2 className="text-black font-bold text-lg">Plans</h2>
             <button className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none">
@@ -48,7 +59,14 @@ export default function Plans() {
                 </thead>
                 <tbody className="text-secondary">
                   {plans.map((plan) => (
-                    <tr className="transition duration-300 ease-in-out border-l-4 border-transparent hover:bg-secondaryLightest hover:border-secondaryLight">
+                    <tr
+                      key={plan.id}
+                      className="transition duration-300 ease-in-out border-l-4 border-transparent hover:bg-secondaryLightest hover:border-secondaryLight"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setIsOverlay(true)
+                        setPlan(plan)
+                      }}>
                       <td className="p-5">{plan.name}</td>
                       <td className="p-5">
                         <p className="desc w-11/12 h-6 overflow-hidden lg:whitespace-no-wrap">
