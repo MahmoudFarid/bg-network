@@ -4,11 +4,11 @@ import ReactPlayer from 'react-player'
 import NumberFormat from 'react-number-format'
 import API from '../../../../api'
 import Loading from '../../../../components/core/loading'
-import PlanDetails from '../../../../components/cards/planDetails'
-import GoogleMap from '../../../../components/features/googleMap'
+import Overlay from './../../../../components/features/overlay'
 import Carousel from '../../../../components/features/carousel'
 import Carousel2 from '../../../../components/features/carousel2'
-import Overlay from './../../../../components/features/overlay'
+import GoogleMap from '../../../../components/features/googleMap'
+import PlanDetails from './../../../../components/popup/planDetails'
 
 export default function Unit() {
   const {

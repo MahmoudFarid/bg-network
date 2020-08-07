@@ -1,26 +1,27 @@
 import { theme } from '../../tailwind.config'
 import { useState, useEffect } from 'react'
-import API from '../../api'
+import Router from 'next/router'
+import { useDispatch, connect } from 'react-redux'
 import Loading from '../../components/core/loading'
 import Overlay from './../../components/features/overlay'
-import PlanDetails from '../../components/cards/planDetails'
+import PlanDetails from '../../components/popup/planDetails'
+import DeletePlan from '../../components/popup/deletePlan'
+import { GetPlans } from './../../redux/actions/plansActions'
 
-export default function Plans() {
+function Plans({ plans }) {
   const [rowId, setRowId] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
   const [isOverlay, setIsOverlay] = useState(false)
+  const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [plans, setPlans] = useState([])
   const [plan, setPlan] = useState()
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    async function fetchPlans() {
-      await API.get('plans/').then((res) => {
-        setPlans(res.data.results)
-        setIsLoading(false)
-      })
-    }
-    fetchPlans()
+    dispatch(GetPlans())
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
   }, [])
 
   return (
@@ -33,18 +34,25 @@ export default function Plans() {
           onClick={(e) => {
             e.stopPropagation()
             setIsOverlay(false)
+            setIsDeleteOverlay(false)
           }}>
           <Overlay opacity={isOverlay} />
+          <Overlay opacity={isDeleteOverlay} />
+
           {isOverlay && <PlanDetails plan={plan} />}
+          {isDeleteOverlay && <DeletePlan plan={plan} />}
+
           <div className="flex justify-between mb-5">
             <h2 className="text-black font-bold text-lg">Plans</h2>
-            <button className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none">
+            <button
+              className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+              onClick={() => Router.push('/plans/add')}>
               <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
               Add Plan
             </button>
           </div>
           <div className="bg-white p-5 rounded-lg">
-            {plans.length === 0 ? (
+            {plans?.length === 0 ? (
               <div className="text-primary text-4xl text-center mx-auto my-10">
                 You don't have any Plans yet
               </div>
@@ -58,13 +66,14 @@ export default function Plans() {
                   </tr>
                 </thead>
                 <tbody className="text-secondary">
-                  {plans.map((plan) => (
+                  {plans?.map((plan) => (
                     <tr
                       key={plan.id}
                       className="transition duration-300 ease-in-out border-l-4 border-transparent hover:bg-secondaryLightest hover:border-secondaryLight"
                       onClick={(e) => {
                         e.stopPropagation()
                         setIsOverlay(true)
+                        setIsDeleteOverlay(false)
                         setPlan(plan)
                       }}>
                       <td className="p-5">{plan.name}</td>
@@ -76,17 +85,30 @@ export default function Plans() {
                       <td className="relative p-5 text-right">
                         <i
                           className="fas fa-ellipsis-v text-primaryLight pl-5 pr-2 cursor-pointer hover:text-primary"
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation()
                             setIsOpen(!isOpen)
                             setRowId(plan.id)
                           }}></i>
                         {isOpen && rowId === plan.id && (
                           <div className="absolute right-0 z-10 bg-white text-primaryLight text-left mr-5 w-9/12 border border-gray-200 rounded-lg shadow-md">
-                            <p className="py-3 px-5 cursor-pointer hover:bg-gray-100 hover:text-primary hover:font-semibold">
+                            <p
+                              className="py-3 px-5 cursor-pointer hover:bg-gray-100 hover:text-primary hover:font-semibold"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                Router.push('/plans/[pid]', `/plans/${plan.id}`)
+                              }}>
                               <i className="fas fa-pen mr-5"></i>
                               Edit
                             </p>
-                            <p className="py-3 px-5 cursor-pointer hover:bg-gray-100 hover:text-primary hover:font-semibold">
+                            <p
+                              className="py-3 px-5 cursor-pointer hover:bg-gray-100 hover:text-primary hover:font-semibold"
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setPlan(plan)
+                                setIsDeleteOverlay(true)
+                                setIsOverlay(false)
+                              }}>
                               <i className="fas fa-trash mr-5"></i>
                               Delete
                             </p>
@@ -115,3 +137,9 @@ export default function Plans() {
     </div>
   )
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  plans: state.plans.data
+})
+
+export default connect(mapStateToProps)(Plans)

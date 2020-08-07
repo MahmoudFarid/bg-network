@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux'
 import authReducer from './authReducer'
-import requestsReducer from './requestsReducer'
+import plansReducer from './plansReducer'
 import profileReducer from './profileReducer'
+import requestsReducer from './requestsReducer'
 
 const rootReducer = combineReducers({
   authentication: authReducer,
   requests: requestsReducer,
   account: profileReducer,
+  plans: plansReducer
 })
 
 export default rootReducer

@@ -11,6 +11,7 @@ export default function FormInput({
   errorMsg,
   currentPass,
   onKeyUp,
+  onKeyPress,
   req,
   controlType,
 }) {
@@ -44,6 +45,7 @@ export default function FormInput({
           autoComplete="off"
           placeholder={placeholder}
           onKeyUp={onKeyUp}
+          onKeyPress={onKeyPress}
           ref={
             label === 'email' && req !== false
               ? register({
