@@ -3,6 +3,8 @@ import { Map, GoogleApiWrapper, Marker } from 'google-maps-react'
 
 class GoogleMap extends Component {
   render() {
+    const { height } = this.props
+
     return (
       <div>
         <Map
@@ -15,7 +17,7 @@ class GoogleMap extends Component {
 
         <style jsx global>{`
           .map {
-            height: 30rem !important;
+            height: ${height} !important;
             position: relative !important;
           }
         `}</style>

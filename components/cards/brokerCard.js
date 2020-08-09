@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Router from 'next/router'
 import { useDispatch } from 'react-redux'
 import { SendRequest } from '../../redux/actions/requestsActions'
 
@@ -21,7 +22,9 @@ export default function BrokerCard({ broker }) {
         />
       </div>
       <div className="item w-9/12">
-        <button className="text-secondary font-semibold text-lg hover:text-primaryText focus:outline-none">
+        <button
+          className="text-secondary font-semibold text-lg hover:text-primaryText focus:outline-none"
+          onClick={() => Router.push('/brokers/[bid]', `/brokers/${broker.id}`)}>
           {broker.name}
         </button>
         <p className="desc text-primaryLight text-sm font-semibold mb-4 mt-1 overflow-hidden whitespace-no-wrap">

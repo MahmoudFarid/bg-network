@@ -51,16 +51,16 @@ export const PatchPlan = (id, plan) => async (dispatch) => {
 
 export const deletePlan = (id) => async (dispatch) => {
   const acc = await API.delete(`plans/${id}/`)
-  .then(() => {
-    toast.success('Your plan is deleted successfully')
-    Router.push('/plans')
-    dispatch({
-      type: types.DELETE_PLAN,
-      payload: id,
+    .then(() => {
+      toast.success('Your plan is deleted successfully')
+      Router.push('/plans')
+      dispatch({
+        type: types.DELETE_PLAN,
+        payload: id,
+      })
     })
-  })
-  .catch((ex) => {
-    toast.error('Something is error')
-    console.log(ex.response)
-  })
+    .catch((ex) => {
+      toast.error('Something is error')
+      console.log(ex.response)
+    })
 }

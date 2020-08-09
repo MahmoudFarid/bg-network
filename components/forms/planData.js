@@ -113,7 +113,7 @@ export default function PlanData({ pid }) {
                     labelTxt="Plan Title"
                     errorMsg="Title is required"
                     type="text"
-                    placeholder="Enter your Title"
+                    placeholder="Enter Plan Title"
                   />
                   <FormInput
                     register={register}
@@ -130,7 +130,7 @@ export default function PlanData({ pid }) {
               <p className="twext-black font-bold mb-5">Installments</p>
               {plan.installments?.map((installment, i) =>
                 i === 0 ? (
-                  <div className="mb-5 grid sm:grid-cols-2 col-gap-10" key={i}>
+                  <div className="mb-5 grid sm:grid-cols-2 col-gap-10 sm:mb-0" key={i}>
                     <FormInput
                       register={register}
                       errors={errors}
@@ -152,7 +152,7 @@ export default function PlanData({ pid }) {
                     />
                   </div>
                 ) : (
-                  <div className="mb-5 grid sm:grid-cols-2 col-gap-10" key={i}>
+                  <div className="mb-5 grid sm:grid-cols-2 col-gap-10 sm:mb-0" key={i}>
                     <FormInput
                       register={register}
                       errors={errors}
@@ -176,7 +176,7 @@ export default function PlanData({ pid }) {
                 )
               )}
               {addNew.map((Number, i) => (
-                <div className="mb-5 grid sm:grid-cols-2 col-gap-10" key={i}>
+                <div className="mb-5 grid sm:grid-cols-2 col-gap-10 sm:mb-0" key={i}>
                   <FormInput
                     register={register}
                     errors={errors}

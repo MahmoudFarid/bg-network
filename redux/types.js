@@ -17,3 +17,8 @@ export const GET_PLANS = 'GET_PLANS'
 export const ADD_PLAN = 'ADD_PLAN'
 export const PATCH_PLAN = 'PATCH_PLAN'
 export const DELETE_PLAN = 'DELETE_PLAN'
+
+// Projects
+export const ADD_PROJECT = 'ADD_PROJECT'
+export const PATCH_PROJECT = 'PATCH_PROJECT'
+export const DELETE_PROJECT = 'DELETE_PROJECT'

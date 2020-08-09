@@ -3,7 +3,7 @@ import API from '../../api'
 import { useDispatch } from 'react-redux'
 import { SendRequest } from '../../redux/actions/requestsActions'
 
-export default function ProfileSideBar({ cid }) {
+export default function ProfileSideBar({ cid, bid }) {
   const [isLoading, setIsLoading] = useState(true)
   const [isPending, setIsPending] = useState(false)
   const [profile, setProfile] = useState({})
@@ -43,8 +43,16 @@ export default function ProfileSideBar({ cid }) {
         })
       }
       fetchProfile()
+    } else if (bid) {
+      async function fetchBroker() {
+        await API.get(`brokers/${bid}/`).then((res) => {
+          setProfile(res.data)
+          setIsLoading(false)
+        })
+      }
+      fetchBroker()
     }
-  }, [cid])
+  }, [cid, bid])
 
   return (
     <div className="bg-bgLight py-12 pt-24">
@@ -96,9 +104,9 @@ export default function ProfileSideBar({ cid }) {
               </div>
             )}
           </div>
-          <div className="mt-8 px-8">
+          <div className="mt-10 px-8 h-56">
             <p className="font-semibold ml-2 mb-2">About</p>
-            <p className="text-primary">
+            <p className="text-primary mb-4">
               {profile.description ? profile.description : 'No Description'}
             </p>
           </div>

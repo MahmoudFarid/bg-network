@@ -241,7 +241,7 @@ export default function Unit() {
               Maadi, Heliopolis, Ring Road and Ain Sokhna
             </p>
             <div className="col-span-2">
-              <GoogleMap />
+              <GoogleMap height="30rem" />
             </div>
           </div>
         </div>

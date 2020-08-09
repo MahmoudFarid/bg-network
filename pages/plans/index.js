@@ -33,6 +33,7 @@ function Plans({ plans }) {
           className="container-fluid my-16"
           onClick={(e) => {
             e.stopPropagation()
+            setIsOpen(false)
             setIsOverlay(false)
             setIsDeleteOverlay(false)
           }}>
@@ -139,7 +140,7 @@ function Plans({ plans }) {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  plans: state.plans.data
+  plans: state.plans.data,
 })
 
 export default connect(mapStateToProps)(Plans)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import Router from 'next/router'
 import API from '../../api'
 import ProjectCard from '../../components/cards/projectCard'
 import Loading from '../../components/core/loading'
@@ -38,7 +38,9 @@ export default function Projects() {
           <div className="flex justify-between mb-5">
             <h2 className="text-black font-bold text-lg">Projects</h2>
             {isBroker != 'true' && (
-              <button className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none">
+              <button
+                className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+                onClick={() => Router.push('/projects/add')}>
                 <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
                 Add Project
               </button>

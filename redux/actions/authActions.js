@@ -64,5 +64,5 @@ export const Logout = () => async (dispatch) => {
   setTimeout(() => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('isBroker')
-  }, 1000);
+  }, 1000)
 }
