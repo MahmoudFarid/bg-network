@@ -32,16 +32,27 @@ export default function Unit() {
 
   useEffect(() => {
     const cid = localStorage.getItem('CID')
+    const isBroker = localStorage.getItem('isBroker')
 
-    if ((pid, uid)) {
+    if (pid && uid) {
       console.log('company -> ', cid, ' in project -> ', pid, ' in unit -> ', uid)
-      async function fetchUnit() {
-        await API.get(`reds/${cid}/projects/${pid}/units/${uid}`).then((res) => {
-          setUnit(res.data)
-          setIsLoading(false)
-        })
+      if (isBroker == 'true') {
+        async function fetchUnit() {
+          await API.get(`reds/${cid}/projects/${pid}/units/${uid}`).then((res) => {
+            setUnit(res.data)
+            setIsLoading(false)
+          })
+        }
+        fetchUnit()
+      } else {
+        async function fetchUnit() {
+          await API.get(`projects/${pid}/units/${uid}`).then((res) => {
+            setUnit(res.data)
+            setIsLoading(false)
+          })
+        }
+        fetchUnit()
       }
-      fetchUnit()
     }
   }, [pid, uid])
   console.log(unit)

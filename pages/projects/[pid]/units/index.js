@@ -56,14 +56,23 @@ export default function Units() {
 
     if (pid) {
       console.log('units of company id -> ', cid, ' in project id -> ', pid)
-
-      async function fetchUnits() {
-        await API.get(`reds/${cid}/projects/${pid}/units/`).then((res) => {
-          setUnits(res.data.results)
-          setIsLoading(false)
-        })
+      if (isBroker == 'true') {
+        async function fetchUnits() {
+          await API.get(`reds/${cid}/projects/${pid}/units/`).then((res) => {
+            setUnits(res.data.results)
+            setIsLoading(false)
+          })
+        }
+        fetchUnits()
+      } else {
+        async function fetchUnits() {
+          await API.get(`projects/${pid}/units/`).then((res) => {
+            setUnits(res.data.results)
+            setIsLoading(false)
+          })
+        }
+        fetchUnits()
       }
-      fetchUnits()
     }
   }, [pid])
 
@@ -86,7 +95,7 @@ export default function Units() {
           )}
           <div className="flex justify-between mb-5">
             <h2 className="text-black font-bold text-lg">Skyline Complex</h2>
-            {!isBroker && (
+            {isBroker != 'true' && (
               <button className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none">
                 <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
                 Add Unit

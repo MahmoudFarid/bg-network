@@ -15,7 +15,7 @@ export default function ProjectCard({ project }) {
       </div>
 
       <div className="absolute bottom-0 ml-5 mb-3">
-        {project.red.friend_status === 'Friends' ? (
+        {project?.red?.friend_status === 'Friends' ? (
           <Link
             href={{
               pathname: '/projects/[pid]',
@@ -28,14 +28,25 @@ export default function ProjectCard({ project }) {
               {project.name}
             </a>
           </Link>
-        ) : (
+        ) : project?.red?.friend_status && project?.red?.friend_status !== 'Friends' ? (
           <p className="text-white text-xl font-semibold">{project.name}</p>
+        ) : (
+          <Link
+            href={{
+              pathname: '/projects/[pid]',
+              query: { pid: project.id },
+            }}
+            as={`/projects/${project.id}`}>
+            <a className="text-white text-xl font-semibold block hover:underline focus:outline-none">
+              {project.name}
+            </a>
+          </Link>
         )}
 
-        <span className="text-gray-300 font-semibold text-sm">
+        {/* <span className="text-gray-300 font-semibold text-sm">
           <i className="fas fa-home fa-sm text-white mr-3"></i>
           {project.units_count} {project.units_count <= 1 ? 'Unit' : 'Units'}
-        </span>
+        </span> */}
       </div>
     </div>
   )

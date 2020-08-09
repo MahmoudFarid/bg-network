@@ -63,14 +63,23 @@ export default function Project() {
 
     if (pid) {
       console.log('company -> ', cid, ' with project -> ', pid)
-
-      async function fetchUnits() {
-        await API.get(`reds/${cid}/projects/${pid}/units/`).then((res) => {
-          setUnits(res.data.results)
-          setIsLoading(false)
-        })
+      if (cid == 0) {
+        async function fetchUnits() {
+          await API.get(`projects/${pid}/units/`).then((res) => {
+            setUnits(res.data.results)
+            setIsLoading(false)
+          })
+        }
+        fetchUnits()
+      } else {
+        async function fetchUnits() {
+          await API.get(`reds/${cid}/projects/${pid}/units/`).then((res) => {
+            setUnits(res.data.results)
+            setIsLoading(false)
+          })
+        }
+        fetchUnits()
       }
-      fetchUnits()
     }
   }, [pid])
 

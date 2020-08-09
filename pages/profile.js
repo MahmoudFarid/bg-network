@@ -60,9 +60,9 @@ export default function MyProfile() {
               </div>
             ) : (
               <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {/* {projects.map((project) => (
+                {projects.map((project) => (
                   <ProjectCard key={project.id} project={project} />
-                ))} */}
+                ))}
               </div>
             )}
           </div>
