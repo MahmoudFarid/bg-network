@@ -9,16 +9,18 @@ import FormInput from './formInput'
 import Loading from './../core/loading'
 import GoogleMap from '../features/googleMap'
 import DropdownMenu from './../features/dropdownMenu'
-import { AddProject } from './../../redux/actions/projectsActions'
+import { AddProject, EditProject } from './../../redux/actions/projectsActions'
 
-export default function ProjectData() {
+export default function ProjectData({ pid }) {
   const { register, errors, handleSubmit } = useForm({
     mode: 'onBlur',
   })
   const [submit, setSubmit] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [project, setProject] = useState({})
   const [plans, setPlans] = useState([])
   const [plansIDs, setPlansIDs] = useState([])
+  const [choices, setChoices] = useState([18])
   const [uploadCoverImg, setCoverImg] = useState({})
   const [uploadProjectImgs, setProjectImgs] = useState([])
   const dispatch = useDispatch()
@@ -90,10 +92,19 @@ export default function ProjectData() {
       plans: plansIDs,
     }
     console.log(result)
-    dispatch(AddProject(result))
+    pid ? dispatch(EditProject(pid, result)) : dispatch(AddProject(result))
   }
 
   useEffect(() => {
+    if (pid) {
+      async function fetchProject() {
+        await API.get(`projects/${pid}`).then((res) => {
+          setProject(res.data)
+          setIsLoading(false)
+        })
+      }
+      fetchProject()
+    }
     async function fetchPlans() {
       await API.get('plans/').then((res) => {
         setPlans(res.data.results)
@@ -101,7 +112,7 @@ export default function ProjectData() {
       })
     }
     fetchPlans()
-  }, [])
+  }, [pid])
 
   return (
     <div>
@@ -117,6 +128,7 @@ export default function ProjectData() {
                   <FormInput
                     register={register}
                     errors={errors}
+                    defaultValue={project?.name}
                     label="name"
                     labelTxt="Project Name"
                     errorMsg="Name is required"
@@ -125,6 +137,7 @@ export default function ProjectData() {
                   <FormInput
                     register={register}
                     errors={errors}
+                    defaultValue={project?.youtube}
                     label="youtube"
                     labelTxt="Youtube Link"
                     type="text"
@@ -136,10 +149,19 @@ export default function ProjectData() {
                     </label>
                     <DropdownMenu
                       order="first"
-                      name="Select plans"
+                      name={` ${
+                        choices.length === 0
+                          ? 'Select plans'
+                          : `${
+                              choices.length <= 1
+                                ? choices.length + ' plan'
+                                : choices.length + ' plans'
+                            } selected`
+                      } `}
                       dropdownWidth="w-full"
                       multiple={true}
                       options={plans}
+                      choices={choices}
                       itemSelectedFunc={itemSelectedFunc}
                     />
                     <p className="text-red-500 text-sm italic font-semibold mb-5">
@@ -152,29 +174,32 @@ export default function ProjectData() {
                   <FormInput
                     register={register}
                     errors={errors}
+                    defaultValue={project?.area}
                     label="area"
                     labelTxt="Area"
                     type="text"
+                    errorMsg="Area is required"
                     onKeyPress={preventShowLetter}
-                    req={false}
                   />
                   <FormInput
                     register={register}
                     errors={errors}
+                    defaultValue={project?.floors_number}
                     label="floors_number"
                     labelTxt="Floors Number"
                     type="text"
+                    errorMsg="Floors Number is required"
                     onKeyPress={preventShowLetter}
-                    req={false}
                   />
                   <FormInput
                     register={register}
                     errors={errors}
+                    defaultValue={project?.flats_per_floor}
                     label="flats_per_floor"
                     labelTxt="Flats per Floor"
                     type="text"
+                    errorMsg="Flats per floor is required"
                     onKeyPress={preventShowLetter}
-                    req={false}
                   />
                 </div>
               </div>

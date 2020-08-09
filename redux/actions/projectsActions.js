@@ -31,3 +31,35 @@ export const AddProject = (project) => async (dispatch) => {
       console.log(ex.response)
     })
 }
+
+export const DeleteProject = (id) => async (dispatch) => {
+  const acc = await API.delete(`projects/${id}/`)
+    .then(() => {
+      toast.success('Your project is deleted successfully')
+      Router.push('/projects')
+      dispatch({
+        type: types.DELETE_PROJECT,
+        payload: id,
+      })
+    })
+    .catch((ex) => {
+      toast.error('Something is error')
+      console.log(ex.response)
+    })
+}
+
+export const EditProject = (id, project) => async (dispatch) => {
+  const acc = await API.patch(`projects/${id}/`, project)
+    .then(() => {
+      toast.success('Your project is updated successfully')
+      Router.push('/projects')
+      dispatch({
+        type: types.PATCH_PROJECT,
+        payload: project,
+      })
+    })
+    .catch((ex) => {
+      toast.error('Something is error')
+      console.log(ex.response)
+    })
+}

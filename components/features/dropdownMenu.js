@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 export default function DropdownMenu({
   order,
   name,
   dropdownWidth,
   options,
+  choices,
   multiple,
   itemSelectedFunc,
 }) {
   const [openDropdown, toggleDropdown] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [item, setItem] = useState('')
-  const [choices, setChoices] = useState([])
 
   const onItemSelecting = (option) => {
     if (multiple) {

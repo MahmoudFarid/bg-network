@@ -49,7 +49,7 @@ export const PatchPlan = (id, plan) => async (dispatch) => {
     })
 }
 
-export const deletePlan = (id) => async (dispatch) => {
+export const DeletePlan = (id) => async (dispatch) => {
   const acc = await API.delete(`plans/${id}/`)
     .then(() => {
       toast.success('Your plan is deleted successfully')

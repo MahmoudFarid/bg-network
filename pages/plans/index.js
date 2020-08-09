@@ -5,8 +5,8 @@ import { useDispatch, connect } from 'react-redux'
 import Loading from '../../components/core/loading'
 import Overlay from './../../components/features/overlay'
 import PlanDetails from '../../components/popup/planDetails'
-import DeletePlan from '../../components/popup/deletePlan'
-import { GetPlans } from './../../redux/actions/plansActions'
+import DeleteObj from '../../components/popup/delete'
+import { GetPlans, DeletePlan } from './../../redux/actions/plansActions'
 
 function Plans({ plans }) {
   const [rowId, setRowId] = useState(0)
@@ -16,6 +16,10 @@ function Plans({ plans }) {
   const [isLoading, setIsLoading] = useState(true)
   const [plan, setPlan] = useState()
   const dispatch = useDispatch()
+
+  const onDeletingItem = () => {
+    dispatch(DeletePlan(plan.id))
+  }
 
   useEffect(() => {
     dispatch(GetPlans())
@@ -41,7 +45,7 @@ function Plans({ plans }) {
           <Overlay opacity={isDeleteOverlay} />
 
           {isOverlay && <PlanDetails plan={plan} />}
-          {isDeleteOverlay && <DeletePlan plan={plan} />}
+          {isDeleteOverlay && <DeleteObj name={plan.name} onDeletingItem={onDeletingItem} />}
 
           <div className="flex justify-between mb-5">
             <h2 className="text-black font-bold text-lg">Plans</h2>
