@@ -1,23 +1,23 @@
 import * as types from '../types'
 
 const initialState = {
-  project: null,
+  unit: null,
   id: null,
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case types.ADD_PROJECT:
+    case types.ADD_UNIT:
       return {
         ...state,
-        project: action.payload,
+        unit: action.payload,
       }
-    case types.PATCH_PROJECT:
+    case types.PATCH_UNIT:
       return {
         ...state,
-        project: action.payload,
+        unit: action.payload,
       }
-    case types.DELETE_PROJECT:
+    case types.DELETE_UNIT:
       return {
         ...state,
         id: action.payload,

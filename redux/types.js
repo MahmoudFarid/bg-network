@@ -22,3 +22,8 @@ export const DELETE_PLAN = 'DELETE_PLAN'
 export const ADD_PROJECT = 'ADD_PROJECT'
 export const PATCH_PROJECT = 'PATCH_PROJECT'
 export const DELETE_PROJECT = 'DELETE_PROJECT'
+
+// Units
+export const ADD_UNIT = 'ADD_UNIT'
+export const PATCH_UNIT = 'PATCH_UNIT'
+export const DELETE_UNIT = 'DELETE_UNIT'

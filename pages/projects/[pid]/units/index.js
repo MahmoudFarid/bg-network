@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import API from '../../../../api'
 import Loading from '../../../../components/core/loading'
@@ -81,90 +81,104 @@ export default function Units() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container-fluid my-16" onClick={() => setIsOverlay(false)}>
-          <Overlay opacity={isOverlay} />
-          {isOverlay && (
-            <div onClick={(e) => e.stopPropagation()}>
-              <AdvancedFilter
-                preventShowLetter={preventShowLetter}
-                dropdownOptions={dropdownOptions}
-                itemSelectedFunc={itemSelectedFunc}
-                onAdvancedSearch={onAdvancedSearch}
-              />
-            </div>
-          )}
+        <div className="container-fluid my-16">
           <div className="flex justify-between mb-5">
             <h2 className="text-black font-bold text-lg">Skyline Complex</h2>
             {isBroker != 'true' && (
-              <button className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none">
+              <button
+                className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+                onClick={() =>
+                  Router.push('/projects/[pid]/units/add', `/projects/${pid}/units/add`)
+                }>
                 <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
                 Add Unit
               </button>
             )}
           </div>
-          <div className="bg-white p-5 rounded-lg w-full">
-            <div className="grid grid-cols-1 col-gap-8 row-gap-5 sm:grid-cols-2 xl:grid-cols-4">
-              <Filter
-                register={register}
-                errors={errors}
-                name="Price"
-                label1="from"
-                labelTxt1="From"
-                label2="to"
-                labelTxt2="To"
-                width="w-5/12"
-                preventShowLetter={preventShowLetter}
-              />
-              <Filter
-                register={register}
-                errors={errors}
-                name="Area"
-                label1="from"
-                labelTxt1="From"
-                label2="to"
-                labelTxt2="To"
-                width="w-5/12"
-                preventShowLetter={preventShowLetter}
-              />
-              <div className="self-end mb-0 xl:mb-5">
-                <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                  Direction
-                </p>
-                <DropdownMenu
-                  order="first"
-                  name="Direction"
-                  dropdownWidth="w-full"
-                  options={dropdownOptions}
-                  itemSelectedFunc={itemSelectedFunc}
-                />
-              </div>
-              <div>
-                <p
-                  className="text-black text-sm text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
-                  onClick={(e) => {
-                    setIsOverlay(true)
-                    e.stopPropagation()
-                  }}>
-                  Advanced Search
-                </p>
-                <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                  Types
-                </p>
-                <DropdownMenu
-                  order="second"
-                  name="Types"
-                  dropdownWidth="w-full"
-                  options={dropdownOptions}
-                  itemSelectedFunc={itemSelectedFunc}
-                />
+          {units.length === 0 ? (
+            <div className="bg-white p-5 rounded-lg shadow-lg">
+              <div className="text-primary text-4xl text-center mx-auto my-10">
+                This project has no Units yet
               </div>
             </div>
-          </div>
-          <div className="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {units.map((unit) => (
-              <UnitCard key={unit.id} unit={unit} pid={pid} />
-            ))}
-          </div>
+          ) : (
+            <div onClick={() => setIsOverlay(false)}>
+              <Overlay opacity={isOverlay} />
+              {isOverlay && (
+                <div onClick={(e) => e.stopPropagation()}>
+                  <AdvancedFilter
+                    preventShowLetter={preventShowLetter}
+                    dropdownOptions={dropdownOptions}
+                    itemSelectedFunc={itemSelectedFunc}
+                    onAdvancedSearch={onAdvancedSearch}
+                  />
+                </div>
+              )}
+              <div className="bg-white p-5 rounded-lg w-full">
+                <div className="grid grid-cols-1 col-gap-8 row-gap-5 sm:grid-cols-2 xl:grid-cols-4">
+                  <Filter
+                    register={register}
+                    errors={errors}
+                    name="Price"
+                    label1="from"
+                    labelTxt1="From"
+                    label2="to"
+                    labelTxt2="To"
+                    width="w-5/12"
+                    preventShowLetter={preventShowLetter}
+                  />
+                  <Filter
+                    register={register}
+                    errors={errors}
+                    name="Area"
+                    label1="from"
+                    labelTxt1="From"
+                    label2="to"
+                    labelTxt2="To"
+                    width="w-5/12"
+                    preventShowLetter={preventShowLetter}
+                  />
+                  <div className="self-end mb-0 xl:mb-5">
+                    <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                      Direction
+                    </p>
+                    <DropdownMenu
+                      order="first"
+                      name="Direction"
+                      dropdownWidth="w-full"
+                      options={dropdownOptions}
+                      itemSelectedFunc={itemSelectedFunc}
+                    />
+                  </div>
+                  <div>
+                    <p
+                      className="text-black text-sm text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
+                      onClick={(e) => {
+                        setIsOverlay(true)
+                        e.stopPropagation()
+                      }}>
+                      Advanced Search
+                    </p>
+                    <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                      Types
+                    </p>
+                    <DropdownMenu
+                      order="second"
+                      name="Types"
+                      dropdownWidth="w-full"
+                      options={dropdownOptions}
+                      itemSelectedFunc={itemSelectedFunc}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-5 mt-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {units.map((unit) => (
+                  <UnitCard key={unit.id} unit={unit} pid={pid} />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

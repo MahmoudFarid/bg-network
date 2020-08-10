@@ -5,7 +5,7 @@ import { useDispatch, connect } from 'react-redux'
 import Loading from '../../components/core/loading'
 import Overlay from './../../components/features/overlay'
 import PlanDetails from '../../components/popup/planDetails'
-import DeleteObj from '../../components/popup/delete'
+import DeleteObj from '../../components/popup/deleteObj'
 import { GetPlans, DeletePlan } from './../../redux/actions/plansActions'
 
 function Plans({ plans }) {

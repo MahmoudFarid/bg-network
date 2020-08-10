@@ -1,26 +1,32 @@
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
+import { useDispatch } from 'react-redux'
+import Router, { useRouter } from 'next/router'
 import ReactPlayer from 'react-player'
 import NumberFormat from 'react-number-format'
-import API from '../../../../api'
-import Loading from '../../../../components/core/loading'
-import Overlay from './../../../../components/features/overlay'
-import Carousel from '../../../../components/features/carousel'
-import Carousel2 from '../../../../components/features/carousel2'
-import GoogleMap from '../../../../components/features/googleMap'
-import PlanDetails from './../../../../components/popup/planDetails'
+import API from '../../../../../api'
+import Loading from '../../../../../components/core/loading'
+import Overlay from '../../../../../components/features/overlay'
+import Carousel from '../../../../../components/features/carousel'
+import Carousel2 from '../../../../../components/features/carousel2'
+import DeleteObj from './../../../../../components/popup/deleteObj'
+import GoogleMap from '../../../../../components/features/googleMap'
+import PlanDetails from '../../../../../components/popup/planDetails'
+import { DeleteUnit } from './../../../../../redux/actions/unitsActions'
 
 export default function Unit() {
   const {
     query: { pid, uid },
   } = useRouter()
 
+  const [isBroker, setIsBroker] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [isOverlay, setIsOverlay] = useState(false)
   const [isOverlay2, setIsOverlay2] = useState(false)
   const [isPlanOverlay, setIsPlanOverlay] = useState(false)
+  const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
   const [plan, setPlan] = useState({})
   const [unit, setUnit] = useState({})
+  const dispatch = useDispatch()
 
   const setIsOverlayFunc = (bool) => {
     setIsOverlay(bool)
@@ -30,9 +36,14 @@ export default function Unit() {
     setIsOverlay2(bool)
   }
 
+  const onDeletingItem = () => {
+    dispatch(DeleteUnit(pid, uid))
+  }
+
   useEffect(() => {
     const cid = localStorage.getItem('CID')
     const isBroker = localStorage.getItem('isBroker')
+    setIsBroker(isBroker)
 
     if (pid && uid) {
       console.log('company -> ', cid, ' in project -> ', pid, ' in unit -> ', uid)
@@ -55,7 +66,6 @@ export default function Unit() {
       }
     }
   }, [pid, uid])
-  console.log(unit)
 
   return (
     <div>
@@ -68,17 +78,44 @@ export default function Unit() {
             setIsOverlay(false)
             setIsOverlay2(false)
             setIsPlanOverlay(false)
+            setIsDeleteOverlay(false)
           }}>
           <Overlay opacity={isPlanOverlay} />
+          <Overlay opacity={isDeleteOverlay} />
+
           {isPlanOverlay && <PlanDetails plan={plan} />}
-          <div className="mb-5 overflow-hidden">
-            <button className="py-3 px-6 float-right text-secondaryLight text-xs font-bold border border-secondaryLight rounded-lg transition duration-500 ease-in-out focus:outline-none hover:bg-secondaryLight hover:text-white">
-              Share with your Brokers
-            </button>
-            <button className="py-3 px-12 mr-5 float-right text-success border border-success text-xs font-bold rounded-lg transition duration-500 ease-in-out focus:outline-none hover:bg-success hover:text-white">
-              Edit
-            </button>
-          </div>
+          {isDeleteOverlay && <DeleteObj name={unit.name} onDeletingItem={onDeletingItem} />}
+
+          {isBroker != 'true' && (
+            <div className="mb-5 overflow-hidden">
+              <div className="float-right">
+                <button
+                  className="py-1 px-3 text-danger text-sm border border-danger font-semibold rounded-full mr-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setIsDeleteOverlay(true)
+                    setIsOverlay(false)
+                    setIsOverlay2(false)
+                    setIsPlanOverlay(false)
+                  }}>
+                  <i className="fas fa-trash-alt"></i>
+                </button>
+                <button
+                  className="py-1 px-3 text-success text-sm border border-success font-semibold rounded-full mr-5 transition duration-500 ease-in-out hover:bg-success hover:text-white focus:outline-none"
+                  onClick={(e) => {
+                    Router.push(
+                      '/projects/[pid]/units/[uid]/edit',
+                      `/projects/${pid}/units/${uid}/edit`
+                    )
+                  }}>
+                  <i className="fas fa-edit"></i>
+                </button>
+                <button className="py-2 px-3 text-secondaryLight text-xs font-bold border border-secondaryLight rounded-full transition duration-500 ease-in-out hover:bg-secondaryLight hover:text-white focus:outline-none">
+                  Share with your Brokers
+                </button>
+              </div>
+            </div>
+          )}
           <div className="flex justify-between flex-wrap">
             <div className="w-full mt-5 lg:w-5/12">
               <h2 className="text-black font-bold text-3xl">{unit.name}</h2>
@@ -209,12 +246,15 @@ export default function Unit() {
           <div className="mb-8">
             <h2 className="text-black text-lg font-bold mb-2">Plans ({unit.plans.length} Plan)</h2>
             {unit.plans.map((plan, index) => (
-              <div className="bg-white mb-5 p-5">
+              <div className="bg-white mb-5 p-5" key={plan.id}>
                 <p
                   className="text-primaryText font-semibold text-lg cursor-pointer hover:text-secondaryLight"
                   onClick={(e) => {
                     e.stopPropagation()
                     setIsPlanOverlay(true)
+                    setIsOverlay(false)
+                    setIsOverlay2(false)
+                    setIsDeleteOverlay(false)
                     setPlan(plan)
                   }}>
                   <span className="font-bold">{index + 1}- </span>

@@ -7,9 +7,11 @@ import Dropzone from 'react-dropzone-uploader'
 import API from '../../api'
 import FormInput from './formInput'
 import Loading from './../core/loading'
+import Overlay from './../features/overlay'
+import DeleteObj from './../popup/deleteObj'
 import GoogleMap from '../features/googleMap'
 import DropdownMenu from './../features/dropdownMenu'
-import { AddProject, EditProject } from './../../redux/actions/projectsActions'
+import { AddProject, EditProject, DeleteProject } from './../../redux/actions/projectsActions'
 
 export default function ProjectData({ pid }) {
   const { register, errors, handleSubmit } = useForm({
@@ -17,10 +19,11 @@ export default function ProjectData({ pid }) {
   })
   const [submit, setSubmit] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
   const [project, setProject] = useState({})
   const [plans, setPlans] = useState([])
   const [plansIDs, setPlansIDs] = useState([])
-  const [choices, setChoices] = useState([18])
+  const [choices, setChoices] = useState([])
   const [uploadCoverImg, setCoverImg] = useState({})
   const [uploadProjectImgs, setProjectImgs] = useState([])
   const dispatch = useDispatch()
@@ -83,6 +86,10 @@ export default function ProjectData({ pid }) {
     }
   }
 
+  const onDeletingItem = () => {
+    dispatch(DeleteProject(pid))
+  }
+
   const onSubmit = (data) => {
     setSubmit(true)
     const result = {
@@ -92,7 +99,8 @@ export default function ProjectData({ pid }) {
       plans: plansIDs,
     }
     console.log(result)
-    pid ? dispatch(EditProject(pid, result)) : dispatch(AddProject(result))
+    if (plansIDs.length > 0 && uploaded_images.length > 0 && Object.keys(cover_image).length > 0)
+      pid ? dispatch(EditProject(pid, result)) : dispatch(AddProject(result))
   }
 
   useEffect(() => {
@@ -120,17 +128,32 @@ export default function ProjectData({ pid }) {
         <Loading />
       ) : (
         <div className="container-fluid my-16">
-          <h2 className="text-black font-bold text-lg mb-5">Add Project</h2>
+          <Overlay opacity={isDeleteOverlay} />
+          {isDeleteOverlay && <DeleteObj name={project.name} onDeletingItem={onDeletingItem} />}
+
+          <div className="flex justify-between">
+            <h2 className="text-black font-bold text-lg mb-5">{pid ? 'Edit' : 'Add'} Project</h2>
+            {pid && (
+              <button
+                className="py-2 px-10 text-danger text-sm border border-danger font-semibold rounded-lg mb-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsDeleteOverlay(true)
+                }}>
+                Delete
+              </button>
+            )}
+          </div>
           <div className="bg-white p-8 rounded-lg shadow-lg clearfix">
             <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="grid gap-10 md:grid-cols-2">
+              <div className="grid gap-row-10 md:grid-cols-2 md:gap-10">
                 <div>
                   <FormInput
                     register={register}
                     errors={errors}
                     defaultValue={project?.name}
                     label="name"
-                    labelTxt="Project Name"
+                    labelTxt="Project Name*"
                     errorMsg="Name is required"
                     type="text"
                   />
@@ -145,19 +168,20 @@ export default function ProjectData({ pid }) {
                   />
                   <div>
                     <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                      Plans
+                      Plans*
                     </label>
                     <DropdownMenu
                       order="first"
                       name={` ${
-                        choices.length === 0
-                          ? 'Select plans'
-                          : `${
+                        pid
+                          ? `${
                               choices.length <= 1
                                 ? choices.length + ' plan'
                                 : choices.length + ' plans'
                             } selected`
-                      } `}
+                          : 'Select plans'
+                      }
+                      `}
                       dropdownWidth="w-full"
                       multiple={true}
                       options={plans}
@@ -176,7 +200,7 @@ export default function ProjectData({ pid }) {
                     errors={errors}
                     defaultValue={project?.area}
                     label="area"
-                    labelTxt="Area"
+                    labelTxt="Area*"
                     type="text"
                     errorMsg="Area is required"
                     onKeyPress={preventShowLetter}
@@ -186,7 +210,7 @@ export default function ProjectData({ pid }) {
                     errors={errors}
                     defaultValue={project?.floors_number}
                     label="floors_number"
-                    labelTxt="Floors Number"
+                    labelTxt="Floors Number*"
                     type="text"
                     errorMsg="Floors Number is required"
                     onKeyPress={preventShowLetter}
@@ -196,7 +220,7 @@ export default function ProjectData({ pid }) {
                     errors={errors}
                     defaultValue={project?.flats_per_floor}
                     label="flats_per_floor"
-                    labelTxt="Flats per Floor"
+                    labelTxt="Flats per Floor*"
                     type="text"
                     errorMsg="Flats per floor is required"
                     onKeyPress={preventShowLetter}
@@ -205,7 +229,7 @@ export default function ProjectData({ pid }) {
               </div>
 
               <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                Cover Image
+                Cover Image*
               </label>
               <Dropzone
                 maxFiles={1}
@@ -233,10 +257,10 @@ export default function ProjectData({ pid }) {
                 {submit && Object.keys(uploadCoverImg).length === 0 && 'Cover image is required'}
               </p>
 
-              <div className="grid gap-10 md:grid-cols-2">
+              <div className="grid gap-row-10 md:grid-cols-2 md:gap-10">
                 <div>
                   <label className="control-label block text-primaryLight text-sm font-semibold mb-1 mt-5 transition ease-in duration-300">
-                    Project Images
+                    Project Images*
                   </label>
                   <Dropzone
                     accept="image/*"

@@ -6,8 +6,8 @@ import API from '../../api'
 import Loading from '../core/loading'
 import FormInput from './formInput'
 import Overlay from './../features/overlay'
-import DeletePlan from '../popup/deletePlan'
-import { AddPlan, PatchPlan } from '../../redux/actions/plansActions'
+import DeleteObj from './../popup/deleteObj'
+import { AddPlan, PatchPlan, DeletePlan } from '../../redux/actions/plansActions'
 
 export default function PlanData({ pid }) {
   const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
@@ -25,6 +25,10 @@ export default function PlanData({ pid }) {
     if (!/[0-9]/.test(char)) {
       e.preventDefault()
     }
+  }
+
+  const onDeletingItem = () => {
+    dispatch(DeletePlan(pid))
   }
 
   const onSubmit = (data) => {
@@ -84,7 +88,7 @@ export default function PlanData({ pid }) {
             setIsDeleteOverlay(false)
           }}>
           <Overlay opacity={isDeleteOverlay} />
-          {isDeleteOverlay && <DeletePlan plan={plan} />}
+          {isDeleteOverlay && <DeleteObj name={plan.name} onDeletingItem={onDeletingItem} />}
 
           <div className="flex justify-between">
             <h2 className="text-black font-bold text-lg mb-5">{pid ? 'Edit' : 'Add'} Plan</h2>
@@ -127,7 +131,7 @@ export default function PlanData({ pid }) {
                 </div>
               </div>
 
-              <p className="twext-black font-bold mb-5">Installments</p>
+              <p className="text-black font-bold mb-5">Installments</p>
               {plan.installments?.map((installment, i) =>
                 i === 0 ? (
                   <div className="mb-5 grid sm:grid-cols-2 col-gap-10 sm:mb-0" key={i}>
