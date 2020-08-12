@@ -2,15 +2,28 @@ import { useState, useEffect } from 'react'
 import API from '../../api'
 import Loading from '../../components/core/loading'
 import BrokerCard from './../../components/cards/brokerCard'
+import Pagination from '../../components/features/pagination'
 
 export default function Brokers() {
   const [isLoading, setIsLoading] = useState(true)
   const [brokers, setBrokers] = useState([])
+  const [brokersCount, setBrokersCount] = useState(Number)
+
+  const setPageItem = (pageNo) => {
+    async function fetchBrokers() {
+      await API.get(`brokers/?page=${pageNo}`).then((res) => {
+        setBrokers(res.data.results)
+      })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    fetchBrokers()
+  }
 
   useEffect(() => {
     async function fetchBrokers() {
       await API.get(`brokers/`).then((res) => {
         setBrokers(res.data.results)
+        setBrokersCount(res.data.count)
         setIsLoading(false)
       })
     }
@@ -30,6 +43,9 @@ export default function Brokers() {
                 <BrokerCard key={broker.id} broker={broker} />
               ))}
             </div>
+          </div>
+          <div>
+            <Pagination count={brokersCount} setPageItem={setPageItem} />
           </div>
         </div>
       )}

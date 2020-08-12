@@ -305,11 +305,21 @@ export default function ProjectData({ pid }) {
                   type="submit">
                   Save
                 </button>
-                <button
-                  className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
-                  onClick={() => Router.push('/projects')}>
-                  Cancel
-                </button>
+                {pid ? (
+                  <button
+                    className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                    type="button"
+                    onClick={() => Router.push('/projects/[pid]', `/projects/${pid}`)}>
+                    Cancel
+                  </button>
+                ) : (
+                  <button
+                    className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                    type="button"
+                    onClick={() => Router.push('/projects')}>
+                    Cancel
+                  </button>
+                )}
               </div>
             </form>
           </div>
