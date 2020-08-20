@@ -3,6 +3,7 @@ import Router from 'next/router'
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 import Dropzone from 'react-dropzone-uploader'
 import API from '../../api'
 import FormInput from './formInput'
@@ -24,7 +25,7 @@ export default function ProjectData({ pid }) {
   const [plans, setPlans] = useState([])
   const [plansIDs, setPlansIDs] = useState([])
   const [choices, setChoices] = useState([])
-  const [uploadCoverImg, setCoverImg] = useState({})
+  const [uploadCoverImg, setCoverImg] = useState()
   const [uploadProjectImgs, setProjectImgs] = useState([])
   const dispatch = useDispatch()
 
@@ -50,19 +51,19 @@ export default function ProjectData({ pid }) {
     )
   }
 
-  const handleChangeCoverImg = ({ meta }, status) => {
+  const handleChangeCoverImg = ({ meta }, status, files) => {
     if (status === 'headers_received') {
-      setCoverImg(meta)
+      setCoverImg(files[0].file)
     } else if (status === 'aborted') {
       toast.warning(`${meta.name}, upload failed...`)
     } else if (status === 'removed') {
-      setCoverImg({})
+      setCoverImg('')
     }
   }
 
-  const handleChangeProjectImgs = ({ meta }, status) => {
+  const handleChangeProjectImgs = ({ meta }, status, files) => {
     if (status === 'headers_received') {
-      setProjectImgs((old) => [...old, meta])
+      setProjectImgs(files.map((f, i) => files[i].file))
     } else if (status === 'aborted') {
       toast.warning(`${meta.name}, upload failed...`)
     } else if (status === 'removed') {
@@ -78,29 +79,36 @@ export default function ProjectData({ pid }) {
     }
   }
 
-  const onchange = (e) => {
-    let reader = new FileReader()
-    reader.readAsDataURL(e.target.files[0])
-    reader.onload = (e) => {
-      console.log(e.target.result)
-    }
-  }
-
   const onDeletingItem = () => {
     dispatch(DeleteProject(pid))
   }
 
   const onSubmit = (data) => {
     setSubmit(true)
-    const result = {
-      ...data,
-      cover_image: uploadCoverImg,
-      uploaded_images: uploadProjectImgs,
-      plans: plansIDs,
+    const token = localStorage.getItem('accessToken')
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+        Authorization: `Token ${token}`,
+      },
     }
-    console.log(result)
-    if (plansIDs.length > 0 && uploaded_images.length > 0 && Object.keys(cover_image).length > 0)
-      pid ? dispatch(EditProject(pid, result)) : dispatch(AddProject(result))
+
+    let formData = new FormData()
+    formData.append('name', data.name)
+    formData.append('youtube', data.youtube)
+    formData.append('area', data.area)
+    formData.append('floors_number', data.floors_number)
+    formData.append('flats_per_floor', data.flats_per_floor)
+    formData.append('plans', plansIDs)
+
+    uploadCoverImg && formData.append('cover_image', uploadCoverImg)
+    uploadProjectImgs.length > 0 && formData.append('uploaded_images', uploadProjectImgs)
+
+    pid && plansIDs.length > 0
+      ? dispatch(EditProject(pid, formData, config))
+      : plansIDs.length > 0 && uploadProjectImgs.length > 0 && typeof uploadCoverImg == 'object'
+      ? dispatch(AddProject(formData, config))
+      : null
   }
 
   useEffect(() => {
@@ -157,15 +165,6 @@ export default function ProjectData({ pid }) {
                     errorMsg="Name is required"
                     type="text"
                   />
-                  <FormInput
-                    register={register}
-                    errors={errors}
-                    defaultValue={project?.youtube}
-                    label="youtube"
-                    labelTxt="Youtube Link"
-                    type="text"
-                    req={false}
-                  />
                   <div>
                     <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
                       Plans*
@@ -192,6 +191,16 @@ export default function ProjectData({ pid }) {
                       {submit && plansIDs.length === 0 && 'Select at least one plan please'}
                     </p>
                   </div>
+
+                  <FormInput
+                    register={register}
+                    errors={errors}
+                    defaultValue={project?.youtube}
+                    label="youtube"
+                    labelTxt="Youtube Link"
+                    type="text"
+                    req={false}
+                  />
                 </div>
 
                 <div>
@@ -222,40 +231,47 @@ export default function ProjectData({ pid }) {
                     label="flats_per_floor"
                     labelTxt="Flats per Floor*"
                     type="text"
-                    errorMsg="Flats per floor is required"
+                    errorMsg="Flats is required"
                     onKeyPress={preventShowLetter}
                   />
                 </div>
               </div>
 
-              <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                Cover Image*
-              </label>
-              <Dropzone
-                maxFiles={1}
-                multiple={false}
-                accept="image/*"
-                inputContent="upload"
-                getUploadParams={getUploadParams}
-                onChangeStatus={handleChangeCoverImg}
-                styles={{
-                  dropzone: {
-                    border: `2px solid #ddd`,
-                    overflow: 'hidden',
-                    width: '20%',
-                    minHeight: '45px',
-                    margin: '0',
-                  },
-                  inputLabel: {
-                    color: `${theme.extend.colors.primaryLight}`,
-                    fontWeight: 'normal',
-                    fontSize: '14px',
-                  },
-                }}
-              />
-              <p className="text-red-500 text-sm italic font-semibold">
-                {submit && Object.keys(uploadCoverImg).length === 0 && 'Cover image is required'}
-              </p>
+              <div className="grid gap-row-10 md:grid-cols-2 md:gap-10">
+                <div>
+                  <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                    Cover Image*
+                  </label>
+                  <Dropzone
+                    maxFiles={1}
+                    multiple={false}
+                    accept="image/*"
+                    inputContent="Drop image here or click to upload"
+                    getUploadParams={getUploadParams}
+                    onChangeStatus={handleChangeCoverImg}
+                    styles={{
+                      dropzone: {
+                        border: `2px solid #ddd`,
+                        overflow: 'hidden',
+                        width: '75%',
+                        minHeight: '45px',
+                        margin: '0',
+                      },
+                      inputLabel: {
+                        color: `${theme.extend.colors.primaryLight}`,
+                        fontWeight: 'normal',
+                        fontSize: '14px',
+                      },
+                    }}
+                  />
+                  <p className="text-red-500 text-sm italic font-semibold">
+                    {!pid &&
+                      submit &&
+                      typeof uploadCoverImg != 'object' &&
+                      'This Field is required'}
+                  </p>
+                </div>
+              </div>
 
               <div className="grid gap-row-10 md:grid-cols-2 md:gap-10">
                 <div>
@@ -287,6 +303,12 @@ export default function ProjectData({ pid }) {
                       },
                     }}
                   />
+                  <p className="text-red-500 text-sm italic font-semibold">
+                    {!pid &&
+                      submit &&
+                      uploadProjectImgs.length === 0 &&
+                      'Insert at least one image please'}
+                  </p>
                 </div>
                 <div>
                   <label className="control-label block text-primaryLight text-sm font-semibold mb-1 mt-5 transition ease-in duration-300">
@@ -295,14 +317,12 @@ export default function ProjectData({ pid }) {
                   <GoogleMap height="12.6rem" />
                 </div>
               </div>
-              <p className="text-red-500 text-sm italic font-semibold">
-                {submit && uploadProjectImgs.length === 0 && 'Insert at least one image please'}
-              </p>
 
               <div className="border-t-2 border-gray-200 pt-3 mt-10 w-full">
                 <button
                   className="float-right py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
-                  type="submit">
+                  type="submit"
+                  onClick={() => setSubmit(true)}>
                   Save
                 </button>
                 {pid ? (

@@ -3,27 +3,14 @@ import API from '../../api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 
-export const AddProject = (project) => async (dispatch) => {
-  // const fd = new FormData()
-  // fd.append('cover_image', project.cover_image)
-  // fd.append('name', project.name)
-  // fd.append('plans', project.plans)
-  // fd.append('area', project.area)
-  // fd.append('floors_number', project.floors_number)
-  // fd.append('flats_per_floor', project.flats_per_floor)
-  // fd.append('uploaded_images', project.uploaded_images)
-  // fd.append('cover_image', project.cover_image)
-  // console.log(fd)
-
-  const acc = await API.post('projects/', project, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+export const AddProject = (formData, config) => async (dispatch) => {
+  const acc = await API.post('projects/', formData, config)
     .then(() => {
       toast.success('Your project is added successfully')
       Router.push('/projects')
       dispatch({
         type: types.ADD_PROJECT,
-        payload: project,
+        payload: formData,
       })
     })
     .catch((ex) => {
@@ -48,14 +35,14 @@ export const DeleteProject = (id) => async (dispatch) => {
     })
 }
 
-export const EditProject = (id, project) => async (dispatch) => {
-  const acc = await API.patch(`projects/${id}/`, project)
+export const EditProject = (id, formData, config) => async (dispatch) => {
+  const acc = await API.patch(`projects/${id}/`, formData, config)
     .then(() => {
       toast.success('Your project is updated successfully')
       Router.push('/projects')
       dispatch({
         type: types.PATCH_PROJECT,
-        payload: project,
+        payload: formData,
       })
     })
     .catch((ex) => {

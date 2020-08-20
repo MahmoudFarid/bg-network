@@ -3,18 +3,19 @@ import API from '../../api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 
-export const PatchProfile = (profile) => async (dispatch) => {
-  const acc = await API.patch('users/me/', profile)
+export const PatchProfile = (formData, config) => async (dispatch) => {
+  const acc = await API.patch('users/me/', formData, config)
     .then(() => {
       toast.success('Your data is changed successfully')
       Router.push('/profile')
       dispatch({
         type: types.PATCH_PROFILE,
-        payload: profile,
+        payload: formData,
       })
     })
     .catch((ex) => {
       toast.error('Something is error')
+      console.log(ex.response)
     })
 }
 

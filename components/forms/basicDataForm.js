@@ -11,26 +11,55 @@ export default function BasicDataForm({ profile }) {
   const { register, errors, handleSubmit } = useForm({
     mode: 'onBlur',
   })
-  const [uploadImg, setUploadImg] = useState({})
+  const [uploadImg, setUploadImg] = useState()
   const dispatch = useDispatch()
 
   const getUploadParams = () => {
     return { url: 'https://httpbin.org/post' }
   }
 
-  const handleChangeStatus = ({ meta }, status) => {
+  const handleChangeImg = ({ meta }, status, files) => {
     if (status === 'headers_received') {
-      setUploadImg(meta)
+      setUploadImg(files[0].file)
     } else if (status === 'aborted') {
       toast.warning(`${meta.name}, upload failed...`)
     } else if (status === 'removed') {
-      setUploadImg(null)
+      setUploadImg('')
     }
   }
 
   const onSubmit = (data) => {
+    console.log(data)
     console.log(uploadImg)
-    dispatch(PatchProfile(data))
+    const token = localStorage.getItem('accessToken')
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+        Authorization: `Token ${token}`,
+      },
+    }
+
+    let formData = new FormData()
+    formData.append('name', data.name)
+    formData.append('email', data.email)
+    formData.append('description', data.description)
+    uploadImg && formData.append('avatar', uploadImg)
+
+    dispatch(PatchProfile(formData, config))
+  }
+
+  const Layout = ({ input, previews, dropzoneProps, files, extra: { maxFiles } }) => {
+    return (
+      <div {...dropzoneProps}>
+        {previews}
+        {files.length === 0 && (
+          <div className="mt-4">
+            <i className="fas fa-file-image fa-2x text-primaryLight"></i>
+          </div>
+        )}
+        {files.length < maxFiles && input}
+      </div>
+    )
   }
 
   return (
@@ -68,13 +97,25 @@ export default function BasicDataForm({ profile }) {
 
         <Dropzone
           maxFiles={1}
+          multiple={false}
           accept="image/*"
-          inputContent="Drop a profile picture"
+          inputContent="Drop profile picture here or click to upload"
+          LayoutComponent={Layout}
           getUploadParams={getUploadParams}
-          onChangeStatus={handleChangeStatus}
+          onChangeStatus={handleChangeImg}
           styles={{
-            dropzone: { border: '1px solid #cbd5e0', overflow: 'hidden' },
-            inputLabel: { color: `${theme.extend.colors.primaryText}` },
+            dropzone: {
+              border: '2px dashed #ddd',
+              background: `${theme.extend.colors.bgLightest}`,
+              overflow: 'hidden',
+              // maxHeight: '200px',
+            },
+            inputLabel: {
+              color: `${theme.extend.colors.primaryLight}`,
+              fontWeight: 'normal',
+              fontSize: '16px',
+              top: '20%',
+            },
           }}
         />
       </div>
