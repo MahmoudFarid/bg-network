@@ -43,10 +43,10 @@ export default function ProjectCard({ project }) {
           </Link>
         )}
 
-        {/* <span className="text-gray-300 font-semibold text-sm">
+        <span className="text-gray-300 font-semibold text-sm">
           <i className="fas fa-home fa-sm text-white mr-3"></i>
           {project.units_count} {project.units_count <= 1 ? 'Unit' : 'Units'}
-        </span> */}
+        </span>
       </div>
     </div>
   )

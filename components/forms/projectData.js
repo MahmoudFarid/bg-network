@@ -116,6 +116,9 @@ export default function ProjectData({ pid }) {
       async function fetchProject() {
         await API.get(`projects/${pid}`).then((res) => {
           setProject(res.data)
+          let planIDs = []
+          res.data.plans.map((plan) => planIDs.push(plan.id))
+          setChoices(planIDs)
           setIsLoading(false)
         })
       }

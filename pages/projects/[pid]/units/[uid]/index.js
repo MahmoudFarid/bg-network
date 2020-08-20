@@ -244,9 +244,9 @@ export default function Unit() {
           </div>
 
           <div className="mb-8">
-            <h2 className="text-black text-lg font-bold mb-2">Plans ({unit.plans.length} Plan)</h2>
+            <h2 className="text-black text-lg font-bold mb-2">Plans ({unit.plans.length} Plans)</h2>
             {unit.plans.map((plan, index) => (
-              <div className="bg-white mb-5 p-5" key={plan.id}>
+              <div className="p-3" key={plan.id}>
                 <p
                   className="text-primaryText font-semibold text-lg cursor-pointer hover:text-secondaryLight"
                   onClick={(e) => {
@@ -257,9 +257,18 @@ export default function Unit() {
                     setIsDeleteOverlay(false)
                     setPlan(plan)
                   }}>
-                  <span className="font-bold">{index + 1}- </span>
                   {plan.name}
                 </p>
+                <div className="bg-white mt-2 p-5 flex flex-start flex-no-wrap overflow-x-auto">
+                  {plan.installments.map((installment, index) => (
+                    <div className="installment" key={installment.id}>
+                      <p className="text-lg text-secondary">{installment.name}</p>
+                      <span className="text-secondary font-semibold block ml-10">
+                        {installment.amount}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
@@ -303,6 +312,9 @@ export default function Unit() {
         }
         .imgs {
           height: 30rem;
+        }
+        .installment {
+          min-width: 20%;
         }
       `}</style>
     </div>

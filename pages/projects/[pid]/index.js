@@ -9,8 +9,8 @@ import Filter from '../../../components/features/filter'
 import UnitCard from '../../../components/cards/unitCard'
 import Overlay from '../../../components/features/overlay'
 import DeleteObj from '../../../components/popup/deleteObj'
-import ProfileSideBar from '../../../components/core/profileSideBar'
 import DropdownMenu from '../../../components/features/dropdownMenu'
+import ProjectSideBar from './../../../components/core/projectSideBar'
 import AdvancedFilter from '../../../components/features/advancedFilter'
 import CarouselOverlay from '../../../components/features/carouselOverlay'
 import { DeleteProject } from './../../../redux/actions/projectsActions'
@@ -22,11 +22,13 @@ export default function Project() {
 
   const [isBroker, setIsBroker] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
+  const [isProjectLoading, setIsProjectLoading] = useState(true)
   const [inputVal, setInputVal] = useState(0)
   const [isOverlay, setIsOverlay] = useState(false)
   const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
   const [isCarouselOverlay, setIsCarouselOverlay] = useState(false)
   const [cid, setCid] = useState()
+  const [project, setProject] = useState({})
   const [units, setUnits] = useState([])
   const dispatch = useDispatch()
 
@@ -67,6 +69,18 @@ export default function Project() {
     dispatch(DeleteProject(pid))
   }
 
+  const toggleProjectImgs = (e) => {
+    e.stopPropagation()
+    setIsCarouselOverlayFunc(true)
+    setIsDeleteOverlay(false)
+  }
+
+  const deleteProject = (e) => {
+    e.stopPropagation()
+    setIsDeleteOverlay(true)
+    setIsCarouselOverlayFunc(false)
+  }
+
   useEffect(() => {
     const cid = localStorage.getItem('CID')
     const isBroker = localStorage.getItem('isBroker')
@@ -77,12 +91,19 @@ export default function Project() {
     if (pid) {
       console.log('company -> ', cid, ' with project -> ', pid)
       if (cid == 0) {
+        async function fetchProject() {
+          await API.get(`projects/${pid}/`).then((res) => {
+            setProject(res.data)
+            setIsProjectLoading(false)
+          })
+        }
         async function fetchUnits() {
           await API.get(`projects/${pid}/units/`).then((res) => {
             setUnits(res.data.results)
             setIsLoading(false)
           })
         }
+        fetchProject()
         fetchUnits()
       } else {
         async function fetchUnits() {
@@ -98,7 +119,7 @@ export default function Project() {
 
   return (
     <div>
-      {isLoading ? (
+      {isLoading && isProjectLoading ? (
         <Loading />
       ) : (
         <div
@@ -121,53 +142,32 @@ export default function Project() {
               />
             </div>
           )}
-          {isDeleteOverlay && <DeleteObj onDeletingItem={onDeletingItem} />}
+          {isDeleteOverlay && <DeleteObj onDeletingItem={onDeletingItem} name={project.name} />}
 
           {isCarouselOverlay && (
-            <CarouselOverlay
-              sources={['project.jpg', 'company-pic.jpg', 'company-cover.jpg']}
-              setIsOverlayFunc={setIsCarouselOverlayFunc}
-            />
+            <CarouselOverlay sources={project.images} setIsOverlayFunc={setIsCarouselOverlayFunc} />
           )}
 
           <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-3 lg:gap-16 lg:ml-0">
-            <ProfileSideBar cid={cid} />
+            <ProjectSideBar
+              project={project}
+              toggleProjectImgs={toggleProjectImgs}
+              deleteProject={deleteProject}
+              isBroker={isBroker}
+            />
 
             <div className="col-span-2 mt-10 mb-16">
-              <div className="flex justify-between mb-5">
-                <h2 className="text-black font-bold text-lg">Skyline Complex</h2>
-                <div>
+              <div className="w-full mb-5 clearfix">
+                {isBroker != 'true' && (
                   <button
-                    className="float-right py-2 px-3 text-secondaryLight text-xs font-bold border border-secondaryLight rounded-full transition duration-500 ease-in-out hover:bg-secondaryLight hover:text-white focus:outline-none"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      setIsCarouselOverlayFunc(true)
-                      setIsDeleteOverlay(false)
-                    }}>
-                    <i className="fas fa-image fa-lg mr-5"></i>
-                    Show Project Images
+                    className="float-right py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+                    onClick={() =>
+                      Router.push('/projects/[pid]/units/add', `/projects/${pid}/units/add`)
+                    }>
+                    <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
+                    Add Unit
                   </button>
-                  {isBroker != 'true' && (
-                    <div className="float-right">
-                      <button
-                        className="py-1 px-3 text-danger text-sm border border-danger font-semibold rounded-full mr-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          setIsDeleteOverlay(true)
-                          setIsCarouselOverlayFunc(false)
-                        }}>
-                        <i className="fas fa-trash-alt"></i>
-                      </button>
-                      <button
-                        className="py-1 px-3 text-success text-sm border border-success font-semibold rounded-full mr-5 transition duration-500 ease-in-out hover:bg-success hover:text-white focus:outline-none"
-                        onClick={(e) => {
-                          Router.push('/projects/[pid]/edit', `/projects/${pid}/edit`)
-                        }}>
-                        <i className="fas fa-edit"></i>
-                      </button>
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
               {units.length === 0 ? (
                 <div className="bg-white p-5 rounded-lg shadow-lg mt-20">
@@ -231,19 +231,6 @@ export default function Project() {
                         />
                       </div>
                     </div>
-                  </div>
-                  <div className="overflow-hidden">
-                    <Link
-                      href={{
-                        pathname: '/projects/[pid]/units',
-                        query: { pid: pid },
-                      }}
-                      as={`/projects/${pid}/units`}>
-                      <a className="text-secondaryLight font-semibold mt-4 mr-4 float-right hover:text-primaryText focus:outline-none">
-                        See all units
-                        <i className="fas fa-angle-right ml-2"></i>
-                      </a>
-                    </Link>
                   </div>
                   <div className="grid grid-cols-1 gap-5 mt-5 md:grid-cols-2 xl:grid-cols-3">
                     {units.map((unit) => (

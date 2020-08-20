@@ -96,9 +96,8 @@ export default function UnitData({ pid, uid }) {
       reception: Number(data.reception),
       uploaded_images: uploadUnitImgs,
       direction: direction,
-      type_id: type.id,
       type: {
-        name: type.name,
+        id: type.id,
       },
     }
     if (Object.keys(type).length > 0 && uploadUnitImgs.length > 0) {
