@@ -99,10 +99,16 @@ export default function ProjectData({ pid }) {
     formData.append('area', data.area)
     formData.append('floors_number', data.floors_number)
     formData.append('flats_per_floor', data.flats_per_floor)
-    formData.append('plans', plansIDs)
 
     uploadCoverImg && formData.append('cover_image', uploadCoverImg)
-    uploadProjectImgs.length > 0 && formData.append('uploaded_images', uploadProjectImgs)
+
+    plansIDs.map((img) => formData.append('plans', img))
+    formData.getAll('plans')
+
+    if (uploadProjectImgs.length > 0) {
+      uploadProjectImgs.map((img) => formData.append('uploaded_images', img))
+      formData.getAll('uploaded_images')
+    }
 
     pid && plansIDs.length > 0
       ? dispatch(EditProject(pid, formData, config))
@@ -119,6 +125,7 @@ export default function ProjectData({ pid }) {
           let planIDs = []
           res.data.plans.map((plan) => planIDs.push(plan.id))
           setChoices(planIDs)
+          setPlansIDs(planIDs)
           setIsLoading(false)
         })
       }
@@ -165,7 +172,6 @@ export default function ProjectData({ pid }) {
                     defaultValue={project?.name}
                     label="name"
                     labelTxt="Project Name*"
-                    errorMsg="Name is required"
                     type="text"
                   />
                   <div>
@@ -214,7 +220,6 @@ export default function ProjectData({ pid }) {
                     label="area"
                     labelTxt="Area*"
                     type="text"
-                    errorMsg="Area is required"
                     onKeyPress={preventShowLetter}
                   />
                   <FormInput
@@ -224,7 +229,6 @@ export default function ProjectData({ pid }) {
                     label="floors_number"
                     labelTxt="Floors Number*"
                     type="text"
-                    errorMsg="Floors Number is required"
                     onKeyPress={preventShowLetter}
                   />
                   <FormInput
@@ -234,7 +238,6 @@ export default function ProjectData({ pid }) {
                     label="flats_per_floor"
                     labelTxt="Flats per Floor*"
                     type="text"
-                    errorMsg="Flats is required"
                     onKeyPress={preventShowLetter}
                   />
                 </div>

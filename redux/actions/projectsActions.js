@@ -39,7 +39,7 @@ export const EditProject = (id, formData, config) => async (dispatch) => {
   const acc = await API.patch(`projects/${id}/`, formData, config)
     .then(() => {
       toast.success('Your project is updated successfully')
-      Router.push('/projects')
+      Router.push(`/projects/${id}`)
       dispatch({
         type: types.PATCH_PROJECT,
         payload: formData,

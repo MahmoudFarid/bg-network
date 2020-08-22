@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { useDispatch, connect } from 'react-redux'
 import API from '../../api'
@@ -8,7 +8,9 @@ import { GetRequests } from './../../redux/actions/requestsActions'
 import NotificationCard from './../cards/notificationCard'
 
 function Header({ requests }) {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [active, setActive] = useState(router.pathname)
   const [isNavigationOpen, setIsNavigationOpen] = useState(false)
   const [account, setAccount] = useState({})
   const dispatch = useDispatch()
@@ -64,7 +66,9 @@ function Header({ requests }) {
       )}
       <nav className="container-fluid">
         <div className="flex items-center justify-between flex-wrap">
-          <div className="flex items-center flex-shrink-0 text-white mr-6">
+          <div
+            className="flex items-center flex-shrink-0 text-white mr-6"
+            onClick={() => setActive('/dashboard')}>
             <Link href="/dashboard">
               <img src="/assets/logo.svg" alt="logo" className="cursor-pointer" />
             </Link>
@@ -89,38 +93,60 @@ function Header({ requests }) {
             <div className="text-sm lg:flex-grow" onClick={() => setIsOpen(false)}>
               {account.is_broker ? (
                 <Link href="/companies">
-                  <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                  <a
+                    onClick={() => setActive('/companies')}
+                    className={`block mt-4 mr-8 font-semibold hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none ${
+                      active === '/companies' ? 'text-primaryText' : 'text-primaryLight'
+                    }`}>
                     All Companies
                   </a>
                 </Link>
               ) : (
                 <Link href="/brokers">
-                  <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                  <a
+                    onClick={() => setActive('/brokers')}
+                    className={`block mt-4 mr-8 font-semibold hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none ${
+                      active === '/brokers' ? 'text-primaryText' : 'text-primaryLight'
+                    }`}>
                     All Brokers
                   </a>
                 </Link>
               )}
               <Link href="/projects">
-                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                <a
+                  onClick={() => setActive('/projects')}
+                  className={`block mt-4 mr-8 font-semibold hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none ${
+                    active === '/projects' ? 'text-primaryText' : 'text-primaryLight'
+                  }`}>
                   My Projects
                 </a>
               </Link>
               {!account.is_broker && (
                 <Link href="/plans">
-                  <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                  <a
+                    onClick={() => setActive('/plans')}
+                    className={`block mt-4 mr-8 font-semibold hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none ${
+                      active === '/plans' ? 'text-primaryText' : 'text-primaryLight'
+                    }`}>
                     My Plans
                   </a>
                 </Link>
               )}
               <Link href="/requests">
-                <a className="block mt-4 mr-8 font-semibold text-primaryLight hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none">
+                <a
+                  onClick={() => setActive('/requests')}
+                  className={`block mt-4 mr-8 font-semibold hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none ${
+                    active === '/requests' ? 'text-primaryText' : 'text-primaryLight'
+                  }`}>
                   Requests
                 </a>
               </Link>
             </div>
             <div onClick={() => setIsOpen(false)}>
               <div
-                className="block relative text-gray-400 mt-4 mr-8 py-1 transition duration-500 ease-in-out cursor-pointer hover:text-primaryText lg:inline-block lg:mt-0"
+                className={`block relative mt-4 mr-8 py-1 transition duration-500 ease-in-out cursor-pointer hover:text-primaryText lg:inline-block lg:mt-0 ${
+                  isNavigationOpen ? 'text-primaryText' : 'text-gray-400'
+                }`}
                 onClick={() => setIsNavigationOpen(!isNavigationOpen)}>
                 <span className="hidden lg:inline">
                   <i className="fas fa-bell fa-lg"></i>
@@ -137,20 +163,29 @@ function Header({ requests }) {
                 </a>
               </Link>
               <Link href="/profile">
-                <a className="block relative mt-4 mr-8 lg:inline-block lg:mt-0 focus:outline-none">
+                <a
+                  className="block relative mt-4 mr-8 lg:inline-block lg:mt-0 focus:outline-none"
+                  onClick={() => setActive('/profile')}>
                   <div className="inline-block mr-12">
                     <img
                       src={account.avatar ? account.avatar : '/assets/profile-pic.png'}
                       className="profile-img rounded-full h-10 w-10 absolute top-0"
                     />
                   </div>
-                  <span className="font-semibold text-primaryLight hover:text-primaryText">
+                  <span
+                    className={`font-semibold hover:text-primaryText ${
+                      active === '/profile' ? 'text-primaryText' : 'text-primaryLight'
+                    }`}>
                     {account.name}
                   </span>
                 </a>
               </Link>
               <Link href="/settings">
-                <a className="inline-block text-gray-400 py-1 mt-4 mr-4 transition duration-500 ease-in-out hover:text-primaryText lg:mt-0 focus:outline-none">
+                <a
+                  onClick={() => setActive('/settings')}
+                  className={`inline-block py-1 mt-4 mr-4 transition duration-500 ease-in-out hover:text-primaryText lg:mt-0 focus:outline-none ${
+                    active === '/settings' ? 'text-primaryText' : 'text-gray-400'
+                  }`}>
                   <i className="fas fa-cog fa-lg"></i>
                 </a>
               </Link>

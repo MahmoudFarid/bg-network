@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
 export default function DropdownMenu({
+  id,
   order,
   name,
   dropdownWidth,
@@ -29,7 +30,7 @@ export default function DropdownMenu({
     } else {
       setIsOpen(false)
       setItem(option.name.toUpperCase())
-      itemSelectedFunc(option.id, name, option.name)
+      itemSelectedFunc(option.id, name, option.name, id)
     }
   }
 

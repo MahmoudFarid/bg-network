@@ -5,7 +5,7 @@ export default function ProjectSideBar({ project, toggleProjectImgs, deleteProje
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="bg-bgLight">
+    <div className="bg-bgLight pb-16">
       {isBroker != 'true' && (
         <div className="relative p-5 text-right">
           <i

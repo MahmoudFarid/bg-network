@@ -114,8 +114,7 @@ export default function PlanData({ pid }) {
                     errors={errors}
                     defaultValue={plan.name}
                     label="name"
-                    labelTxt="Plan Title"
-                    errorMsg="Title is required"
+                    labelTxt="Plan Title*"
                     type="text"
                     placeholder="Enter Plan Title"
                   />
@@ -140,7 +139,7 @@ export default function PlanData({ pid }) {
                       errors={errors}
                       defaultValue={installment.name}
                       label="instName"
-                      labelTxt="Installment Name"
+                      labelTxt="Installment Name*"
                       errorMsg="Enter less than one Installment"
                       type="text"
                     />
@@ -149,8 +148,8 @@ export default function PlanData({ pid }) {
                       errors={errors}
                       defaultValue={installment.percentage}
                       label="percentage"
-                      labelTxt="Installment Percentage"
-                      errorMsg="Enter Percentage"
+                      labelTxt="Installment Percentage*"
+                      errorMsg=" "
                       type="text"
                       onKeyPress={preventShowLetter}
                     />

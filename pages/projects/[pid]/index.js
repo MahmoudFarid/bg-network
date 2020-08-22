@@ -158,7 +158,7 @@ export default function Project() {
 
             <div className="col-span-2 mt-10 mb-16">
               <div className="w-full mb-5 clearfix">
-                {isBroker != 'true' && (
+                {isBroker != 'true' && units.length > 0 && (
                   <button
                     className="float-right py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
                     onClick={() =>

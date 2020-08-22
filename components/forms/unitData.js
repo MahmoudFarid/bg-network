@@ -21,6 +21,7 @@ export default function UnitData({ pid, uid }) {
   const [unit, setUnit] = useState({})
   const [type, setType] = useState({})
   const [types, setTypes] = useState([])
+  const [status, setStatus] = useState('')
   const [direction, setDirection] = useState('')
   const [uploadUnitImgs, setUnitImgs] = useState([])
   const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
@@ -32,14 +33,21 @@ export default function UnitData({ pid, uid }) {
     { id: 3, name: 'Sidy' },
   ]
 
-  const itemSelectedFunc = (id, name, optionName) => {
-    if (name === 'type') {
+  const statusOptions = [
+    { id: 1, name: 'Free' },
+    { id: 2, name: 'Reserved' },
+  ]
+
+  const itemSelectedFunc = (typeId, name, optionName, id) => {
+    if (id === 'type') {
       setType({
-        id: id,
+        id: typeId,
         name: optionName,
       })
-    } else if (name === 'direction') {
+    } else if (id === 'direction') {
       setDirection(optionName.toUpperCase())
+    } else if (id === 'status') {
+      setStatus(optionName.toUpperCase())
     }
   }
 
@@ -61,9 +69,9 @@ export default function UnitData({ pid, uid }) {
     )
   }
 
-  const handleChangeUnitImgs = ({ meta }, status) => {
+  const handleChangeUnitImgs = ({ meta }, status, files) => {
     if (status === 'headers_received') {
-      setUnitImgs((old) => [...old, meta])
+      setUnitImgs(files.map((f, i) => files[i].file))
     } else if (status === 'aborted') {
       toast.warning(`${meta.name}, upload failed...`)
     } else if (status === 'removed') {
@@ -85,24 +93,32 @@ export default function UnitData({ pid, uid }) {
 
   const onSubmit = (data) => {
     setSubmit(true)
-    const result = {
-      ...data,
-      cost: Number(data.cost),
-      cash_percentage: Number(data.cash_percentage),
-      area: Number(data.area),
-      floor_number: Number(data.floor_number),
-      bathrooms: Number(data.bathrooms),
-      bedrooms: Number(data.bedrooms),
-      reception: Number(data.reception),
-      uploaded_images: uploadUnitImgs,
-      direction: direction,
-      type: {
-        id: type.id,
+    const token = localStorage.getItem('accessToken')
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+        Authorization: `Token ${token}`,
       },
     }
-    if (Object.keys(type).length > 0 && uploadUnitImgs.length > 0) {
-      uid ? dispatch(EditUnit(pid, uid, result)) : dispatch(AddUnit(pid, result))
+
+    let formData = new FormData()
+    for (let item in data) {
+      formData.append(item, data[item])
     }
+    formData.append('type', type.id)
+    formData.append('status', status)
+    formData.append('direction', direction)
+
+    if (uploadUnitImgs.length > 0) {
+      uploadUnitImgs.map((img) => formData.append('uploaded_images', img))
+      formData.getAll('uploaded_images')
+    }
+
+    uid
+      ? dispatch(EditUnit(pid, uid, formData, config))
+      : uploadUnitImgs.length > 0 && Object.keys(type).length > 0
+      ? dispatch(AddUnit(pid, formData, config))
+      : null
   }
 
   useEffect(() => {
@@ -110,6 +126,7 @@ export default function UnitData({ pid, uid }) {
       async function fetchUnit() {
         await API.get(`projects/${pid}/units/${uid}`).then((res) => {
           setUnit(res.data)
+          setType(res.data.type)
           setIsLoading(false)
         })
       }
@@ -157,7 +174,6 @@ export default function UnitData({ pid, uid }) {
                     defaultValue={unit?.name}
                     label="name"
                     labelTxt="Unit Name*"
-                    errorMsg="Name is required"
                     type="text"
                   />
                   <FormInput
@@ -178,9 +194,22 @@ export default function UnitData({ pid, uid }) {
                     defaultValue={unit?.code}
                     label="code"
                     labelTxt="Code*"
-                    errorMsg="Code is required"
                     type="text"
                   />
+                  <div className="mt-5">
+                    <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                      Status
+                    </label>
+                    <DropdownMenu
+                      id="status"
+                      order="first"
+                      name={unit.status ? unit.status : 'status'}
+                      defaultValue={unit.status}
+                      dropdownWidth="w-full"
+                      options={statusOptions}
+                      itemSelectedFunc={itemSelectedFunc}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -193,7 +222,6 @@ export default function UnitData({ pid, uid }) {
                   label="cost"
                   labelTxt="Unit Price*"
                   type="text"
-                  errorMsg="Price is required"
                   onKeyPress={preventShowLetter}
                 />
                 <FormInput
@@ -216,14 +244,16 @@ export default function UnitData({ pid, uid }) {
                       Types*
                     </label>
                     <DropdownMenu
+                      id="type"
                       order="first"
                       name={unit.type?.name ? unit.type.name : 'type'}
+                      defaultValue={unit.type?.name}
                       dropdownWidth="w-full"
                       options={types}
                       itemSelectedFunc={itemSelectedFunc}
                     />
                     <p className="text-red-500 text-sm italic font-semibold mb-5">
-                      {submit && Object.keys(type).length === 0 && 'Type is required'}
+                      {submit && Object.keys(type).length === 0 && 'This Field is required'}
                     </p>
                   </div>
                   <FormInput
@@ -231,35 +261,37 @@ export default function UnitData({ pid, uid }) {
                     errors={errors}
                     defaultValue={unit?.area}
                     label="area"
-                    labelTxt="Area"
+                    labelTxt="Area*"
                     type="text"
                     onKeyPress={preventShowLetter}
-                    req={false}
                   />
                 </div>
                 <div>
                   <div className="mb-5">
                     <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                      Directions
+                      Directions*
                     </label>
                     <DropdownMenu
                       order="first"
+                      id="direction"
                       name={unit.direction ? unit.direction : 'direction'}
                       defaultValue={unit.direction}
                       dropdownWidth="w-full"
                       options={directionsOptions}
                       itemSelectedFunc={itemSelectedFunc}
                     />
+                    <p className="text-red-500 text-sm italic font-semibold mb-5">
+                      {submit && direction === '' && 'This Field is required'}
+                    </p>
                   </div>
                   <FormInput
                     register={register}
                     errors={errors}
                     defaultValue={unit?.floor_number}
                     label="floor_number"
-                    labelTxt="Floor Number"
+                    labelTxt="Floor Number*"
                     type="text"
                     onKeyPress={preventShowLetter}
-                    req={false}
                   />
                 </div>
               </div>
@@ -270,30 +302,27 @@ export default function UnitData({ pid, uid }) {
                   errors={errors}
                   defaultValue={unit?.bathrooms}
                   label="bathrooms"
-                  labelTxt="Number of bathrooms"
+                  labelTxt="Number of bathrooms*"
                   type="text"
                   onKeyPress={preventShowLetter}
-                  req={false}
                 />
                 <FormInput
                   register={register}
                   errors={errors}
                   defaultValue={unit?.bedrooms}
                   label="bedrooms"
-                  labelTxt="Number of bedrooms"
+                  labelTxt="Number of bedrooms*"
                   type="text"
                   onKeyPress={preventShowLetter}
-                  req={false}
                 />
                 <FormInput
                   register={register}
                   errors={errors}
                   defaultValue={unit?.reception}
                   label="reception"
-                  labelTxt="Number of Receptions"
+                  labelTxt="Number of Receptions*"
                   type="text"
                   onKeyPress={preventShowLetter}
-                  req={false}
                 />
               </div>
 
@@ -327,14 +356,18 @@ export default function UnitData({ pid, uid }) {
                   }}
                 />
                 <p className="text-red-500 text-sm italic font-semibold">
-                  {submit && uploadUnitImgs.length === 0 && 'Insert at least one image please'}
+                  {!uid &&
+                    submit &&
+                    uploadUnitImgs.length === 0 &&
+                    'Insert at least one image please'}
                 </p>
               </div>
 
               <div className="border-t-2 border-gray-200 pt-3 mt-10 w-full">
                 <button
                   className="float-right py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
-                  type="submit">
+                  type="submit"
+                  onClick={() => setSubmit(true)}>
                   Save
                 </button>
                 <button

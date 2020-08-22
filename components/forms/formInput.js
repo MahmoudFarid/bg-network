@@ -67,7 +67,11 @@ export default function FormInput({
         />
       )}
       <p className="text-red-500 text-sm italic font-semibold">
-        {errors[label] && errors[label].type === 'required' && errorMsg}
+        {errors[label] && errors[label].type === 'required'
+          ? errorMsg
+            ? errorMsg
+            : 'This Field is required'
+          : ''}
         {label === 'email' &&
           errors.email &&
           errors.email.type === 'pattern' &&

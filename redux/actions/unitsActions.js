@@ -3,14 +3,14 @@ import API from '../../api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 
-export const AddUnit = (pid, unit) => async (dispatch) => {
-  const acc = await API.post(`projects/${pid}/units/`, unit)
+export const AddUnit = (pid, formData, config) => async (dispatch) => {
+  const acc = await API.post(`projects/${pid}/units/`, formData, config)
     .then(() => {
       toast.success('Your unit is added successfully')
       Router.push('/projects/[pid]/units', `/projects/${pid}/units`)
       dispatch({
         type: types.ADD_UNIT,
-        payload: unit,
+        payload: formData,
       })
     })
     .catch((ex) => {
@@ -19,14 +19,14 @@ export const AddUnit = (pid, unit) => async (dispatch) => {
     })
 }
 
-export const EditUnit = (pid, uid, unit) => async (dispatch) => {
-  const acc = await API.patch(`projects/${pid}/units/${uid}/`, unit)
+export const EditUnit = (pid, uid, formData, config) => async (dispatch) => {
+  const acc = await API.patch(`projects/${pid}/units/${uid}/`, formData, config)
     .then(() => {
       toast.success('Your unit is updated successfully')
-      Router.push('/projects/[pid]/units', `/projects/${pid}/units`)
+      Router.push('/projects/[pid]/units/[uid]', `/projects/${pid}/units/${uid}`)
       dispatch({
         type: types.PATCH_UNIT,
-        payload: unit,
+        payload: formData,
       })
     })
     .catch((ex) => {

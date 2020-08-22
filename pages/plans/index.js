@@ -84,7 +84,7 @@ function Plans({ plans }) {
                       <td className="p-5">{plan.name}</td>
                       <td className="p-5">
                         <p className="desc w-11/12 h-6 overflow-hidden lg:whitespace-no-wrap">
-                          {plan.description}
+                          {plan.description ? plan.description : 'No Description'}
                         </p>
                       </td>
                       <td className="relative p-5 text-right">
