@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import ReactPaginate from 'react-paginate'
 
-export default function Pagination({ count, setPageItem }) {
+export default function Pagination({ count, limit, setPageItem }) {
   const [activeNo, setActiveNo] = useState(1)
-  const pagesNo = Math.ceil(count / 20)
+  const pagesNo = Math.ceil(count / limit)
 
   const onPageChange = (e) => {
-    setPageItem(e.selected + 1)
+    setPageItem(limit, e.selected)
     setActiveNo(e.selected + 1)
   }
 

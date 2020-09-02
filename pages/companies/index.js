@@ -2,15 +2,28 @@ import { useState, useEffect } from 'react'
 import API from '../../api'
 import CompanyCard from '../../components/cards/companyCard'
 import Loading from '../../components/core/loading'
+import Pagination from '../../components/features/pagination'
 
 export default function Companies() {
   const [isLoading, setIsLoading] = useState(true)
   const [companies, setCompanies] = useState([])
+  const [companiesCount, setCompaniesCount] = useState(Number)
+
+  const setPageItem = (offset, limit) => {
+    async function fetchCompanies() {
+      await API.get(`reds/new/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+        setCompanies(res.data.results)
+      })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    fetchCompanies()
+  }
 
   useEffect(() => {
     async function fetchCompanies() {
       await API.get('reds/new').then((res) => {
         setCompanies(res.data.results)
+        setCompaniesCount(res.data.count)
         setIsLoading(false)
       })
     }
@@ -44,6 +57,8 @@ export default function Companies() {
           </div>
         </div>
       )}
+      <Pagination count={companiesCount} limit={15} setPageItem={setPageItem} />
+
       <style jsx>{`
         .icon {
           top: 10px;

@@ -3,12 +3,12 @@ import API from '../../api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 
-export const GetPlans = () => async (dispatch) => {
-  const acc = await API.get('plans/')
+export const GetPlans = (offset, limit) => async (dispatch) => {
+  const acc = await API.get(`plans/?limit=${offset}&offset=${offset * limit}`)
     .then((res) => {
       dispatch({
         type: types.GET_PLANS,
-        payload: res.data.results,
+        payload: res.data,
       })
     })
     .catch((ex) => {

@@ -9,9 +9,9 @@ export default function Brokers() {
   const [brokers, setBrokers] = useState([])
   const [brokersCount, setBrokersCount] = useState(Number)
 
-  const setPageItem = (pageNo) => {
+  const setPageItem = (offset, limit) => {
     async function fetchBrokers() {
-      await API.get(`brokers/?page=${pageNo}`).then((res) => {
+      await API.get(`brokers/?limit=${offset}&offset=${offset * limit}`).then((res) => {
         setBrokers(res.data.results)
       })
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -44,9 +44,7 @@ export default function Brokers() {
               ))}
             </div>
           </div>
-          <div>
-            <Pagination count={brokersCount} setPageItem={setPageItem} />
-          </div>
+          <Pagination count={brokersCount} limit={21} setPageItem={setPageItem} />
         </div>
       )}
       <style jsx>{`

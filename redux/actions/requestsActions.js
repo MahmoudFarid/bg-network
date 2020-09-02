@@ -2,12 +2,12 @@ import * as types from '../types'
 import API from '../../api'
 import { toast } from 'react-toastify'
 
-export const GetRequests = () => async (dispatch) => {
-  const acc = await API.get('followers/requests')
+export const GetRequests = (offset, limit) => async (dispatch) => {
+  const acc = await API.get(`followers/requests/?limit=${offset}&offset=${offset * limit}`)
     .then((res) => {
       dispatch({
         type: types.GET_REQs,
-        payload: res.data.results,
+        payload: res.data,
       })
     })
     .catch((ex) => {

@@ -5,6 +5,7 @@ import API from '../api'
 import CompanyCard from '../components/cards/companyCard'
 import CompanyInfo from '../components/cards/companyInfo'
 import Loading from '../components/core/loading'
+import Pagination from '../components/features/pagination'
 
 export default function Dashboard() {
   const [isFriendsLoading, setIsFriendsLoading] = useState(true)
@@ -13,11 +14,23 @@ export default function Dashboard() {
   const [companies, setCompanies] = useState([])
   const [suggestions, setSuggestions] = useState([])
   const [count, setCount] = useState({})
+  const [companiesCount, setCompaniesCount] = useState(Number)
+
+  const setPageItem = (offset, limit) => {
+    async function fetchCompanies() {
+      await API.get(`reds/friends/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+        setCompanies(res.data.results)
+      })
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+    fetchCompanies()
+  }
 
   useEffect(() => {
     async function fetchCompanies() {
       await API.get('reds/friends').then((res) => {
         setCompanies(res.data.results)
+        setCompaniesCount(res.data.count)
         setIsFriendsLoading(false)
       })
     }
@@ -72,7 +85,11 @@ export default function Dashboard() {
                     {companies.map((company) => (
                       <CompanyCard company={company} key={company.id} />
                     ))}
+                    {companies.map((company) => (
+                      <CompanyCard company={company} key={company.id} />
+                    ))}
                   </div>
+                  <Pagination count={companiesCount} limit={6} setPageItem={setPageItem} />
                 </div>
               )}
             </div>

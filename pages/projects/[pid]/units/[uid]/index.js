@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import Router, { useRouter } from 'next/router'
@@ -10,7 +11,6 @@ import Carousel from '../../../../../components/features/carousel'
 import Carousel2 from '../../../../../components/features/carousel2'
 import DeleteObj from './../../../../../components/popup/deleteObj'
 import GoogleMap from '../../../../../components/features/googleMap'
-import PlanDetails from '../../../../../components/popup/planDetails'
 import { DeleteUnit } from './../../../../../redux/actions/unitsActions'
 
 export default function Unit() {
@@ -22,9 +22,8 @@ export default function Unit() {
   const [isLoading, setIsLoading] = useState(true)
   const [isOverlay, setIsOverlay] = useState(false)
   const [isOverlay2, setIsOverlay2] = useState(false)
-  const [isPlanOverlay, setIsPlanOverlay] = useState(false)
   const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
-  const [plan, setPlan] = useState({})
+  const [plansSelected, setSelectPlans] = useState([])
   const [unit, setUnit] = useState({})
   const dispatch = useDispatch()
 
@@ -39,6 +38,18 @@ export default function Unit() {
   const onDeletingItem = () => {
     dispatch(DeleteUnit(pid, uid))
   }
+
+  const onSelectingPlan = (plan) => {
+    if (plansSelected.find((p) => p.id === plan.id) == undefined)
+      setSelectPlans((old) => [...old, plan])
+    else {
+      const index = plansSelected.findIndex((p) => p.id === plan.id)
+      plansSelected.splice(index, 1)
+      setSelectPlans((old) => [...old])
+    }
+  }
+
+  console.log(plansSelected)
 
   useEffect(() => {
     const cid = localStorage.getItem('CID')
@@ -59,6 +70,7 @@ export default function Unit() {
         async function fetchUnit() {
           await API.get(`projects/${pid}/units/${uid}`).then((res) => {
             setUnit(res.data)
+            plansSelected.push(res.data.plans[0])
             setIsLoading(false)
           })
         }
@@ -69,6 +81,13 @@ export default function Unit() {
 
   return (
     <div>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
+        />
+        <title>Unit Details</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (
@@ -77,13 +96,10 @@ export default function Unit() {
           onClick={() => {
             setIsOverlay(false)
             setIsOverlay2(false)
-            setIsPlanOverlay(false)
             setIsDeleteOverlay(false)
           }}>
-          <Overlay opacity={isPlanOverlay} />
           <Overlay opacity={isDeleteOverlay} />
 
-          {isPlanOverlay && <PlanDetails plan={plan} />}
           {isDeleteOverlay && <DeleteObj name={unit.name} onDeletingItem={onDeletingItem} />}
 
           {isBroker != 'true' && (
@@ -96,7 +112,6 @@ export default function Unit() {
                     setIsDeleteOverlay(true)
                     setIsOverlay(false)
                     setIsOverlay2(false)
-                    setIsPlanOverlay(false)
                   }}>
                   <i className="fas fa-trash-alt"></i>
                 </button>
@@ -116,7 +131,7 @@ export default function Unit() {
               </div>
             </div>
           )}
-          <div className="flex justify-between flex-wrap">
+          <div className="relative flex justify-between flex-wrap">
             <div className="w-full mt-5 lg:w-5/12">
               <h2 className="text-black font-bold text-3xl">{unit.name}</h2>
               <p className="text-primary my-4 w-11/12">
@@ -132,106 +147,92 @@ export default function Unit() {
                 developed 8.5 million sqm of land so far.
               </p>
             </div>
-            <div className="imgs relative w-full lg:w-7/12">
+            <div className="imgs w-full lg:w-7/12">
               <Carousel2
                 isOverlay2={isOverlay2}
                 setIsOverlayFunc2={setIsOverlayFunc2}
                 sources2={unit.images}
                 order={2}
               />
-              <div className="absolute bottom-0 right-0 bg-white py-3 px-5 border-b-2 border-gray-200 w-full sm:w-8/12">
-                <div className="inline-block font-bold text-secondary w-1/2">
-                  <p className="text-lg mb-1">Total</p>
-                  <span className="inline-block text-black text-3xl">
-                    <NumberFormat value={unit.cost} displayType={'text'} thousandSeparator={true} />
-                    &nbsp; LE
-                  </span>
-                </div>
-                <div className="inline-block font-bold text-secondary w-1/2">
-                  <p className="text-lg mb-1">In cash</p>
-                  <span className="inline-block text-danger text-3xl">
-                    <NumberFormat
-                      value={unit.cash_value}
-                      displayType={'text'}
-                      thousandSeparator={true}
-                    />
-                    &nbsp; LE
-                  </span>
-                </div>
+            </div>
+            <div className="price absolute bottom-0 bg-white py-3 px-5 ml-0 border-b-2 border-gray-200 w-full sm:w-1/3">
+              <div className="inline-block font-bold text-secondary w-1/2">
+                <p className="text-lg mb-1">Total</p>
+                <span className="inline-block text-black text-3xl">
+                  <NumberFormat value={unit.cost} displayType={'text'} thousandSeparator={true} />
+                  &nbsp; LE
+                </span>
+              </div>
+              <div className="inline-block font-bold text-secondary w-1/2">
+                <p className="text-lg mb-1">In cash</p>
+                <span className="inline-block text-danger text-3xl">
+                  <NumberFormat
+                    value={unit.cash_value}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                  />
+                  &nbsp; LE
+                </span>
               </div>
             </div>
           </div>
 
           <div className="overflow-hidden mb-5">
-            <div className="float-right flex flex-row-reverse flex-wrap w-full bg-white text-center rounded-lg lg:w-3/4 lg:flex-no-wrap">
-              {unit.status && (
-                <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                  <img
-                    src="/assets/units/clock.jpg"
-                    alt="clock"
-                    className="block w-10 mx-auto mb-2"
-                  />
-                  <span>{unit.status}</span>
-                </div>
-              )}
-              {unit.reception && (
-                <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                  <img
-                    src="/assets/units/room.jpg"
-                    alt="room"
-                    className="block w-10 mx-auto mb-2"
-                  />
-                  <span>{unit.reception} Receptions</span>
-                </div>
-              )}
-              {unit.floor_number && (
-                <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                  <img
-                    src="/assets/units/floor.jpg"
-                    alt="floor"
-                    className="block w-10 mx-auto mb-2"
-                  />
-                  <span>{unit.floor_number} Floors</span>
-                </div>
-              )}
-              {unit.direction && (
-                <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                  <img
-                    src="/assets/units/north.jpg"
-                    alt="north"
-                    className="block w-10 mx-auto mb-2"
-                  />
-                  <span>{unit.direction}</span>
-                </div>
-              )}
-              {unit.area && (
-                <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                  <img src="/assets/units/m2.jpg" alt="m2" className="block w-10 mx-auto mb-2" />
-                  <span>
-                    {unit.area} M<sup>2</sup>
-                  </span>
-                </div>
-              )}
-              {unit.bathrooms && (
-                <div className="w-3/12 py-4 mt-2 border-r-2 border-gray-200">
-                  <img
-                    src="/assets/units/bathroom.jpg"
-                    alt="bathroom"
-                    className="block w-10 mx-auto mb-2"
-                  />
-                  <span>{unit.bathrooms}</span>
-                </div>
-              )}
-              {unit.bedrooms && (
-                <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                  <img
-                    src="/assets/units/bedroom.jpg"
-                    alt="bedroom"
-                    className="block w-10 mx-auto mb-2"
-                  />
-                  <span>{unit.bedrooms} Bedrooms</span>
-                </div>
-              )}
+            <div className="float-right flex flex-row-reverse flex-wrap w-full bg-white text-center lg:w-3/4 lg:flex-no-wrap">
+              <div className="w-3/12 py-4 border-r-2 border-gray-200">
+                <img
+                  src="/assets/units/clock.jpg"
+                  alt="clock"
+                  className="block w-10 mx-auto mb-2"
+                />
+                <span>
+                  {unit.status.charAt(0).toUpperCase() + unit.status.toLowerCase().slice(1)}
+                </span>
+              </div>
+              <div className="w-3/12 py-4 border-r-2 border-gray-200">
+                <img src="/assets/units/room.jpg" alt="room" className="block w-10 mx-auto mb-2" />
+                <span>{unit.reception} Receptions</span>
+              </div>
+              <div className="w-3/12 py-4 border-r-2 border-gray-200">
+                <img
+                  src="/assets/units/floor.jpg"
+                  alt="floor"
+                  className="block w-10 mx-auto mb-2"
+                />
+                <span>{unit.floor_number} Floors</span>
+              </div>
+              <div className="w-3/12 py-4 border-r-2 border-gray-200">
+                <img
+                  src="/assets/units/north.jpg"
+                  alt="north"
+                  className="block w-10 mx-auto mb-2"
+                />
+                <span>
+                  {unit.direction.charAt(0).toUpperCase() + unit.direction.toLowerCase().slice(1)}
+                </span>
+              </div>
+              <div className="w-3/12 py-4 border-r-2 border-gray-200">
+                <img src="/assets/units/m2.jpg" alt="m2" className="block w-10 mx-auto mb-2" />
+                <span>
+                  {unit.area} M<sup>2</sup>
+                </span>
+              </div>
+              <div className="w-3/12 py-4 mt-2 border-r-2 border-gray-200">
+                <img
+                  src="/assets/units/bathroom.jpg"
+                  alt="bathroom"
+                  className="block w-10 mx-auto mb-3"
+                />
+                <span>{unit.bathrooms} Bathrooms</span>
+              </div>
+              <div className="w-3/12 py-4 border-r-2 border-gray-200">
+                <img
+                  src="/assets/units/bedroom.jpg"
+                  alt="bedroom"
+                  className="block w-10 mx-auto mb-2"
+                />
+                <span>{unit.bedrooms} Bedrooms</span>
+              </div>
               <div className="w-3/12 py-4 border-r-2 border-gray-200">
                 <img
                   src="/assets/units/appartment.jpg"
@@ -245,29 +246,33 @@ export default function Unit() {
 
           <div className="mb-8">
             <h2 className="text-black text-lg font-bold mb-2">Plans ({unit.plans.length} Plans)</h2>
-            {unit.plans.map((plan, index) => (
+            {unit.plans.map((plan) => (
               <div className="p-3" key={plan.id}>
-                <p
-                  className="text-primaryText font-semibold text-lg cursor-pointer hover:text-secondaryLight"
+                <div
+                  className="text-primaryText font-semibold text-xl cursor-pointer hover:text-secondaryLight"
                   onClick={(e) => {
                     e.stopPropagation()
-                    setIsPlanOverlay(true)
-                    setIsOverlay(false)
-                    setIsOverlay2(false)
-                    setIsDeleteOverlay(false)
-                    setPlan(plan)
+                    onSelectingPlan(plan)
                   }}>
                   {plan.name}
-                </p>
-                <div className="bg-white mt-2 p-5 flex flex-start flex-no-wrap overflow-x-auto">
-                  {plan.installments.map((installment, index) => (
-                    <div className="installment" key={installment.id}>
-                      <p className="text-lg text-secondary">{installment.name}</p>
-                      <span className="text-secondary font-semibold block ml-10">
-                        {installment.amount}
-                      </span>
-                    </div>
-                  ))}
+                </div>
+                <div className="bg-white w-full">
+                  <div className="mt-2 flex flex-start flex-no-wrap overflow-x-auto overflow-y-hidden">
+                    {plansSelected.map(
+                      (p) =>
+                        p.name === plan.name &&
+                        p.installments.map((installment) => (
+                          <div
+                            className={`installment p-5 animate__animated animate__slideInDown`}
+                            key={installment.id}>
+                            <p className="text-lg text-secondary">{installment.name}</p>
+                            <span className="text-secondary font-semibold block">
+                              {installment.amount}
+                            </span>
+                          </div>
+                        ))
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -276,8 +281,14 @@ export default function Unit() {
           <div className="grid grid-cols-1 gap-0 mb-10 lg:grid-cols-2 lg:gap-10 xl:gap-24">
             <div>
               <h2 className="text-black text-lg font-bold mb-2">Project Video</h2>
-              <div className="project bg-white p-5 rounded-lg shadow-lg h-full">
-                <ReactPlayer url={unit.p_youtube} width="100%" height="100%" controls={true} />
+              <div className="project relative bg-white p-5 rounded-lg shadow-lg h-full">
+                {unit.p_youtube ? (
+                  <ReactPlayer url={unit.p_youtube} width="100%" height="100%" controls={true} />
+                ) : (
+                  <div className="msg absolute w-full text-primary text-3xl text-center mx-auto">
+                    The project has no video yet
+                  </div>
+                )}
               </div>
             </div>
             <div>
@@ -306,17 +317,27 @@ export default function Unit() {
           </div>
         </div>
       )}
-      <style jsx>{`
-        .project {
-          height: 33rem;
-        }
-        .imgs {
-          height: 30rem;
-        }
-        .installment {
-          min-width: 20%;
-        }
-      `}</style>
+      <style jsx>
+        {`
+          .project {
+            height: 33rem;
+          }
+          .imgs {
+            height: 30rem;
+          }
+          .installment {
+            min-width: 20%;
+          }
+          .msg {
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%);
+          }
+          .price {
+            margin-left: 25%;
+          }
+        `}
+      </style>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import Overlay from './../../components/features/overlay'
 import PlanDetails from '../../components/popup/planDetails'
 import DeleteObj from '../../components/popup/deleteObj'
 import { GetPlans, DeletePlan } from './../../redux/actions/plansActions'
+import Pagination from '../../components/features/pagination'
 
 function Plans({ plans }) {
   const [rowId, setRowId] = useState(0)
@@ -19,6 +20,11 @@ function Plans({ plans }) {
 
   const onDeletingItem = () => {
     dispatch(DeletePlan(plan.id))
+  }
+
+  const setPageItem = (offset, limit) => {
+    dispatch(GetPlans(offset, limit))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   useEffect(() => {
@@ -57,7 +63,7 @@ function Plans({ plans }) {
             </button>
           </div>
           <div className="bg-white p-5 rounded-lg">
-            {plans?.length === 0 ? (
+            {plans?.results.length === 0 ? (
               <div className="text-primary text-4xl text-center mx-auto my-10">
                 You don't have any Plans yet
               </div>
@@ -71,7 +77,7 @@ function Plans({ plans }) {
                   </tr>
                 </thead>
                 <tbody className="text-secondary">
-                  {plans?.map((plan) => (
+                  {plans?.results.map((plan) => (
                     <tr
                       key={plan.id}
                       className="transition duration-300 ease-in-out border-l-4 border-transparent hover:bg-secondaryLightest hover:border-secondaryLight"
@@ -126,6 +132,7 @@ function Plans({ plans }) {
               </table>
             )}
           </div>
+          <Pagination count={plans?.count} limit={10} setPageItem={setPageItem} />
         </div>
       )}
       <style jsx>{`

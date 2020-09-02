@@ -4,11 +4,32 @@ import Router from 'next/router'
 import Loading from '../components/core/loading'
 import ProjectCard from '../components/cards/projectCard'
 import ProfileSideBar from '../components/core/profileSideBar'
+import Pagination from '../components/features/pagination'
 
 export default function MyProfile() {
+  const [isBroker, setIsBroker] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [projects, setProjects] = useState([])
-  const [isBroker, setIsBroker] = useState()
+  const [ProjectsCount, setProjectsCount] = useState(Number)
+
+  const setPageItem = (offset, limit) => {
+    if (isBroker == 'true') {
+      async function fetchProjects() {
+        await API.get(`reds/projects/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+          setProjects(res.data.results)
+        })
+      }
+      fetchProjects()
+    } else {
+      async function fetchProjects() {
+        await API.get(`projects/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+          setProjects(res.data.results)
+        })
+      }
+      fetchProjects()
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   useEffect(() => {
     localStorage.setItem('CID', 0)
@@ -19,11 +40,13 @@ export default function MyProfile() {
       if (isBroker == 'true') {
         await API.get('reds/projects/').then((res) => {
           setProjects(res.data.results)
+          setProjectsCount(res.data.count)
           setIsLoading(false)
         })
       } else {
         await API.get('projects/').then((res) => {
           setProjects(res.data.results)
+          setProjectsCount(res.data.count)
           setIsLoading(false)
         })
       }
@@ -65,6 +88,7 @@ export default function MyProfile() {
                 ))}
               </div>
             )}
+            <Pagination count={ProjectsCount} limit={15} setPageItem={setPageItem} />
           </div>
         </div>
       )}
