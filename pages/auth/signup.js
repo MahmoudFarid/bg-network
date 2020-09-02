@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import Link from 'next/link'
 import { useState } from 'react'
 import SignUpForm from '../../components/forms/signupForm'
@@ -7,6 +8,9 @@ export default function SignUp() {
 
   return (
     <div>
+      <Head>
+        <title>Sign Up</title>
+      </Head>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         <div className="px-8 pt-20 z-10 md:bg-white">
           <img src="/assets/logo.svg" alt="logo" className="w-1/3" />

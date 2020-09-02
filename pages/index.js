@@ -1,9 +1,13 @@
+import Head from 'next/head'
 import Link from 'next/link'
 import LoginForm from '../components/forms/loginForm'
 
 export default function Home() {
   return (
     <div>
+      <Head>
+        <title>Log In</title>
+      </Head>
       <div className="grid grid-cols-1 gap-0 md:grid-cols-2 xl:grid-cols-3">
         <div className="px-8 pt-20 z-10 md:bg-white">
           <img src="/assets/logo.svg" alt="logo" className="w-1/3" />

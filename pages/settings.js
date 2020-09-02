@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import API from '../api'
 import BasicDataForm from '../components/forms/basicDataForm'
@@ -21,6 +22,9 @@ export default function Settings() {
 
   return (
     <div>
+      <Head>
+        <title>Profile Settings</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (

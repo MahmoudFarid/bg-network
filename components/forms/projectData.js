@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { theme } from '../../tailwind.config'
 import Router from 'next/router'
 import { useState, useEffect } from 'react'
@@ -142,6 +143,9 @@ export default function ProjectData({ pid }) {
 
   return (
     <div>
+      <Head>
+        <title>{pid ? 'Edit Project' : 'Add Project'}</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (

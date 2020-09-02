@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import Router from 'next/router'
 import API from '../../api'
@@ -54,6 +55,9 @@ export default function Projects() {
 
   return (
     <div>
+      <Head>
+        <title>All Projects</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (

@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import API from '../../api'
 import Loading from '../../components/core/loading'
@@ -32,6 +33,9 @@ export default function Brokers() {
 
   return (
     <div>
+      <Head>
+        <title>All Brokers</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (

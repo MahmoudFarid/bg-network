@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import Router from 'next/router'
 import { useForm } from 'react-hook-form'
@@ -78,6 +79,9 @@ export default function PlanData({ pid }) {
 
   return (
     <div>
+      <Head>
+        <title>{pid ? 'Edit Plan' : 'Add Plan'}</title>
+      </Head>
       {isLoading && pid ? (
         <Loading />
       ) : (

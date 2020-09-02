@@ -1,6 +1,6 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import Link from 'next/link'
 import { useDispatch } from 'react-redux'
 import Router, { useRouter } from 'next/router'
 import API from '../../../api'
@@ -119,6 +119,9 @@ export default function Project() {
 
   return (
     <div>
+      <Head>
+        <title>Project Details</title>
+      </Head>
       {isLoading && isProjectLoading ? (
         <Loading />
       ) : (

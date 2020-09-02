@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import API from '../../api'
@@ -28,6 +29,9 @@ export default function Company() {
 
   return (
     <div>
+      <Head>
+        <title>Company Details</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (

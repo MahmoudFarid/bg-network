@@ -4,6 +4,7 @@ import 'react-dropzone-uploader/dist/styles.css'
 import '../public/styles/tailwind.css'
 import '../public/styles/globalStyles.css'
 
+import Head from 'next/head'
 import store from './../redux/store'
 import { Provider } from 'react-redux'
 import { createWrapper } from 'next-redux-wrapper'
@@ -16,6 +17,13 @@ function App({ Component, pageProps }) {
       <ToastContainer />
 
       <MainLayout>
+        <Head>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
+          />
+          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        </Head>
         <Component {...pageProps} />
       </MainLayout>
     </Provider>

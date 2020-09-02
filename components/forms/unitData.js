@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { theme } from '../../tailwind.config'
 import Router from 'next/router'
 import { useState, useEffect } from 'react'
@@ -143,6 +144,9 @@ export default function UnitData({ pid, uid }) {
 
   return (
     <div>
+      <Head>
+        <title>{uid ? 'Edit Unit' : 'Add Unit'}</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (

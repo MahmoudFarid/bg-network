@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useEffect } from 'react'
 import FollowCard from '../components/cards/followCard'
 import { connect, useDispatch } from 'react-redux'
@@ -17,20 +18,25 @@ function Requests({ requests }) {
   }, [])
 
   return (
-    <div className="container-fluid my-16">
-      <h2 className="text-black font-bold text-lg mb-8">Requests</h2>
-      <div className="bg-white p-5 pt-0 mt-3 rounded-lg shadow-lg">
-        {requests?.results.length === 0 || !requests ? (
-          <div className="text-primary text-4xl text-center mx-auto py-16 w-8/12">
-            You don't have any Requests
-          </div>
-        ) : (
-          requests?.results.map((request) => (
-            <FollowCard key={request.id} account={request.from_user} request={request} />
-          ))
-        )}
+    <div>
+      <Head>
+        <title>All Requests</title>
+      </Head>
+      <div className="container-fluid my-16">
+        <h2 className="text-black font-bold text-lg mb-8">Requests</h2>
+        <div className="bg-white p-5 pt-0 mt-3 rounded-lg shadow-lg">
+          {requests?.results.length === 0 || !requests ? (
+            <div className="text-primary text-4xl text-center mx-auto py-16 w-8/12">
+              You don't have any Requests
+            </div>
+          ) : (
+            requests?.results.map((request) => (
+              <FollowCard key={request.id} account={request.from_user} request={request} />
+            ))
+          )}
+        </div>
+        <Pagination count={requests?.count} limit={10} setPageItem={setPageItem} />
       </div>
-      <Pagination count={requests?.count} limit={10} setPageItem={setPageItem} />
     </div>
   )
 }

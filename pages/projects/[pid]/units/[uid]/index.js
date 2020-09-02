@@ -82,10 +82,6 @@ export default function Unit() {
   return (
     <div>
       <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
-        />
         <title>Unit Details</title>
       </Head>
       {isLoading ? (

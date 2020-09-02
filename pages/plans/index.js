@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { theme } from '../../tailwind.config'
 import { useState, useEffect } from 'react'
 import Router from 'next/router'
@@ -36,6 +37,9 @@ function Plans({ plans }) {
 
   return (
     <div>
+      <Head>
+        <title>All Plans</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (

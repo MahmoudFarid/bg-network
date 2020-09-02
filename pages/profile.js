@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import API from '../api'
 import Router from 'next/router'
@@ -56,6 +57,9 @@ export default function MyProfile() {
 
   return (
     <div>
+      <Head>
+        <title>My Profile</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (
