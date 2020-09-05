@@ -6,6 +6,7 @@ export default function FormInput({
   type,
   label,
   labelTxt,
+  classes,
   placeholder,
   defaultValue,
   errorMsg,
@@ -35,9 +36,9 @@ export default function FormInput({
           ref={register(req === false ? { required: false } : { required: true })}></textarea>
       ) : (
         <input
-          className={`appearance-none block w-full border border-gray-400 rounded py-2 px-4 focus:border-primaryText focus:outline-none ${
+          className={`appearance-none block w-full border border-gray-400 rounded px-4 focus:border-primaryText focus:outline-none ${
             Object.keys(errors).includes(label) ? 'border-red-400' : 'border-gray-400'
-          }`}
+          } ${classes ? classes : 'py-2'}`}
           type={type}
           id={label}
           name={label}
@@ -70,7 +71,7 @@ export default function FormInput({
         {errors[label] && errors[label].type === 'required'
           ? errorMsg
             ? errorMsg
-            : 'This Field is required'
+            : 'This field is required'
           : ''}
         {label === 'email' &&
           errors.email &&

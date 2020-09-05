@@ -130,17 +130,22 @@ export default function Unit() {
           <div className="relative flex justify-between flex-wrap">
             <div className="w-full mt-5 lg:w-5/12">
               <h2 className="text-black font-bold text-3xl">{unit.name}</h2>
-              <p className="text-primary my-4 w-11/12">
+              <p className="desc text-primary my-4 w-11/12 overflow-y-auto">
                 Talaat Mustafa Group (TMG) Holding is the leading community real estate developer in
                 Egypt, with a land bank of 50 million square meters. The group has a strong track
                 record of over 40 years in the housing and real-estate development industry, having
-                developed 8.5 million sqm of land so far.
-              </p>
-              <p className="text-primary my-4 w-11/12">
-                Talaat Mustafa Group (TMG) Holding is the leading community real estate developer in
-                Egypt, with a land bank of 50 million square meters. The group has a strong track
-                record of over 40 years in the housing and real-estate development industry, having
-                developed 8.5 million sqm of land so far.
+                developed 8.5 million sqm of land so far. Talaat Mustafa Group (TMG) Holding is the
+                leading community real estate developer in Egypt, with a land bank of 50 million
+                square meters. The group has a strong track record of over 40 years in the housing
+                and real-estate development industry, having developed 8.5 million sqm of land so
+                far. Talaat Mustafa Group (TMG) Holding is the leading community real estate
+                developer in Egypt, with a land bank of 50 million square meters. The group has a
+                strong track record of over 40 years in the housing and real-estate development
+                industry, having developed 8.5 million sqm of land so far. Talaat Mustafa Group
+                (TMG) Holding is the leading community real estate developer in Egypt, with a land
+                bank of 50 million square meters. The group has a strong track record of over 40
+                years in the housing and real-estate development industry, having developed 8.5
+                million sqm of land so far.
               </p>
             </div>
             <div className="imgs w-full lg:w-7/12">
@@ -151,16 +156,16 @@ export default function Unit() {
                 order={2}
               />
             </div>
-            <div className="price absolute bottom-0 bg-white py-3 px-5 ml-0 border-b-2 border-gray-200 w-full sm:w-1/3">
+            <div className="price absolute bottom-0 bg-white py-1 px-4 ml-0 border-b-2 border-gray-200 w-full sm:w-1/3">
               <div className="inline-block font-bold text-secondary w-1/2">
-                <p className="text-lg mb-1">Total</p>
+                <p className="text-lg">Total</p>
                 <span className="inline-block text-black text-3xl">
                   <NumberFormat value={unit.cost} displayType={'text'} thousandSeparator={true} />
                   &nbsp; LE
                 </span>
               </div>
               <div className="inline-block font-bold text-secondary w-1/2">
-                <p className="text-lg mb-1">In cash</p>
+                <p className="text-lg">In cash</p>
                 <span className="inline-block text-danger text-3xl">
                   <NumberFormat
                     value={unit.cash_value}
@@ -175,65 +180,53 @@ export default function Unit() {
 
           <div className="overflow-hidden mb-5">
             <div className="float-right flex flex-row-reverse flex-wrap w-full bg-white text-center lg:w-3/4 lg:flex-no-wrap">
-              <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                <img
-                  src="/assets/units/clock.jpg"
-                  alt="clock"
-                  className="block w-10 mx-auto mb-2"
-                />
+              <div className="w-3/12 py-2 border-r-2 border-gray-200">
+                <img src="/assets/units/clock.jpg" alt="clock" className="block w-8 mx-auto mb-2" />
                 <span>
                   {unit.status.charAt(0).toUpperCase() + unit.status.toLowerCase().slice(1)}
                 </span>
               </div>
-              <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                <img src="/assets/units/room.jpg" alt="room" className="block w-10 mx-auto mb-2" />
+              <div className="w-3/12 py-2 border-r-2 border-gray-200">
+                <img src="/assets/units/room.jpg" alt="room" className="block w-8 mx-auto mb-2" />
                 <span>{unit.reception} Receptions</span>
               </div>
-              <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                <img
-                  src="/assets/units/floor.jpg"
-                  alt="floor"
-                  className="block w-10 mx-auto mb-2"
-                />
+              <div className="w-3/12 py-2 border-r-2 border-gray-200">
+                <img src="/assets/units/floor.jpg" alt="floor" className="block w-8 mx-auto mb-2" />
                 <span>{unit.floor_number} Floors</span>
               </div>
-              <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                <img
-                  src="/assets/units/north.jpg"
-                  alt="north"
-                  className="block w-10 mx-auto mb-2"
-                />
+              <div className="w-3/12 py-2 border-r-2 border-gray-200">
+                <img src="/assets/units/north.jpg" alt="north" className="block w-8 mx-auto mb-2" />
                 <span>
                   {unit.direction.charAt(0).toUpperCase() + unit.direction.toLowerCase().slice(1)}
                 </span>
               </div>
-              <div className="w-3/12 py-4 border-r-2 border-gray-200">
-                <img src="/assets/units/m2.jpg" alt="m2" className="block w-10 mx-auto mb-2" />
+              <div className="w-3/12 py-2 border-r-2 border-gray-200">
+                <img src="/assets/units/m2.jpg" alt="m2" className="block w-8 mx-auto mb-2" />
                 <span>
                   {unit.area} M<sup>2</sup>
                 </span>
               </div>
-              <div className="w-3/12 py-4 mt-2 border-r-2 border-gray-200">
+              <div className="w-3/12 py-2 mt-2 border-r-2 border-gray-200">
                 <img
                   src="/assets/units/bathroom.jpg"
                   alt="bathroom"
-                  className="block w-10 mx-auto mb-3"
+                  className="block w-8 mx-auto mb-3"
                 />
                 <span>{unit.bathrooms} Bathrooms</span>
               </div>
-              <div className="w-3/12 py-4 border-r-2 border-gray-200">
+              <div className="w-3/12 py-2 border-r-2 border-gray-200">
                 <img
                   src="/assets/units/bedroom.jpg"
                   alt="bedroom"
-                  className="block w-10 mx-auto mb-2"
+                  className="block w-8 mx-auto mb-2"
                 />
                 <span>{unit.bedrooms} Bedrooms</span>
               </div>
-              <div className="w-3/12 py-4 border-r-2 border-gray-200">
+              <div className="w-3/12 py-2 border-r-2 border-gray-200">
                 <img
                   src="/assets/units/appartment.jpg"
                   alt="appartment"
-                  className="block w-10 mx-auto mb-2"
+                  className="block w-8 mx-auto mb-2"
                 />
                 <span>{unit.type.name}</span>
               </div>
@@ -331,6 +324,9 @@ export default function Unit() {
           }
           .price {
             margin-left: 25%;
+          }
+          .desc {
+            height: 66%;
           }
         `}
       </style>

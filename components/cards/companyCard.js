@@ -31,11 +31,11 @@ export default function CompanyCard({ company }) {
         </div>
 
         <div className="flex justify-start p-5">
-          <div className="w-20 h-16 mr-5 mt-3">
+          <div className="w-20 h-16 mr-2 mt-3">
             <img
-              src={company.avatar}
+              src={company.avatar ? company.avatar : '/assets/company-pic.png'}
               alt="company"
-              className="block w-10/12 h-full rounded-full mx-auto"
+              className="block w-full h-full rounded-full mx-auto"
             />
           </div>
           <div className="item w-9/12">

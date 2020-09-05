@@ -7,6 +7,7 @@ export default function DropdownMenu({
   dropdownWidth,
   options,
   choices,
+  classes,
   multiple,
   defaultValue,
   itemSelectedFunc,
@@ -41,7 +42,9 @@ export default function DropdownMenu({
   return (
     <div className="relative">
       <div
-        className="block appearance-none w-full py-2 px-4 rounded border cursor-pointer focus:outline-none border-gray-400"
+        className={`block appearance-none w-full px-4 rounded border cursor-pointer focus:outline-none border-gray-400 ${
+          classes ? classes : 'py-2'
+        }`}
         onClick={(e) => {
           toggleDropdown(order)
           setIsOpen(!isOpen)

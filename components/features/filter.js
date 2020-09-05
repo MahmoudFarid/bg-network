@@ -24,6 +24,7 @@ export default function Filter({
             type="text"
             req={false}
             onKeyUp={preventShowLetter}
+            classes="py-1"
           />
         </div>
       ) : (
@@ -37,6 +38,7 @@ export default function Filter({
               type="text"
               req={false}
               onKeyUp={preventShowLetter}
+              classes="py-1"
             />
           </div>
           <div className={`inline-block mr-5 ${width}`}>
@@ -48,6 +50,7 @@ export default function Filter({
               type="text"
               req={false}
               onKeyUp={preventShowLetter}
+              classes="py-1"
             />
           </div>
         </div>

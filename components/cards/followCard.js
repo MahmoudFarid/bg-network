@@ -11,7 +11,7 @@ function FollowCard({ account, request, acceptRequest, rejectRequest }) {
     <div className="grid grid-cols-9 lg:grid-cols-11 border-b border-gray-300 py-4">
       <div className="w-24 h-16 mr-2 mt-2">
         <img
-          src={account.avatar}
+          src={account.avatar ? account.avatar : '/assets/profile-pic.png'}
           alt="avatar"
           className="block w-10/12 h-full rounded-full mx-auto"
         />

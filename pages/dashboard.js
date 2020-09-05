@@ -62,8 +62,8 @@ export default function Dashboard() {
           {isFriendsLoading || isSuggestionsLoading || isCountLoading ? (
             <Loading />
           ) : (
-            <div className="grid grid-cols-1 row-gap-4 mb-16 xl:grid-cols-3 xl:gap-4">
-              <div className="col-span-2 bg-white p-5 rounded-lg mt-16">
+            <div className="grid grid-cols-1 row-gap-4 mb-16 lg:grid-cols-3 xl:grid-cols-4 lg:gap-4">
+              <div className="col-span-3 bg-white p-5 rounded-lg mt-16 lg:col-span-2 xl:col-span-3">
                 {companies.length === 0 ? (
                   <div className="text-primary text-4xl text-center mx-auto mt-64 w-8/12">
                     You don't have any Companies yet start by adding ones
@@ -75,7 +75,7 @@ export default function Dashboard() {
                   </div>
                 ) : (
                   <div>
-                    <div className="relative w-1/2 mx-auto mt-5 mb-10">
+                    <div className="relative w-full mx-auto mt-5 mb-10 md:w-1/2">
                       <i className="icon fas fa-search fa-2x absolute inline-block text-gray-400"></i>
                       <input
                         className="appearance-none block w-full text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
@@ -86,22 +86,18 @@ export default function Dashboard() {
                         placeholder="Type Company name"
                       />
                     </div>
-                    <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2">
-                      {companies.map((company) => (
-                        <CompanyCard company={company} key={company.id} />
-                      ))}
+                    <div className="grid grid-cols-1 col-gap-5 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
                       {companies.map((company) => (
                         <CompanyCard company={company} key={company.id} />
                       ))}
                     </div>
-                    <Pagination count={companiesCount} limit={6} setPageItem={setPageItem} />
+                    <Pagination count={companiesCount} limit={9} setPageItem={setPageItem} />
                   </div>
                 )}
               </div>
 
-              <div className="mt-10 lg:mt-12">
+              <div className="mt-10 lg:mt-16">
                 <div className="mb-10">
-                  <h2 className="text-black font-bold text-lg mb-2">Total</h2>
                   <div className="bg-white p-5 rounded-lg">
                     <div className="flex justify-start lg:justify-between">
                       <div className="w-1/2">

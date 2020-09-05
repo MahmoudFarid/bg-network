@@ -11,7 +11,7 @@ function NotificationCard({ account, request, acceptRequest, rejectRequest }) {
     <div className="grid grid-cols-4 border-b border-gray-300 py-2">
       <div className="mt-3">
         <img
-          src="/assets/user.jpg"
+          src={account.avatar ? account.avatar : '/assets/profile-pic.png'}
           alt="user"
           className="block w-7/12 h-full rounded-full mx-auto"
         />
