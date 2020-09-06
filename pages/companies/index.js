@@ -54,7 +54,7 @@ export default function Companies() {
             </div>
 
             <div className="bg-white p-5 rounded-lg shadow-lg">
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {companies.map((company) => (
                   <CompanyCard company={company} key={company.id} />
                 ))}
@@ -62,7 +62,7 @@ export default function Companies() {
             </div>
           </div>
         )}
-        <Pagination count={companiesCount} limit={15} setPageItem={setPageItem} />
+        <Pagination count={companiesCount} limit={16} setPageItem={setPageItem} />
 
         <style jsx>{`
           .icon {

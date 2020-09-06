@@ -14,6 +14,7 @@ import ProjectSideBar from './../../../components/core/projectSideBar'
 import AdvancedFilter from '../../../components/features/advancedFilter'
 import CarouselOverlay from '../../../components/features/carouselOverlay'
 import { DeleteProject } from './../../../redux/actions/projectsActions'
+import Pagination from '../../../components/features/pagination'
 
 export default function Project() {
   const {
@@ -30,6 +31,7 @@ export default function Project() {
   const [cid, setCid] = useState()
   const [project, setProject] = useState({})
   const [units, setUnits] = useState([])
+  const [unitsCount, setUnitsCount] = useState(Number)
   const dispatch = useDispatch()
 
   const { register, errors, getValues } = useForm({
@@ -81,6 +83,29 @@ export default function Project() {
     setIsCarouselOverlayFunc(false)
   }
 
+  const setPageItem = (offset, limit) => {
+    if (cid == 0) {
+      async function fetchUnits() {
+        await API.get(`projects/${pid}/units/?limit=${offset}&offset=${offset * limit}`).then(
+          (res) => {
+            setUnits(res.data.results)
+          }
+        )
+      }
+      fetchUnits()
+    } else {
+      async function fetchUnits() {
+        await API.get(
+          `reds/${cid}/projects/${pid}/units/?limit=${offset}&offset=${offset * limit}`
+        ).then((res) => {
+          setUnits(res.data.results)
+        })
+      }
+      fetchUnits()
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   useEffect(() => {
     const cid = localStorage.getItem('CID')
     const isBroker = localStorage.getItem('isBroker')
@@ -100,6 +125,7 @@ export default function Project() {
         async function fetchUnits() {
           await API.get(`projects/${pid}/units/`).then((res) => {
             setUnits(res.data.results)
+            setUnitsCount(res.data.count)
             setIsLoading(false)
           })
         }
@@ -109,6 +135,7 @@ export default function Project() {
         async function fetchUnits() {
           await API.get(`reds/${cid}/projects/${pid}/units/`).then((res) => {
             setUnits(res.data.results)
+            setUnitsCount(res.data.count)
             setIsLoading(false)
           })
         }
@@ -151,7 +178,7 @@ export default function Project() {
             <CarouselOverlay sources={project.images} setIsOverlayFunc={setIsCarouselOverlayFunc} />
           )}
 
-          <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-3 lg:gap-16 lg:ml-0">
+          <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-4 lg:gap-6 lg:ml-0">
             <ProjectSideBar
               project={project}
               toggleProjectImgs={toggleProjectImgs}
@@ -159,7 +186,7 @@ export default function Project() {
               isBroker={isBroker}
             />
 
-            <div className="col-span-2 mt-10 mb-16">
+            <div className="col-span-3 mt-10 mb-16">
               <div className="w-full mb-5 clearfix">
                 {isBroker != 'true' && units.length > 0 && (
                   <button
@@ -187,8 +214,8 @@ export default function Project() {
                 </div>
               ) : (
                 <div>
-                  <div className="bg-white p-5 rounded-lg w-full">
-                    <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
+                  <div className="bg-white p-3 rounded-lg w-full xl:pb-0">
+                    <div className="grid grid-cols-1 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
                       <Filter
                         register={register}
                         errors={errors}
@@ -228,6 +255,7 @@ export default function Project() {
                         <DropdownMenu
                           order="first"
                           name="Types"
+                          classes="py-1"
                           dropdownWidth="w-full"
                           options={dropdownOptions}
                           itemSelectedFunc={itemSelectedFunc}
@@ -240,6 +268,7 @@ export default function Project() {
                       <UnitCard key={unit.id} unit={unit} pid={pid} />
                     ))}
                   </div>
+                  <Pagination count={unitsCount} limit={9} setPageItem={setPageItem} />
                 </div>
               )}
             </div>

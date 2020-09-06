@@ -50,7 +50,7 @@ function Header({ requests }) {
             </div>
           ) : (
             <div>
-              {requests?.map((request) => (
+              {requests.results?.map((request) => (
                 <NotificationCard key={request.id} account={request.from_user} request={request} />
               ))}
               <Link href="/requests">
