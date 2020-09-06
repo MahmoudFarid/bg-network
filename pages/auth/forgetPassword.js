@@ -47,7 +47,6 @@ export default function forgetPassword() {
                   errors={errors}
                   label="email"
                   labelTxt="Email"
-                  errorMsg="Email is required"
                   type="text"
                   placeholder="Enter your Email"
                 />

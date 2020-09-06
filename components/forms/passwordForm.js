@@ -23,8 +23,7 @@ export default function PasswordForm() {
           register={register}
           errors={errors}
           label="current_password"
-          labelTxt="Current Password"
-          errorMsg="Current Password is required"
+          labelTxt="Current Password*"
           type="password"
         />
 
@@ -32,8 +31,7 @@ export default function PasswordForm() {
           register={register}
           errors={errors}
           label="new_password"
-          labelTxt="New Password"
-          errorMsg="New Password is required"
+          labelTxt="New Password*"
           type="password"
         />
 
@@ -41,8 +39,7 @@ export default function PasswordForm() {
           register={register}
           errors={errors}
           label="confirm_password"
-          labelTxt="Confirm New Password"
-          errorMsg="Password Confirmation is required"
+          labelTxt="Confirm New Password*"
           type="password"
           currentPass={new_password.current}
         />

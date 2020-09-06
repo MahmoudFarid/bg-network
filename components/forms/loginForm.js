@@ -21,7 +21,6 @@ export default function LoginForm() {
         errors={errors}
         label="email"
         labelTxt="Email"
-        errorMsg="Email is required"
         type="text"
         placeholder="Enter your Email"
       />
@@ -31,7 +30,6 @@ export default function LoginForm() {
         errors={errors}
         label="password"
         labelTxt="Password"
-        errorMsg="Password is required"
         type="password"
         placeholder="*********"
       />

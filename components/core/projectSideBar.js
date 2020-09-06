@@ -5,9 +5,9 @@ export default function ProjectSideBar({ project, toggleProjectImgs, deleteProje
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="bg-bgLight pt-16">
+    <div className="bg-bgLight pt-10">
       {isBroker != 'true' && (
-        <div className="relative p-5 text-right">
+        <div className="relative px-5 text-right">
           <i
             className="fas fa-ellipsis-v text-primaryLight pl-5 pr-2 cursor-pointer hover:text-primary"
             onClick={(e) => {
@@ -15,7 +15,7 @@ export default function ProjectSideBar({ project, toggleProjectImgs, deleteProje
               setIsOpen(!isOpen)
             }}></i>
           {isOpen && (
-            <div className="absolute right-0 z-10 bg-white text-primaryLight text-left mr-5 w-1/3 border border-gray-200 rounded-lg shadow-md">
+            <div className="absolute right-0 z-10 bg-white text-primaryLight text-left mr-5 w-2/5 border border-gray-200 rounded-lg shadow-md">
               <p
                 className="py-3 px-5 cursor-pointer hover:bg-gray-100 hover:text-primary hover:font-semibold"
                 onClick={(e) => {

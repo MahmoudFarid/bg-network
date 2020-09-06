@@ -22,8 +22,7 @@ export default function SignUpForm({ isDeveloper }) {
         register={register}
         errors={errors}
         label="name"
-        labelTxt="Name"
-        errorMsg="Name is required"
+        labelTxt="Name*"
         type="text"
         placeholder="Enter your Name"
       />
@@ -32,8 +31,7 @@ export default function SignUpForm({ isDeveloper }) {
         register={register}
         errors={errors}
         label="email"
-        labelTxt="Email"
-        errorMsg="Email is required"
+        labelTxt="Email*"
         type="text"
         placeholder="Enter your Email"
       />
@@ -42,8 +40,7 @@ export default function SignUpForm({ isDeveloper }) {
         register={register}
         errors={errors}
         label="password"
-        labelTxt="Password"
-        errorMsg="Password is required"
+        labelTxt="Password*"
         type="password"
         placeholder="Enter your Password"
       />
@@ -52,8 +49,7 @@ export default function SignUpForm({ isDeveloper }) {
         register={register}
         errors={errors}
         label="confirm_password"
-        labelTxt="Password Confirmation"
-        errorMsg="Password Confirmation is required"
+        labelTxt="Password Confirmation*"
         type="password"
         placeholder="Repeat your Password"
         currentPass={password.current}

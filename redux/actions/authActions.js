@@ -6,7 +6,6 @@ import Router from 'next/router'
 export const Login = (account) => async (dispatch) => {
   const acc = await API.post('auth/token/login/', account)
     .then((res) => {
-      toast.success('You logged in successfully')
       // Router.push('/dashboard')
       Router.push('/profile')
       localStorage.setItem('accessToken', res.data.auth_token)

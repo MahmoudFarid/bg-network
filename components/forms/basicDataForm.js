@@ -70,8 +70,7 @@ export default function BasicDataForm({ profile }) {
           errors={errors}
           defaultValue={profile.name}
           label="name"
-          labelTxt="Name"
-          errorMsg="Name is required"
+          labelTxt="Name*"
           type="text"
         />
 
@@ -80,8 +79,7 @@ export default function BasicDataForm({ profile }) {
           errors={errors}
           defaultValue={profile.email}
           label="email"
-          labelTxt="Email"
-          errorMsg="Email is required"
+          labelTxt="Email*"
           type="text"
         />
 
