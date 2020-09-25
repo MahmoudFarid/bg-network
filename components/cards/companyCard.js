@@ -15,8 +15,7 @@ export default function CompanyCard({ company }) {
   return (
     <div className="bg-white border-none shadow-md rounded-lg overflow-hidden">
       <div className="transition duration-1000 ease-in-out transform hover:-translate-y-1 hover:scale-105">
-        <div className="relative">
-          <img src="/assets/company-cover.jpg" alt="company" />
+        <div className="cover relative">
           {company.friend_status !== 'Friends' && (
             <button
               className={`absolute bottom-0 right-0 py-1 mb-3 mr-5 w-1/4 text-sm rounded-full ransition duration-700 ease-in-out focus:outline-none ${
@@ -33,7 +32,7 @@ export default function CompanyCard({ company }) {
         <div className="flex justify-start p-5">
           <div className="w-20 h-16 mr-2 mt-3">
             <img
-              src={company.avatar ? company.avatar : '/assets/company-pic.png'}
+              src={company.avatar ? company.avatar : '/assets/company-pict.png'}
               alt="company"
               className="block w-full h-full rounded-full mx-auto"
             />
@@ -65,6 +64,15 @@ export default function CompanyCard({ company }) {
       <style jsx>{`
         .desc {
           text-overflow: ellipsis;
+        }
+        .cover {
+          height: 100px;
+          background-image: url(${company.project_photo
+            ? company.project_photo
+            : '/assets/company-cover.jpg'});
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: 50% 50%;
         }
       `}</style>
     </div>

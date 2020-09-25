@@ -107,8 +107,8 @@ export default function Project() {
   }
 
   useEffect(() => {
-    const cid = localStorage.getItem('CID')
     const isBroker = localStorage.getItem('isBroker')
+    const cid = isBroker == 'true' ? localStorage.getItem('CID') : 0
 
     setCid(cid)
     setIsBroker(isBroker)
@@ -134,6 +134,7 @@ export default function Project() {
       } else {
         async function fetchUnits() {
           await API.get(`reds/${cid}/projects/${pid}/units/`).then((res) => {
+            setProject(res.data.results[0].project)
             setUnits(res.data.results)
             setUnitsCount(res.data.count)
             setIsLoading(false)

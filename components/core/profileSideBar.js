@@ -18,7 +18,7 @@ export default function ProfileSideBar({ cid, bid }) {
   useEffect(() => {
     const isBroker = localStorage.getItem('isBroker')
 
-    if (cid != 0) {
+    if (cid != 0 && isBroker == 'true') {
       async function fetchCompany() {
         await API.get(`reds/${cid}/`).then((res) => {
           setProfile(res.data)
@@ -68,6 +68,18 @@ export default function ProfileSideBar({ cid, bid }) {
           <div className="text-center mt-5">
             <p className="text-black font-semibold text-lg">{profile.name}</p>
             <span className="text-secondary text-sm">Cairo, Egypt</span>
+
+            {profile?.reds_count >= 0 && (
+              <div className="w-3/4 mx-auto mt-8 text-center">
+                <div>
+                  <p className="font-bold">
+                    Companies Count: &nbsp;{' '}
+                    <span className="text-sm font-normal">{profile?.reds_count}</span>
+                  </p>
+                </div>
+              </div>
+            )}
+
             {cid != 0 && !profile.is_broker && (
               <button
                 className={`block py-3 mt-5 w-1/3 mx-auto text-xs font-semibold rounded-full focus:outline-none ${
@@ -107,7 +119,9 @@ export default function ProfileSideBar({ cid, bid }) {
           <div className="mt-10 px-8 h-56">
             <p className="font-semibold ml-2 mb-2">About</p>
             <p className="text-primary mb-4">
-              {profile.description ? profile.description : 'No Description'}
+              {profile.description && profile.description !== 'null'
+                ? profile.description
+                : 'No Description'}
             </p>
           </div>
         </div>

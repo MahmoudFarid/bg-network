@@ -2,26 +2,26 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import API from '../../api'
 import Loading from '../../components/core/loading'
-import ProjectCard from '../../components/cards/projectCard'
 import ProfileSideBar from '../../components/core/profileSideBar'
+import CompanyCard from './../../components/cards/companyCard'
+import ProjectCard from './../../components/cards/projectCard'
 
 export default function Broker() {
   const [isLoading, setIsLoading] = useState(true)
-  const [projects, setProjects] = useState([])
+  const [companies, setCompanies] = useState([])
   const {
     query: { bid },
   } = useRouter()
 
   useEffect(() => {
     if (bid) {
-      async function fetchProjects() {
-        // This API For testing only !!
+      async function fetchCompanies() {
         await API.get(`brokers/${bid}/`).then((res) => {
-          setProjects(res.data.results)
+          setCompanies(res.data.reds)
           setIsLoading(false)
         })
       }
-      fetchProjects()
+      fetchCompanies()
     }
   }, [bid])
 
@@ -30,16 +30,22 @@ export default function Broker() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-3 lg:gap-20 lg:ml-0">
+        <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-4 lg:gap-6 lg:ml-0">
           <ProfileSideBar bid={bid} />
 
-          <div className="col-span-2 mt-10 mb-16">
-            <h2 className="text-black font-bold text-lg mb-5">Projects</h2>
-            <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {/* {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))} */}
-            </div>
+          <div className="col-span-3 mt-10 mb-16">
+            <h2 className="text-black font-bold text-lg mb-5">Companies</h2>
+            {companies.length > 0 ? (
+              <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {companies.map((company) => (
+                  <ProjectCard key={company.id} company={company} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-primary text-4xl text-center mx-auto mt-32 w-full">
+                This broker doesn't work with any company
+              </div>
+            )}
           </div>
         </div>
       )}

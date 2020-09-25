@@ -12,7 +12,7 @@ export default function Brokers() {
 
   const setPageItem = (offset, limit) => {
     async function fetchBrokers() {
-      await API.get(`brokers/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+      await API.get(`brokers/new/?limit=${offset}&offset=${offset * limit}`).then((res) => {
         setBrokers(res.data.results)
       })
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -22,7 +22,7 @@ export default function Brokers() {
 
   useEffect(() => {
     async function fetchBrokers() {
-      await API.get(`brokers/`).then((res) => {
+      await API.get(`brokers/new`).then((res) => {
         setBrokers(res.data.results)
         setBrokersCount(res.data.count)
         setIsLoading(false)

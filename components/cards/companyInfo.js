@@ -17,7 +17,7 @@ export default function CompanyInfo({ company }) {
       <div className="flex justify-start">
         <div className="w-20 h-16 mr-2 mt-2">
           <img
-            src={company.avatar ? company.avatar : '/assets/company-pic.png'}
+            src={company.avatar ? company.avatar : '/assets/company-pict.png'}
             alt="company"
             className="block w-10/12 h-full rounded-full mx-auto"
           />

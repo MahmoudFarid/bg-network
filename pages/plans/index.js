@@ -5,7 +5,6 @@ import Router from 'next/router'
 import { useDispatch, connect } from 'react-redux'
 import Loading from '../../components/core/loading'
 import Overlay from './../../components/features/overlay'
-import PlanDetails from '../../components/popup/planDetails'
 import DeleteObj from '../../components/popup/deleteObj'
 import { GetPlans, DeletePlan } from './../../redux/actions/plansActions'
 import Pagination from '../../components/features/pagination'
@@ -13,7 +12,6 @@ import Pagination from '../../components/features/pagination'
 function Plans({ plans }) {
   const [rowId, setRowId] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
-  const [isOverlay, setIsOverlay] = useState(false)
   const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [plan, setPlan] = useState()
@@ -48,13 +46,9 @@ function Plans({ plans }) {
           onClick={(e) => {
             e.stopPropagation()
             setIsOpen(false)
-            setIsOverlay(false)
             setIsDeleteOverlay(false)
           }}>
-          <Overlay opacity={isOverlay} />
           <Overlay opacity={isDeleteOverlay} />
-
-          {isOverlay && <PlanDetails plan={plan} />}
           {isDeleteOverlay && <DeleteObj name={plan.name} onDeletingItem={onDeletingItem} />}
 
           <div className="flex justify-between mb-5">
@@ -87,7 +81,6 @@ function Plans({ plans }) {
                       className="transition duration-300 ease-in-out border-l-4 border-transparent hover:bg-secondaryLightest hover:border-secondaryLight"
                       onClick={(e) => {
                         e.stopPropagation()
-                        setIsOverlay(true)
                         setIsDeleteOverlay(false)
                         setPlan(plan)
                       }}>
@@ -122,7 +115,6 @@ function Plans({ plans }) {
                                 e.stopPropagation()
                                 setPlan(plan)
                                 setIsDeleteOverlay(true)
-                                setIsOverlay(false)
                               }}>
                               <i className="fas fa-trash mr-5"></i>
                               Delete
