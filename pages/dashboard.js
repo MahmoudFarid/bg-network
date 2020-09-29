@@ -84,21 +84,19 @@ export default function Dashboard() {
     }
   }, [])
 
-  console.log(suggestions)
-
   return (
     <div>
       <Head>
         <title>Dashboard</title>
       </Head>
-      <div className="container-fluid">
+      <div className="container">
         <div>
           {isFriendsLoading || isSuggestionsLoading || isCountLoading ? (
             <Loading />
           ) : (
-            <div className="grid grid-cols-1 row-gap-4 mb-16 lg:grid-cols-3 xl:grid-cols-4 lg:gap-4">
+            <div className="grid grid-cols-1 row-gap-4 mb-16 lg:grid-cols-3 xl:grid-cols-7">
               {isBroker == 'true' ? (
-                <div className="col-span-3 bg-white p-5 rounded-lg mt-16 lg:col-span-2 xl:col-span-3">
+                <div className="dashboard col-span-3 bg-white p-8 rounded-lg mt-16 lg:col-span-2 xl:col-span-5">
                   {companies.length === 0 ? (
                     <div className="text-primary text-4xl text-center mx-auto mt-64 w-8/12">
                       You don't have any Companies yet start by adding ones
@@ -110,8 +108,8 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div>
-                      <div className="relative w-full mx-auto mt-5 mb-10 md:w-1/2">
-                        <i className="icon fas fa-search fa-2x absolute inline-block text-gray-400"></i>
+                      <div className="relative w-full mx-auto mt-2 mb-8 md:w-1/2  lg:w-8/12">
+                        <i className="icon fas fa-search fa-2x absolute inline-block text-gray-300"></i>
                         <input
                           className="appearance-none block w-full text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
                           id="search"
@@ -121,7 +119,7 @@ export default function Dashboard() {
                           placeholder="Type Company name"
                         />
                       </div>
-                      <div className="grid grid-cols-1 col-gap-5 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
+                      <div className="grid grid-cols-1 col-gap-8 row-gap-6 md:grid-cols-2 xl:grid-cols-2">
                         {companies.map((company) => (
                           <CompanyCard company={company} key={company.id} />
                         ))}
@@ -131,7 +129,7 @@ export default function Dashboard() {
                   )}
                 </div>
               ) : (
-                <div className="col-span-3 bg-white p-5 rounded-lg mt-16 lg:col-span-2 xl:col-span-3">
+                <div className="dashboard col-span-3 bg-white p-8 rounded-lg mt-16 lg:col-span-2 xl:col-span-5">
                   {brokers.length === 0 ? (
                     <div className="text-primary text-4xl text-center mx-auto mt-64 w-8/12">
                       You don't have any Brokers yet start by adding ones
@@ -143,8 +141,8 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div>
-                      <div className="relative w-full mx-auto mt-5 mb-10 md:w-1/2">
-                        <i className="icon fas fa-search fa-2x absolute inline-block text-gray-400"></i>
+                      <div className="relative w-full mx-auto mt-2 mb-8 md:w-1/2 lg:w-8/12">
+                        <i className="icon fas fa-search fa-2x absolute inline-block text-gray-300"></i>
                         <input
                           className="appearance-none block w-full text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
                           id="search"
@@ -154,7 +152,7 @@ export default function Dashboard() {
                           placeholder="Type Broker name"
                         />
                       </div>
-                      <div className="grid grid-cols-1 col-gap-5 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
+                      <div className="grid grid-cols-1 col-gap-5 row-gap-5 md:grid-cols-2 xl:grid-cols-2">
                         {brokers.map((broker) => (
                           <BrokerCard broker={broker} key={broker.id} />
                         ))}
@@ -165,16 +163,16 @@ export default function Dashboard() {
                 </div>
               )}
 
-              <div className="mt-10 lg:mt-16">
-                <div className="mb-10">
-                  <div className="bg-white p-5 rounded-lg">
+              <div className="col-span-2 mt-10 lg:mt-16">
+                <div className="mb-6">
+                  <div className="bg-white px-8 py-4 rounded-lg">
                     <div className="flex justify-start lg:justify-between">
                       <div className="w-1/2">
-                        <p className="text-primaryLight uppercase tracking-wide mb-2">
+                        <p className="text-primaryLight text-sm uppercase tracking-wide mb-2">
                           {isBroker == 'true' ? 'Companies' : 'Brokers'}
                         </p>
                         <div className="flex justify-start items-center">
-                          <div className="bg-primary rounded-full p-2 px-3 mr-3 h-full">
+                          <div className="bg-primary rounded-full p-1 px-2 mr-2 h-full">
                             {isBroker == 'true' ? (
                               <i className="fas fa-building fa-md text-white"></i>
                             ) : (
@@ -185,7 +183,7 @@ export default function Dashboard() {
                             <p className="text-3xl font-semibold -mb-3">
                               {count.friends_count ? count.friends_count : '0'}
                             </p>
-                            <span className="text-sm">
+                            <span className="text-xs">
                               out of {isBroker == 'true' ? count.reds_count : count.brokers_count}
                             </span>
                           </div>
@@ -193,16 +191,18 @@ export default function Dashboard() {
                       </div>
                       {isBroker == 'true' && (
                         <div>
-                          <p className="text-primaryLight uppercase tracking-wide mb-2">Projects</p>
+                          <p className="text-primaryLight text-sm uppercase tracking-wide mb-2">
+                            Projects
+                          </p>
                           <div className="flex justify-start items-center">
-                            <div className="bg-primary rounded-full p-2 px-3 mr-3 h-full">
+                            <div className="bg-primary rounded-full p-1 px-2 mr-2 h-full">
                               <i className="fas fa-city fa-md text-white"></i>
                             </div>
                             <div className="text-secondary">
                               <p className="text-3xl font-semibold -mb-3">
                                 {count.friends_projects_count ? count.friends_projects_count : '0'}
                               </p>
-                              <span className="text-sm">out of {count.reds_projects_count}</span>
+                              <span className="text-xs">out of {count.reds_projects_count}</span>
                             </div>
                           </div>
                         </div>
@@ -213,9 +213,9 @@ export default function Dashboard() {
                 {isBroker == 'true' ? (
                   <div>
                     <div className="flex justify-between">
-                      <h2 className="text-black font-bold text-lg mb-2">Suggested Companies</h2>
+                      <h2 className="text-black font-bold text-md mb-3">Suggested Companies</h2>
                       <Link href="/companies">
-                        <a className="text-primaryLight text-sm underline hover:text-primaryText focus:outline-none">
+                        <a className="text-primaryLight text-xs underline hover:text-primaryText focus:outline-none">
                           View All
                         </a>
                       </Link>
@@ -231,7 +231,7 @@ export default function Dashboard() {
                     <div className="flex justify-between">
                       <h2 className="text-black font-bold text-lg mb-2">Suggested Brokers</h2>
                       <Link href="/brokers">
-                        <a className="text-primaryLight text-sm underline hover:text-primaryText focus:outline-none">
+                        <a className="text-primaryLight text-xs underline hover:text-primaryText focus:outline-none">
                           View All
                         </a>
                       </Link>
@@ -251,6 +251,9 @@ export default function Dashboard() {
           .icon {
             top: 10px;
             left: 20px;
+          }
+          .dashboard {
+            width: 98%;
           }
         `}</style>
       </div>

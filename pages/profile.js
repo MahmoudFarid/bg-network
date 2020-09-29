@@ -63,10 +63,10 @@ export default function MyProfile() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-4 lg:gap-6 lg:ml-0">
+        <div className="container-fluid grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-7 lg:ml-0">
           <ProfileSideBar cid={0} />
 
-          <div className="col-span-3 mt-10 mb-16">
+          <div className="col-span-5 mt-10 mb-16 ml-8 mr-16">
             <h2 className="text-black font-bold text-lg mb-5">Projects</h2>
             {projects.length === 0 ? (
               <div className="text-primary text-4xl text-center mx-auto mt-32 w-7/12">

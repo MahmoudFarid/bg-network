@@ -55,7 +55,7 @@ export default function ProfileSideBar({ cid, bid }) {
   }, [cid, bid])
 
   return (
-    <div className="bg-bgLight py-12 pt-24">
+    <div className="profile col-span-2 bg-bgLight py-12 pt-24">
       {!isLoading && (
         <div>
           <div className="w-48 h-40 mx-auto">
@@ -116,7 +116,7 @@ export default function ProfileSideBar({ cid, bid }) {
               </div>
             )}
           </div>
-          <div className="mt-10 px-8 h-56">
+          <div className="mt-10 px-8 h-56 overflow-auto lg:overflow-visible">
             <p className="font-semibold ml-2 mb-2">About</p>
             <p className="text-primary mb-4">
               {profile.description && profile.description !== 'null'
@@ -126,6 +126,13 @@ export default function ProfileSideBar({ cid, bid }) {
           </div>
         </div>
       )}
+      <style>
+        {`
+        .profile {
+          width: 91%
+        }
+      `}
+      </style>
     </div>
   )
 }

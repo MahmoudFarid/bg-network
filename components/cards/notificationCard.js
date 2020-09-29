@@ -27,12 +27,12 @@ function NotificationCard({ account, request, acceptRequest, rejectRequest }) {
       <div className="btn col-span-4 self-center">
         <div>
           <button
-            className="py-2 px-5 mr-2 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+            className="py-1 px-5 mr-2 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
             onClick={() => rejectRequest(request.id)}>
             Ignore
           </button>
           <button
-            className="py-2 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
+            className="py-1 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
             onClick={() => acceptRequest(request.id)}>
             Accept
           </button>

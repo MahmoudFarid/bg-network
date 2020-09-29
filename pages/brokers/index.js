@@ -39,8 +39,19 @@ export default function Brokers() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container-fluid my-16">
-          <h2 className="text-black font-bold text-lg mb-5">Brokers</h2>
+        <div className="container mb-16">
+          <div className="relative w-2/3 mx-auto mt-8 mb-6 md:w-1/2 lg:w-5/12">
+            <i className="icon fas fa-search fa-2x absolute inline-block text-gray-300"></i>
+            <input
+              className="appearance-none block w-full bg-white text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
+              id="search"
+              type="search"
+              name="search"
+              autoComplete="off"
+              placeholder="Type Broker name"
+            />
+          </div>
+
           <div className="bg-white p-5 rounded-lg shadow-lg">
             <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 lg:grid-cols-3">
               {brokers.map((broker) => (
@@ -54,6 +65,10 @@ export default function Brokers() {
       <style jsx>{`
         .desc {
           text-overflow: ellipsis;
+        }
+        .icon {
+          top: 10px;
+          left: 20px;
         }
       `}</style>
     </div>

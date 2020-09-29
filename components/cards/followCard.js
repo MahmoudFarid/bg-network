@@ -9,7 +9,7 @@ function FollowCard({ account, request, acceptRequest, rejectRequest }) {
 
   return (
     <div className="grid grid-cols-9 lg:grid-cols-11 border-b border-gray-300 py-4">
-      <div className="w-24 h-16 mr-2 mt-2">
+      <div className="w-20 h-16 mr-2 mt-2">
         <img
           src={account.avatar ? account.avatar : '/assets/profile-pic.png'}
           alt="avatar"
@@ -26,11 +26,11 @@ function FollowCard({ account, request, acceptRequest, rejectRequest }) {
       </div>
       <div className="btn col-span-9 self-center lg:col-span-4">
         <div>
-          <span className="text-primaryLight italic mr-4 lg:block xl:inline-block">
+          <span className="text-primaryLight text-sm italic mr-4 lg:block xl:inline-block">
             {formattedDate}
           </span>
           <button
-            className="py-2 px-8 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+            className="py-2 px-8 mr-2 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
             onClick={() => rejectRequest(request.id)}>
             Ignore
           </button>

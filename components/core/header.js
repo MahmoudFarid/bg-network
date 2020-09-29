@@ -41,7 +41,7 @@ function Header({ requests }) {
   }, [])
 
   return (
-    <div className="bg-white p-5 mt-1">
+    <div className="container-fluid bg-white p-6 mt-1">
       {isNavigationOpen && (
         <div className="navigation absolute top-0 right-0 z-40 w-1/3 bg-white px-2 rounded-lg shadow-lg border border-gray-200 hidden lg:block xl:w-1/4">
           {requests?.length === 0 || !requests ? (
@@ -64,10 +64,10 @@ function Header({ requests }) {
           )}
         </div>
       )}
-      <nav className="container-fluid">
+      <nav className="container">
         <div className="flex items-center justify-between flex-wrap">
           <div
-            className="flex items-center flex-shrink-0 text-white mr-6"
+            className="logo flex items-center flex-shrink-0 text-white mr-6"
             onClick={() => setActive('/dashboard')}>
             <Link href="/dashboard">
               <img src="/assets/logo.svg" alt="logo" className="cursor-pointer" />
@@ -205,6 +205,9 @@ function Header({ requests }) {
         .navigation {
           top: 9%;
           right: 18%;
+        }
+        .logo {
+          width: 11%;
         }
       `}</style>
     </div>

@@ -150,12 +150,12 @@ export default function UnitData({ pid, uid }) {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container-fluid my-16">
+        <div className="container my-12">
           <Overlay opacity={isDeleteOverlay} />
           {isDeleteOverlay && <DeleteObj name={unit.name} onDeletingItem={onDeletingItem} />}
 
           <div className="flex justify-between">
-            <h2 className="text-black font-bold text-lg mb-5">{uid ? 'Edit' : 'Add'} Unit</h2>
+            <h2 className="text-black font-bold text-md mb-3">{uid ? 'Edit' : 'Add'} Unit</h2>
             {uid && (
               <button
                 className="py-2 px-10 text-danger text-sm border border-danger font-semibold rounded-lg mb-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"

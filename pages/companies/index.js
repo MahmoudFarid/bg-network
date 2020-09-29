@@ -36,13 +36,13 @@ export default function Companies() {
       <Head>
         <title>All Companies</title>
       </Head>
-      <div className="container-fluid mb-16">
+      <div className="container mb-16">
         {isLoading ? (
           <Loading />
         ) : (
           <div>
-            <div className="relative w-2/3 mx-auto my-10 md:w-1/2 lg:w-5/12">
-              <i className="icon fas fa-search fa-2x absolute inline-block text-gray-400"></i>
+            <div className="relative w-2/3 mx-auto mt-8 mb-6 md:w-1/2 lg:w-5/12">
+              <i className="icon fas fa-search fa-2x absolute inline-block text-gray-300"></i>
               <input
                 className="appearance-none block w-full bg-white text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
                 id="search"
@@ -54,7 +54,7 @@ export default function Companies() {
             </div>
 
             <div className="bg-white p-5 rounded-lg shadow-lg">
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
                 {companies.map((company) => (
                   <CompanyCard company={company} key={company.id} />
                 ))}

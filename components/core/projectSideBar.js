@@ -5,7 +5,7 @@ export default function ProjectSideBar({ project, toggleProjectImgs, deleteProje
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="bg-bgLight pt-10">
+    <div className="profile col-span-2 bg-bgLight pt-10">
       {isBroker != 'true' && (
         <div className="relative px-5 text-right">
           <i
@@ -79,6 +79,13 @@ export default function ProjectSideBar({ project, toggleProjectImgs, deleteProje
           </div>
         </div>
       </div>
+      <style>
+        {`
+        .profile {
+          width: 91%
+        }
+      `}
+      </style>
     </div>
   )
 }

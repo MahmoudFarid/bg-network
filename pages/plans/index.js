@@ -42,7 +42,7 @@ function Plans({ plans }) {
         <Loading />
       ) : (
         <div
-          className="container-fluid my-16"
+          className="container my-12"
           onClick={(e) => {
             e.stopPropagation()
             setIsOpen(false)
@@ -51,10 +51,10 @@ function Plans({ plans }) {
           <Overlay opacity={isDeleteOverlay} />
           {isDeleteOverlay && <DeleteObj name={plan.name} onDeletingItem={onDeletingItem} />}
 
-          <div className="flex justify-between mb-5">
-            <h2 className="text-black font-bold text-lg">Plans</h2>
+          <div className="flex justify-between mb-3">
+            <h2 className="text-black font-bold text-md">Plans</h2>
             <button
-              className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+              className="py-2 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
               onClick={() => Router.push('/plans/add')}>
               <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
               Add Plan

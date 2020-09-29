@@ -13,7 +13,7 @@ export default function Filter({
 }) {
   return (
     <div>
-      <h3 className="text-black text-sm font-bold mb-3">{name}</h3>
+      <h3 className="text-black text-xs font-bold mb-3">{name}</h3>
       {width !== 'w-5/12' ? (
         <div className={`inline-block mr-5 ${width}`}>
           <FormInput
@@ -21,6 +21,7 @@ export default function Filter({
             errors={errors}
             label={name + label1}
             labelTxt={labelTxt1}
+            labelClasses="text-xs"
             type="text"
             req={false}
             onKeyUp={preventShowLetter}
@@ -35,6 +36,7 @@ export default function Filter({
               errors={errors}
               label={name + label1}
               labelTxt={labelTxt1}
+              labelClasses="text-xs"
               type="text"
               req={false}
               onKeyUp={preventShowLetter}
@@ -47,6 +49,7 @@ export default function Filter({
               errors={errors}
               label={name + label2}
               labelTxt={labelTxt2}
+              labelClasses="text-xs"
               type="text"
               req={false}
               onKeyUp={preventShowLetter}

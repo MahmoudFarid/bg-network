@@ -22,8 +22,8 @@ function Requests({ requests }) {
       <Head>
         <title>All Requests</title>
       </Head>
-      <div className="container-fluid my-16">
-        <h2 className="text-black font-bold text-lg mb-8">Requests</h2>
+      <div className="container my-12">
+        <h2 className="text-black font-bold text-md mb-3">Requests</h2>
         <div className="bg-white p-5 pt-0 mt-3 rounded-lg shadow-lg">
           {requests?.results.length === 0 || !requests ? (
             <div className="text-primary text-4xl text-center mx-auto py-16 w-8/12">

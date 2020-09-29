@@ -88,7 +88,7 @@ export default function Unit() {
         <Loading />
       ) : (
         <div
-          className="container-fluid my-16"
+          className="container my-16"
           onClick={() => {
             setIsOverlay(false)
             setIsOverlay2(false)
@@ -156,16 +156,16 @@ export default function Unit() {
                 order={2}
               />
             </div>
-            <div className="price absolute bottom-0 bg-white py-1 px-4 ml-0 border-b-2 border-gray-200 w-full sm:w-1/3">
-              <div className="inline-block font-bold text-secondary w-1/2">
-                <p className="text-lg">Total</p>
+            <div className="price absolute bottom-0 bg-white py-2 px-4 ml-0 border-b-2 border-gray-200">
+              <div className="inline-block font-bold text-secondary mr-20">
+                <p className="text-md">Total</p>
                 <span className="inline-block text-black text-3xl">
                   <NumberFormat value={unit.cost} displayType={'text'} thousandSeparator={true} />
                   &nbsp; LE
                 </span>
               </div>
-              <div className="inline-block font-bold text-secondary w-1/2">
-                <p className="text-lg">In cash</p>
+              <div className="inline-block font-bold text-secondary">
+                <p className="text-md">In cash</p>
                 <span className="inline-block text-danger text-3xl">
                   <NumberFormat
                     value={unit.cash_value}
@@ -234,7 +234,7 @@ export default function Unit() {
           </div>
 
           <div className="mb-8">
-            <h2 className="text-black text-lg font-bold mb-2">Plans ({unit.plans.length} Plans)</h2>
+            <h2 className="text-black text-md font-bold mb-3">Plans ({unit.plans.length} Plans)</h2>
             {unit.plans.map((plan) => (
               <div className="p-3" key={plan.id}>
                 <div
@@ -269,7 +269,7 @@ export default function Unit() {
 
           <div className="grid grid-cols-1 gap-0 mb-10 lg:grid-cols-2 lg:gap-10 xl:gap-24">
             <div>
-              <h2 className="text-black text-lg font-bold mb-2">Project Video</h2>
+              <h2 className="text-black text-md font-bold mb-3">Project Video</h2>
               <div className="project relative bg-white p-5 rounded-lg shadow-lg h-full">
                 {unit.p_youtube ? (
                   <ReactPlayer url={unit.p_youtube} width="100%" height="100%" controls={true} />
@@ -281,7 +281,7 @@ export default function Unit() {
               </div>
             </div>
             <div>
-              <h2 className="text-black text-lg font-bold mb-2 mt-5 lg:mt-0">Project Gallery</h2>
+              <h2 className="text-black text-md font-bold mb-3 mt-5 lg:mt-0">Project Gallery</h2>
               <div className="project bg-white p-5 rounded-lg shadow-lg">
                 <Carousel
                   isOverlay={isOverlay}
@@ -312,7 +312,7 @@ export default function Unit() {
             height: 33rem;
           }
           .imgs {
-            height: 30rem;
+            height: 32rem;
           }
           .installment {
             min-width: 20%;
@@ -324,6 +324,7 @@ export default function Unit() {
           }
           .price {
             margin-left: 25%;
+            min-width: 33%;
           }
           .desc {
             height: 66%;

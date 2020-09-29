@@ -6,6 +6,7 @@ export default function FormInput({
   type,
   label,
   labelTxt,
+  labelClasses,
   classes,
   placeholder,
   defaultValue,
@@ -19,7 +20,9 @@ export default function FormInput({
   return (
     <div className="control-group relative mb-5 flex flex-col">
       <label
-        className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300"
+        className={`control-label block text-primaryLight font-semibold mb-1 transition ease-in duration-300 ${
+          labelClasses ? labelClasses : 'text-sm'
+        }`}
         htmlFor={label}>
         {labelTxt}
       </label>

@@ -30,7 +30,7 @@ export default function CompanyCard({ company }) {
         </div>
 
         <div className="flex justify-start p-5">
-          <div className="w-20 h-16 mr-2 mt-3">
+          <div className="w-16 h-16 mr-6 mt-3">
             <img
               src={company.avatar ? company.avatar : '/assets/company-pict.png'}
               alt="company"
@@ -39,22 +39,22 @@ export default function CompanyCard({ company }) {
           </div>
           <div className="item w-9/12">
             <button
-              className="text-black font-extrabold text-lg cursor-pointer hover:text-primaryText focus:outline-none"
+              className="text-black font-bold text-lg cursor-pointer hover:text-primaryText focus:outline-none"
               onClick={() => Router.push('/companies/[cid]', `/companies/${company.id}`)}>
               {company.name}
             </button>
-            <p className="desc text-primaryLight text-xs tracking-wide font-semibold mb-4 mt-1 overflow-hidden whitespace-no-wrap">
+            <p className="desc text-primaryLight text-xs tracking-wide font-semibold mb-4 overflow-hidden whitespace-no-wrap">
               {company.description ? company.description : 'No Description'}
             </p>
             <div className="inline-block mr-2 mb-2 py-1 pt-0 px-3 bg-bgLight text-black rounded-full">
               <i className="fas fa-city fa-xs text-black mr-2"></i>
-              <span className="text-xs text-secondary font-semibold">
+              <span className="details text-xs text-secondary font-semibold">
                 {company.projects_count} {company.projects_count <= 1 ? 'Project' : 'Projects'}
               </span>
             </div>
             <div className="inline-block mr-2 py-1 pt-0 px-3 bg-bgLight text-black rounded-full">
               <i className="fas fa-home fa-xs text-black mr-2"></i>
-              <span className="text-xs text-secondary font-semibold">
+              <span className="details text-xs text-secondary font-semibold">
                 {company.units_count} {company.units_count <= 1 ? 'Unit' : 'Units'}
               </span>
             </div>
@@ -65,8 +65,11 @@ export default function CompanyCard({ company }) {
         .desc {
           text-overflow: ellipsis;
         }
+        .details {
+          font-size: 0.7rem;
+        }
         .cover {
-          height: 100px;
+          height: 120px;
           background-image: url(${company.project_photo
             ? company.project_photo
             : '/assets/company-cover.jpg'});

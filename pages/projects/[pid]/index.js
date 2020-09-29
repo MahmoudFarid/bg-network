@@ -179,7 +179,7 @@ export default function Project() {
             <CarouselOverlay sources={project.images} setIsOverlayFunc={setIsCarouselOverlayFunc} />
           )}
 
-          <div className="grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-4 lg:gap-6 lg:ml-0">
+          <div className="container-fluid grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-7 lg:ml-0">
             <ProjectSideBar
               project={project}
               toggleProjectImgs={toggleProjectImgs}
@@ -187,11 +187,11 @@ export default function Project() {
               isBroker={isBroker}
             />
 
-            <div className="col-span-3 mt-10 mb-16">
+            <div className="col-span-5 mt-10 mb-16 mr-12">
               <div className="w-full mb-5 clearfix">
                 {isBroker != 'true' && units.length > 0 && (
                   <button
-                    className="float-right py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+                    className="float-right py-2 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
                     onClick={() =>
                       Router.push('/projects/[pid]/units/add', `/projects/${pid}/units/add`)
                     }>
@@ -241,14 +241,14 @@ export default function Project() {
                       />
                       <div>
                         <p
-                          className="text-black text-sm text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
+                          className="text-black text-xs text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
                           onClick={(e) => {
                             setIsOverlay(true)
                             setIsDeleteOverlay(false)
                             setIsCarouselOverlayFunc(false)
                             e.stopPropagation()
                           }}>
-                          Advanced Search
+                          Advanced filters
                         </p>
                         <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
                           Types
@@ -264,7 +264,7 @@ export default function Project() {
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 gap-5 mt-5 md:grid-cols-2 xl:grid-cols-3">
+                  <div className="grid grid-cols-1 col-gap-10 row-gap-6 mt-5 md:grid-cols-2 xl:grid-cols-3">
                     {units.map((unit) => (
                       <UnitCard key={unit.id} unit={unit} pid={pid} />
                     ))}

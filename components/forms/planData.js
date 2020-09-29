@@ -86,7 +86,7 @@ export default function PlanData({ pid }) {
         <Loading />
       ) : (
         <div
-          className="container-fluid my-16"
+          className="container my-12"
           onClick={(e) => {
             e.stopPropagation()
             setIsDeleteOverlay(false)
@@ -95,7 +95,7 @@ export default function PlanData({ pid }) {
           {isDeleteOverlay && <DeleteObj name={plan.name} onDeletingItem={onDeletingItem} />}
 
           <div className="flex justify-between">
-            <h2 className="text-black font-bold text-lg mb-5">{pid ? 'Edit' : 'Add'} Plan</h2>
+            <h2 className="text-black font-bold text-md mb-3">{pid ? 'Edit' : 'Add'} Plan</h2>
             {pid && (
               <button
                 className="py-2 px-10 text-danger text-sm border border-danger font-semibold rounded-lg mb-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"

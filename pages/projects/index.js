@@ -61,19 +61,19 @@ export default function Projects() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container-fluid my-16">
+        <div className="container my-12">
           <div className="flex justify-between mb-5">
-            <h2 className="text-black font-bold text-lg">Projects</h2>
+            <h2 className="text-black font-bold text-md">Projects</h2>
             {isBroker != 'true' && (
               <button
-                className="py-3 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+                className="py-2 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
                 onClick={() => Router.push('/projects/add')}>
                 <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
                 Add Project
               </button>
             )}
           </div>
-          <div className="bg-white p-5 rounded-lg shadow-lg">
+          <div className="bg-white p-10 rounded-lg shadow-lg">
             {projects.length === 0 ? (
               isBroker == 'true' ? (
                 <div className="text-primary text-4xl text-center mx-auto my-10">
@@ -90,7 +90,7 @@ export default function Projects() {
                 </div>
               )
             ) : (
-              <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid grid-cols-1 col-gap-6 row-gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {projects.map((project) => (
                   <ProjectCard key={project.id} project={project} />
                 ))}
