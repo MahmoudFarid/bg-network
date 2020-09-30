@@ -1,16 +1,20 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import API from '../../api'
-import CompanyCard from '../../components/cards/companyCard'
 import Loading from '../../components/core/loading'
+import DataCard from './../../components/cards/dataCard'
 import Pagination from '../../components/features/pagination'
 
 export default function Companies() {
   const [isLoading, setIsLoading] = useState(true)
   const [companies, setCompanies] = useState([])
   const [companiesCount, setCompaniesCount] = useState(Number)
+  const [limit, setLimit] = useState(Number)
+  const [offset, setOffset] = useState(Number)
 
   const setPageItem = (offset, limit) => {
+    setOffset(offset)
+    setLimit(limit)
     async function fetchCompanies() {
       await API.get(`reds/new/?limit=${offset}&offset=${offset * limit}`).then((res) => {
         setCompanies(res.data.results)
@@ -18,6 +22,14 @@ export default function Companies() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     fetchCompanies()
+  }
+
+  const onSendRequest = () => {
+    setTimeout(async () => {
+      await API.get(`reds/new/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+        setCompanies(res.data.results)
+      })
+    }, 100)
   }
 
   useEffect(() => {
@@ -54,9 +66,9 @@ export default function Companies() {
             </div>
 
             <div className="bg-white p-5 rounded-lg shadow-lg">
-              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {companies.map((company) => (
-                  <CompanyCard company={company} key={company.id} />
+                  <DataCard data={company} key={company.id} onSendRequest={onSendRequest} />
                 ))}
               </div>
             </div>

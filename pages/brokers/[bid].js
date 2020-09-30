@@ -1,9 +1,9 @@
+import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import API from '../../api'
 import Loading from '../../components/core/loading'
 import ProfileSideBar from '../../components/core/profileSideBar'
-import CompanyCard from './../../components/cards/companyCard'
 import ProjectCard from './../../components/cards/projectCard'
 
 export default function Broker() {
@@ -27,6 +27,9 @@ export default function Broker() {
 
   return (
     <div>
+      <Head>
+        <title>Broker Profile</title>
+      </Head>
       {isLoading ? (
         <Loading />
       ) : (

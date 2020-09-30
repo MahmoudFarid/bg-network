@@ -2,15 +2,19 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import API from '../../api'
 import Loading from '../../components/core/loading'
-import BrokerCard from './../../components/cards/brokerCard'
 import Pagination from '../../components/features/pagination'
+import DataCard from './../../components/cards/dataCard'
 
 export default function Brokers() {
   const [isLoading, setIsLoading] = useState(true)
   const [brokers, setBrokers] = useState([])
   const [brokersCount, setBrokersCount] = useState(Number)
+  const [limit, setLimit] = useState(Number)
+  const [offset, setOffset] = useState(Number)
 
   const setPageItem = (offset, limit) => {
+    setOffset(offset)
+    setLimit(limit)
     async function fetchBrokers() {
       await API.get(`brokers/new/?limit=${offset}&offset=${offset * limit}`).then((res) => {
         setBrokers(res.data.results)
@@ -18,6 +22,14 @@ export default function Brokers() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     }
     fetchBrokers()
+  }
+
+  const onSendRequest = () => {
+    setTimeout(async () => {
+      await API.get(`brokers/new/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+        setBrokers(res.data.results)
+      })
+    }, 100)
   }
 
   useEffect(() => {
@@ -53,9 +65,14 @@ export default function Brokers() {
           </div>
 
           <div className="bg-white p-5 rounded-lg shadow-lg">
-            <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {brokers.map((broker) => (
-                <BrokerCard key={broker.id} broker={broker} />
+                <DataCard
+                  key={broker.id}
+                  data={broker}
+                  isBroker={true}
+                  onSendRequest={onSendRequest}
+                />
               ))}
             </div>
           </div>
@@ -63,9 +80,6 @@ export default function Brokers() {
         </div>
       )}
       <style jsx>{`
-        .desc {
-          text-overflow: ellipsis;
-        }
         .icon {
           top: 10px;
           left: 20px;

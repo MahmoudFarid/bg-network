@@ -3,11 +3,10 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 import API from '../api'
-import CompanyCard from '../components/cards/companyCard'
-import CompanyInfo from '../components/cards/companyInfo'
 import Loading from '../components/core/loading'
+import DataCard from './../components/cards/dataCard'
+import DataInfo from './../components/cards/dataInfo'
 import Pagination from '../components/features/pagination'
-import BrokerCard from './../components/cards/brokerCard'
 
 export default function Dashboard() {
   const [isBroker, setIsBroker] = useState()
@@ -22,13 +21,39 @@ export default function Dashboard() {
   const [brokersCount, setBrokersCount] = useState(Number)
 
   const setPageItem = (offset, limit) => {
-    async function fetchCompanies() {
-      await API.get(`reds/friends/?limit=${offset}&offset=${offset * limit}`).then((res) => {
-        setCompanies(res.data.results)
-      })
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (isBroker == 'true') {
+      async function fetchCompanies() {
+        await API.get(`reds/friends/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+          setCompanies(res.data.results)
+        })
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+      fetchCompanies()
+    } else {
+      async function fetchBrokers() {
+        await API.get(`brokers/friends/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+          setCompanies(res.data.results)
+        })
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+      fetchBrokers()
     }
-    fetchCompanies()
+  }
+
+  const onSendRequest = () => {
+    if (isBroker == 'true') {
+      setTimeout(async () => {
+        await API.get('reds/suggestions').then((res) => {
+          setSuggestions(res.data.results)
+        })
+      }, 100)
+    } else {
+      setTimeout(async () => {
+        await API.get('brokers/suggestions').then((res) => {
+          setSuggestions(res.data.results)
+        })
+      }, 100)
+    }
   }
 
   useEffect(() => {
@@ -119,9 +144,9 @@ export default function Dashboard() {
                           placeholder="Type Company name"
                         />
                       </div>
-                      <div className="grid grid-cols-1 col-gap-8 row-gap-6 md:grid-cols-2 xl:grid-cols-2">
+                      <div className="grid grid-cols-1 col-gap-8 row-gap-6 md:grid-cols-2 xl:grid-cols-3">
                         {companies.map((company) => (
-                          <CompanyCard company={company} key={company.id} />
+                          <DataCard data={company} key={company.id} />
                         ))}
                       </div>
                       <Pagination count={companiesCount} limit={9} setPageItem={setPageItem} />
@@ -152,9 +177,9 @@ export default function Dashboard() {
                           placeholder="Type Broker name"
                         />
                       </div>
-                      <div className="grid grid-cols-1 col-gap-5 row-gap-5 md:grid-cols-2 xl:grid-cols-2">
+                      <div className="grid grid-cols-1 col-gap-5 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
                         {brokers.map((broker) => (
-                          <BrokerCard broker={broker} key={broker.id} />
+                          <DataCard data={broker} isBroker={true} key={broker.id} />
                         ))}
                       </div>
                       <Pagination count={brokersCount} limit={12} setPageItem={setPageItem} />
@@ -167,7 +192,7 @@ export default function Dashboard() {
                 <div className="mb-6">
                   <div className="bg-white px-8 py-4 rounded-lg">
                     <div className="flex justify-start lg:justify-between">
-                      <div className="w-1/2">
+                      <div className={isBroker == 'true' ? 'w-1/2' : 'mx-auto'}>
                         <p className="text-primaryLight text-sm uppercase tracking-wide mb-2">
                           {isBroker == 'true' ? 'Companies' : 'Brokers'}
                         </p>
@@ -211,38 +236,34 @@ export default function Dashboard() {
                   </div>
                 </div>
                 {isBroker == 'true' ? (
-                  <div>
-                    <div className="flex justify-between">
-                      <h2 className="text-black font-bold text-md mb-3">Suggested Companies</h2>
-                      <Link href="/companies">
-                        <a className="text-primaryLight text-xs underline hover:text-primaryText focus:outline-none">
-                          View All
-                        </a>
-                      </Link>
-                    </div>
-                    <div className="bg-white p-5 rounded-lg">
-                      {suggestions.map((suggestion) => (
-                        <CompanyInfo company={suggestion} key={suggestion.id} />
-                      ))}
-                    </div>
+                  <div className="flex justify-between">
+                    <h2 className="text-black font-bold text-md mb-3">Suggested Companies</h2>
+                    <Link href="/companies">
+                      <a className="text-primaryLight text-xs underline hover:text-primaryText focus:outline-none">
+                        View All
+                      </a>
+                    </Link>
                   </div>
                 ) : (
-                  <div>
-                    <div className="flex justify-between">
-                      <h2 className="text-black font-bold text-lg mb-2">Suggested Brokers</h2>
-                      <Link href="/brokers">
-                        <a className="text-primaryLight text-xs underline hover:text-primaryText focus:outline-none">
-                          View All
-                        </a>
-                      </Link>
-                    </div>
-                    <div className="bg-white p-5 rounded-lg">
-                      {suggestions.map((suggestion) => (
-                        <BrokerCard broker={suggestion} key={suggestion.id} />
-                      ))}
-                    </div>
+                  <div className="flex justify-between">
+                    <h2 className="text-black font-bold text-lg mb-2">Suggested Brokers</h2>
+                    <Link href="/brokers">
+                      <a className="text-primaryLight text-xs underline hover:text-primaryText focus:outline-none">
+                        View All
+                      </a>
+                    </Link>
                   </div>
                 )}
+                <div className="bg-white p-5 rounded-lg">
+                  {suggestions.map((suggestion) => (
+                    <DataInfo
+                      data={suggestion}
+                      isBroker={isBroker}
+                      onSendRequest={onSendRequest}
+                      key={suggestion.id}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           )}
