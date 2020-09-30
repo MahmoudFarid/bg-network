@@ -18,6 +18,7 @@ export default function UnitData({ pid, uid }) {
     mode: 'onBlur',
   })
   const [submit, setSubmit] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [unit, setUnit] = useState({})
   const [type, setType] = useState({})
@@ -207,7 +208,8 @@ export default function UnitData({ pid, uid }) {
                     <DropdownMenu
                       id="status"
                       order="first"
-                      name={unit.status ? unit.status : 'status'}
+                      name={unit.status}
+                      placeholder="status"
                       defaultValue={unit.status}
                       dropdownWidth="w-full"
                       options={statusOptions}
@@ -249,8 +251,9 @@ export default function UnitData({ pid, uid }) {
                     </label>
                     <DropdownMenu
                       id="type"
-                      order="first"
-                      name={unit.type?.name ? unit.type.name : 'type'}
+                      order="second"
+                      name={unit.type?.name}
+                      placeholder="type"
                       defaultValue={unit.type?.name}
                       dropdownWidth="w-full"
                       options={types}
@@ -276,9 +279,10 @@ export default function UnitData({ pid, uid }) {
                       Directions*
                     </label>
                     <DropdownMenu
-                      order="first"
                       id="direction"
-                      name={unit.direction ? unit.direction : 'direction'}
+                      order="third"
+                      name={unit.direction}
+                      placeholder="direction"
                       defaultValue={unit.direction}
                       dropdownWidth="w-full"
                       options={directionsOptions}

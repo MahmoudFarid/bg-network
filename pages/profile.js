@@ -39,13 +39,13 @@ export default function MyProfile() {
 
     async function fetchProjects() {
       if (isBroker == 'true') {
-        await API.get('reds/projects/').then((res) => {
+        await API.get('reds/projects/?limit=15').then((res) => {
           setProjects(res.data.results)
           setProjectsCount(res.data.count)
           setIsLoading(false)
         })
       } else {
-        await API.get('projects/').then((res) => {
+        await API.get('projects/?limit=15').then((res) => {
           setProjects(res.data.results)
           setProjectsCount(res.data.count)
           setIsLoading(false)

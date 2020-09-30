@@ -25,15 +25,22 @@ export default function ProjectData({ pid }) {
   const [project, setProject] = useState({})
   const [plans, setPlans] = useState([])
   const [plansIDs, setPlansIDs] = useState([])
+  const [plansNames, setPlansNames] = useState([])
   const [choices, setChoices] = useState([])
   const [uploadCoverImg, setCoverImg] = useState()
   const [uploadProjectImgs, setProjectImgs] = useState([])
   const dispatch = useDispatch()
 
-  const itemSelectedFunc = (plansArr) => {
-    setPlansIDs(plansArr)
+  const itemSelectedFunc = (choices) => {
+    console.log(choices)
+    let plansIDs = []
+    let plansNames = []
+    choices.map((choice) => {
+      plansIDs.push(choice.id), plansNames.push(choice.name)
+    })
+    setPlansIDs(plansIDs)
+    setPlansNames(plansNames)
   }
-
   const getUploadParams = () => {
     return { url: 'https://httpbin.org/post' }
   }
@@ -55,7 +62,7 @@ export default function ProjectData({ pid }) {
   const handleChangeCoverImg = ({ meta }, status, files) => {
     if (status === 'headers_received') {
       setCoverImg(files[0].file)
-    } else if (status === 'aborted') {
+    } else if (submit && status === 'aborted') {
       toast.warning(`${meta.name}, upload failed...`)
     } else if (status === 'removed') {
       setCoverImg('')
@@ -65,7 +72,7 @@ export default function ProjectData({ pid }) {
   const handleChangeProjectImgs = ({ meta }, status, files) => {
     if (status === 'headers_received') {
       setProjectImgs(files.map((f, i) => files[i].file))
-    } else if (status === 'aborted') {
+    } else if (submit && status === 'aborted') {
       toast.warning(`${meta.name}, upload failed...`)
     } else if (status === 'removed') {
       const index = uploadProjectImgs.findIndex((project) => project.name === meta.name)
@@ -118,15 +125,21 @@ export default function ProjectData({ pid }) {
       : null
   }
 
+  console.log(project)
+
   useEffect(() => {
     if (pid) {
       async function fetchProject() {
         await API.get(`projects/${pid}`).then((res) => {
           setProject(res.data)
           let planIDs = []
-          res.data.plans.map((plan) => planIDs.push(plan.id))
-          setChoices(planIDs)
+          let planNames = []
+          res.data.plans.map((plan) => {
+            planIDs.push(plan.id), planNames.push(plan.name)
+          })
+          setChoices(res.data.plans)
           setPlansIDs(planIDs)
+          setPlansNames(planNames)
           setIsLoading(false)
         })
       }
@@ -184,20 +197,13 @@ export default function ProjectData({ pid }) {
                     </label>
                     <DropdownMenu
                       order="first"
-                      name={` ${
-                        pid
-                          ? `${
-                              choices.length <= 1
-                                ? choices.length + ' plan'
-                                : choices.length + ' plans'
-                            } selected`
-                          : 'Select plans'
-                      }
-                      `}
+                      name={`${plansNames.length > 0 && plansNames}`}
+                      placeholder={`${plansNames.length == 0 && 'Select plans'}`}
                       dropdownWidth="w-full"
                       multiple={true}
                       options={plans}
                       choices={choices}
+                      defaultValues={project?.plans}
                       itemSelectedFunc={itemSelectedFunc}
                     />
                     <p className="text-red-500 text-sm italic font-semibold mb-5">

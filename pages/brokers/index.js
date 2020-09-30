@@ -34,7 +34,7 @@ export default function Brokers() {
 
   useEffect(() => {
     async function fetchBrokers() {
-      await API.get(`brokers/new`).then((res) => {
+      await API.get(`brokers/new/?limit=20`).then((res) => {
         setBrokers(res.data.results)
         setBrokersCount(res.data.count)
         setIsLoading(false)
@@ -76,7 +76,7 @@ export default function Brokers() {
               ))}
             </div>
           </div>
-          <Pagination count={brokersCount} limit={21} setPageItem={setPageItem} />
+          <Pagination count={brokersCount} limit={20} setPageItem={setPageItem} />
         </div>
       )}
       <style jsx>{`

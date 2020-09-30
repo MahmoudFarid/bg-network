@@ -123,7 +123,7 @@ export default function Project() {
           })
         }
         async function fetchUnits() {
-          await API.get(`projects/${pid}/units/`).then((res) => {
+          await API.get(`projects/${pid}/units/?limit=9`).then((res) => {
             setUnits(res.data.results)
             setUnitsCount(res.data.count)
             setIsLoading(false)
@@ -133,7 +133,7 @@ export default function Project() {
         fetchUnits()
       } else {
         async function fetchUnits() {
-          await API.get(`reds/${cid}/projects/${pid}/units/`).then((res) => {
+          await API.get(`reds/${cid}/projects/${pid}/units/?limit=9`).then((res) => {
             setProject(res.data.results[0].project)
             setUnits(res.data.results)
             setUnitsCount(res.data.count)

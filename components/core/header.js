@@ -44,7 +44,7 @@ function Header({ requests }) {
     <div className="container-fluid bg-white p-6 mt-1">
       {isNavigationOpen && (
         <div className="navigation absolute top-0 right-0 z-40 w-1/3 bg-white px-2 rounded-lg shadow-lg border border-gray-200 hidden lg:block xl:w-1/4">
-          {requests?.length === 0 || !requests ? (
+          {requests.count === 0 || !requests ? (
             <div className="text-primary text-xl text-center mx-auto py-8">
               You don't have any Requests
             </div>
@@ -150,7 +150,7 @@ function Header({ requests }) {
                 onClick={() => setIsNavigationOpen(!isNavigationOpen)}>
                 <span className="hidden lg:inline">
                   <i className="fas fa-bell fa-lg"></i>
-                  {requests?.length !== 0 && (
+                  {requests?.count !== 0 && (
                     <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
                   )}
                 </span>

@@ -62,7 +62,7 @@ export default function Dashboard() {
 
     if (isBroker == 'true') {
       async function fetchCompanies() {
-        await API.get('reds/friends').then((res) => {
+        await API.get('reds/friends/?limit=12').then((res) => {
           setCompanies(res.data.results)
           setCompaniesCount(res.data.count)
           setIsFriendsLoading(false)
@@ -85,7 +85,7 @@ export default function Dashboard() {
       fetchSuggestedCompanies()
     } else {
       async function fetchBrokers() {
-        await API.get('brokers/friends').then((res) => {
+        await API.get('brokers/friends/?limit=12').then((res) => {
           setBrokers(res.data.results)
           setBrokersCount(res.data.count)
           setIsFriendsLoading(false)

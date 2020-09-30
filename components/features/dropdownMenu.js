@@ -4,6 +4,7 @@ export default function DropdownMenu({
   id,
   order,
   name,
+  placeholder,
   dropdownWidth,
   options,
   choices,
@@ -19,14 +20,12 @@ export default function DropdownMenu({
   const onItemSelecting = (option) => {
     if (multiple) {
       setIsOpen(true)
-      if (!choices.includes(option.id)) choices.push(option.id)
+      if (!name.trim().split(',').includes(option.name)) choices.push(option)
       else {
-        const index = choices.findIndex((id) => id === option.id)
+        const index = choices.findIndex((choice) => choice.id === option.id)
         choices.splice(index, 1)
       }
-      setItem(
-        `${choices.length <= 1 ? choices.length + ' plan' : choices.length + ' plans'} selected`
-      )
+      setItem(`${choices.map((choice) => choice.name)}`)
       itemSelectedFunc(choices)
     } else {
       setIsOpen(false)
@@ -39,6 +38,9 @@ export default function DropdownMenu({
     if (defaultValue) setItem(defaultValue.toUpperCase())
   }, [defaultValue])
 
+  console.log(openDropdown)
+  console.log(order)
+  console.log(isOpen)
   return (
     <div className="relative">
       <div
@@ -46,10 +48,19 @@ export default function DropdownMenu({
           classes ? classes : 'py-2'
         }`}
         onClick={(e) => {
+          e.stopPropagation()
           toggleDropdown(order)
           setIsOpen(!isOpen)
         }}>
-        <span>{item ? item.charAt(0).toUpperCase() + item.toLowerCase().slice(1) : name}</span>
+        <span>
+          {item ? (
+            item.charAt(0).toUpperCase() + item.toLowerCase().slice(1)
+          ) : placeholder ? (
+            <span className="text-gray-500">{placeholder}</span>
+          ) : (
+            name
+          )}
+        </span>
         <i className="fas fa-angle-down fa-lg mt-2 text-primaryLight float-right"></i>
       </div>
       <div
@@ -60,7 +71,7 @@ export default function DropdownMenu({
           options?.map((option) => (
             <div
               className={`item block px-4 py-1 border-b cursor-pointer transition duration-500 ease-in-out hover:text-primaryText ${
-                multiple && choices.includes(option.id)
+                multiple && name.trim().split(',').includes(option.name)
                   ? 'border border-primaryText bg-gray-100 text-primaryText'
                   : 'bg-white text-gray-400'
               }
@@ -75,11 +86,14 @@ export default function DropdownMenu({
               <i className="fas fa-circle fal-lg mr-5"></i>
               <span
                 className={`inline-block w-10/12 py-3 hover:text-primaryText ${
-                  multiple && choices.includes(option.id) ? 'text-primaryText' : 'text-primary'
+                  (multiple && name.trim().split(',').includes(option.name)) ||
+                  item === option.name.toUpperCase()
+                    ? 'text-primaryText'
+                    : 'text-primary'
                 }`}>
                 {option.name}
               </span>
-              {multiple && choices.includes(option.id) && (
+              {multiple && name.trim().split(',').includes(option.name) && (
                 <i className="fas fa-check-circle fa-lg text-success"></i>
               )}
             </div>

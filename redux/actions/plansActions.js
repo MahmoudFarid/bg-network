@@ -19,7 +19,6 @@ export const GetPlans = (offset, limit) => async (dispatch) => {
 export const AddPlan = (plan) => async (dispatch) => {
   const acc = await API.post('plans/', plan)
     .then(() => {
-      toast.success('Your plan is added successfully')
       Router.push('/plans')
       dispatch({
         type: types.ADD_PLAN,
@@ -27,7 +26,7 @@ export const AddPlan = (plan) => async (dispatch) => {
       })
     })
     .catch((ex) => {
-      if (ex.response.data.installments) toast.info(ex.response.data.installments[0])
+      if (ex.response.data.installments) toast.error(ex.response.data.installments[0])
       else toast.error('Something is error')
     })
 }
@@ -50,17 +49,11 @@ export const PatchPlan = (id, plan) => async (dispatch) => {
 }
 
 export const DeletePlan = (id) => async (dispatch) => {
-  const acc = await API.delete(`plans/${id}/`)
-    .then(() => {
-      toast.success('Your plan is deleted successfully')
-      Router.push('/plans')
-      dispatch({
-        type: types.DELETE_PLAN,
-        payload: id,
-      })
+  const acc = await API.delete(`plans/${id}/`).then(() => {
+    Router.push('/plans')
+    dispatch({
+      type: types.DELETE_PLAN,
+      payload: id,
     })
-    .catch((ex) => {
-      toast.error('Something is error')
-      console.log(ex.response)
-    })
+  })
 }

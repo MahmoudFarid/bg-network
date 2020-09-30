@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
     case types.GET_PLANS:
       return {
         ...state,
-        data: action.payload,
+        data: action.payload.results,
       }
     case types.ADD_PLAN:
       return {

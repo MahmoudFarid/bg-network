@@ -44,12 +44,19 @@ function Plans({ plans }) {
         <div
           className="container my-12"
           onClick={(e) => {
-            e.stopPropagation()
             setIsOpen(false)
             setIsDeleteOverlay(false)
           }}>
           <Overlay opacity={isDeleteOverlay} />
-          {isDeleteOverlay && <DeleteObj name={plan.name} onDeletingItem={onDeletingItem} />}
+          <div onClick={(e) => e.stopPropagation()}>
+            {isDeleteOverlay && (
+              <DeleteObj
+                name={plan.name}
+                onDeletingItem={onDeletingItem}
+                setIsDeleteOverlay={setIsDeleteOverlay}
+              />
+            )}
+          </div>
 
           <div className="flex justify-between mb-3">
             <h2 className="text-black font-bold text-md">Plans</h2>
@@ -61,7 +68,7 @@ function Plans({ plans }) {
             </button>
           </div>
           <div className="bg-white p-5 rounded-lg">
-            {plans?.results.length === 0 ? (
+            {plans?.length === 0 ? (
               <div className="text-primary text-4xl text-center mx-auto my-10">
                 You don't have any Plans yet
               </div>
@@ -69,13 +76,14 @@ function Plans({ plans }) {
               <table className="table-auto w-full">
                 <thead className="text-primaryText text-left font-bold">
                   <tr>
-                    <th className="p-5 pt-0 w-4/12">Name</th>
+                    <th className="p-5 pt-0 w-3/12">Name</th>
                     <th className="p-5 pt-0 w-1/2">Description</th>
+                    <th className="p-5 pt-0">Installments</th>
                     <th className="p-5 pt-0 w-1/6 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="text-secondary">
-                  {plans?.results.map((plan) => (
+                  {plans?.map((plan) => (
                     <tr
                       key={plan.id}
                       className="transition duration-300 ease-in-out border-l-4 border-transparent hover:bg-secondaryLightest hover:border-secondaryLight"
@@ -86,10 +94,11 @@ function Plans({ plans }) {
                       }}>
                       <td className="p-5">{plan.name}</td>
                       <td className="p-5">
-                        <p className="desc w-11/12 h-6 overflow-hidden lg:whitespace-no-wrap">
+                        <p className="desc h-6 overflow-hidden lg:whitespace-no-wrap">
                           {plan.description ? plan.description : 'No Description'}
                         </p>
                       </td>
+                      <td className="p-5">{plan.installments.length}</td>
                       <td className="relative p-5 text-right">
                         <i
                           className="fas fa-ellipsis-v text-primaryLight pl-5 pr-2 cursor-pointer hover:text-primary"
@@ -140,6 +149,7 @@ function Plans({ plans }) {
         }
         .desc {
           text-overflow: ellipsis;
+          width: 30rem;
         }
       `}</style>
     </div>

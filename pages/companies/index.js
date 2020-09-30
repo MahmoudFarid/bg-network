@@ -34,7 +34,7 @@ export default function Companies() {
 
   useEffect(() => {
     async function fetchCompanies() {
-      await API.get('reds/new').then((res) => {
+      await API.get('reds/new/?limit=20').then((res) => {
         setCompanies(res.data.results)
         setCompaniesCount(res.data.count)
         setIsLoading(false)
@@ -74,7 +74,7 @@ export default function Companies() {
             </div>
           </div>
         )}
-        <Pagination count={companiesCount} limit={16} setPageItem={setPageItem} />
+        <Pagination count={companiesCount} limit={20} setPageItem={setPageItem} />
 
         <style jsx>{`
           .icon {
