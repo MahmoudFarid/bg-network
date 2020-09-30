@@ -49,8 +49,6 @@ export default function Unit() {
     }
   }
 
-  console.log(plansSelected)
-
   useEffect(() => {
     const cid = localStorage.getItem('CID')
     const isBroker = localStorage.getItem('isBroker')
@@ -62,6 +60,7 @@ export default function Unit() {
         async function fetchUnit() {
           await API.get(`reds/${cid}/projects/${pid}/units/${uid}`).then((res) => {
             setUnit(res.data)
+            plansSelected.push(res.data.plans[0])
             setIsLoading(false)
           })
         }
@@ -98,39 +97,36 @@ export default function Unit() {
 
           {isDeleteOverlay && <DeleteObj name={unit.name} onDeletingItem={onDeletingItem} />}
 
-          {isBroker != 'true' && (
-            <div className="mb-5 overflow-hidden">
-              <div className="float-right">
-                <button
-                  className="py-1 px-3 text-danger text-sm border border-danger font-semibold rounded-full mr-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setIsDeleteOverlay(true)
-                    setIsOverlay(false)
-                    setIsOverlay2(false)
-                  }}>
-                  <i className="fas fa-trash-alt"></i>
-                </button>
-                <button
-                  className="py-1 px-3 text-success text-sm border border-success font-semibold rounded-full mr-5 transition duration-500 ease-in-out hover:bg-success hover:text-white focus:outline-none"
-                  onClick={(e) => {
-                    Router.push(
-                      '/projects/[pid]/units/[uid]/edit',
-                      `/projects/${pid}/units/${uid}/edit`
-                    )
-                  }}>
-                  <i className="fas fa-edit"></i>
-                </button>
-                <button className="py-2 px-3 text-secondaryLight text-xs font-bold border border-secondaryLight rounded-full transition duration-500 ease-in-out hover:bg-secondaryLight hover:text-white focus:outline-none">
-                  Share with your Brokers
-                </button>
-              </div>
-            </div>
-          )}
           <div className="relative flex justify-between flex-wrap">
             <div className="w-full mt-5 lg:w-5/12">
-              <h2 className="text-black font-bold text-3xl">{unit.name}</h2>
-              <p className="desc text-primary my-4 w-11/12 overflow-y-auto">
+              <div className="flex justify-between items-baseline w-11/12">
+                <h2 className="text-black font-bold text-3xl">{unit.name}</h2>
+                {isBroker != 'true' && (
+                  <div>
+                    <button
+                      className="py-1 px-2 text-primary text-sm border border-gray-400 font-semibold rounded-md mr-2 transition duration-500 ease-in-out hover:bg-gray-200 focus:outline-none"
+                      onClick={(e) => {
+                        Router.push(
+                          '/projects/[pid]/units/[uid]/edit',
+                          `/projects/${pid}/units/${uid}/edit`
+                        )
+                      }}>
+                      <i className="fas fa-edit"></i>
+                    </button>
+                    <button
+                      className="py-1 px-2 text-primary text-sm border border-gray-400 font-semibold rounded-md transition duration-500 ease-in-out hover:bg-gray-200 focus:outline-none"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setIsDeleteOverlay(true)
+                        setIsOverlay(false)
+                        setIsOverlay2(false)
+                      }}>
+                      <i className="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                )}
+              </div>
+              <p className="desc w-11/12 text-primary my-4 overflow-y-auto">
                 Talaat Mustafa Group (TMG) Holding is the leading community real estate developer in
                 Egypt, with a land bank of 50 million square meters. The group has a strong track
                 record of over 40 years in the housing and real-estate development industry, having
