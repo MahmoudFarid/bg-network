@@ -5,8 +5,11 @@ export const RESET_PASS = 'RESET_PASS'
 
 // Requests
 export const GET_REQs = 'GET_REQs'
+export const GET_PENDING = 'GET_PENDING'
 export const SEND_REQ = 'SEND_REQ'
+export const ACCEPT_REQ = 'ACCEPT_REQ'
 export const HANDLE_REQ = 'HANDLE_REQ'
+export const DELETE_REQ = 'DELETE_REQ'
 
 // Profile
 export const PATCH_PROFILE = 'PATCH_PROFILE'

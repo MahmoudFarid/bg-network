@@ -39,19 +39,25 @@ function Header({ requests }) {
     Router.events.on('routeChangeEnd', end)
     Router.events.on('routeChangeStart', end)
   }, [])
+  console.log(requests)
 
   return (
     <div className="container-fluid bg-white p-6 mt-1">
       {isNavigationOpen && (
         <div className="navigation absolute top-0 right-0 z-40 w-1/3 bg-white px-2 rounded-lg shadow-lg border border-gray-200 hidden lg:block xl:w-1/4">
-          {requests.count === 0 || !requests ? (
+          {requests.count === 0 || !requests || requests.length === 0 ? (
             <div className="text-primary text-xl text-center mx-auto py-8">
               You don't have any Requests
             </div>
           ) : (
             <div>
-              {requests.results?.map((request) => (
-                <NotificationCard key={request.id} account={request.from_user} request={request} />
+              {requests?.map((request) => (
+                <NotificationCard
+                  key={request.from_user.id}
+                  account={request.from_user}
+                  request={request}
+                  isBroker={account.is_broker}
+                />
               ))}
               <Link href="/requests">
                 <a
@@ -150,7 +156,7 @@ function Header({ requests }) {
                 onClick={() => setIsNavigationOpen(!isNavigationOpen)}>
                 <span className="hidden lg:inline">
                   <i className="fas fa-bell fa-lg"></i>
-                  {requests?.count !== 0 && (
+                  {requests?.length !== 0 && (
                     <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
                   )}
                 </span>

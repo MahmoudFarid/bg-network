@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { connect } from 'react-redux'
 import { AcceptRequest, RejectRequest } from '../../redux/actions/requestsActions'
 
-function NotificationCard({ account, request, acceptRequest, rejectRequest }) {
+function NotificationCard({ isBroker, account, request, acceptRequest, rejectRequest }) {
   const date = new Date(request.created)
   const formattedDate = format(date, 'MMMM dd, yyy H:mma')
 
@@ -17,23 +17,32 @@ function NotificationCard({ account, request, acceptRequest, rejectRequest }) {
         />
       </div>
       <div className="col-span-3 text-primary text-sm self-center hover:text-primaryText">
-        <Link href="companies/[cid]" as={`companies/${account.id}`}>
-          <a>
-            <span className="font-bold">{account.name}</span>
-            <span className="text-primary"> wants to connect with you</span>
-          </a>
-        </Link>
+        {isBroker ? (
+          <Link href="companies/[cid]" as={`companies/${account.id}`}>
+            <a>
+              <span className="font-bold">{account.name}</span>
+              <span className="text-primary"> wants to connect with you</span>
+            </a>
+          </Link>
+        ) : (
+          <Link href="brokers/[bid]" as={`brokers/${account.id}`}>
+            <a>
+              <span className="font-bold">{account.name}</span>
+              <span className="text-primary"> wants to connect with you</span>
+            </a>
+          </Link>
+        )}
       </div>
       <div className="btn col-span-4 self-center">
         <div>
           <button
             className="py-1 px-5 mr-2 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
-            onClick={() => rejectRequest(request.id)}>
+            onClick={() => rejectRequest(request.from_user.id)}>
             Ignore
           </button>
           <button
             className="py-1 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
-            onClick={() => acceptRequest(request.id)}>
+            onClick={() => acceptRequest(request.from_user.id)}>
             Accept
           </button>
         </div>

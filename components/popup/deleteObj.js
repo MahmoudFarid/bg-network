@@ -1,8 +1,20 @@
-export default function DeleteObj({ name, onDeletingItem, setIsDeleteOverlay }) {
+export default function DeleteObj({ name, msg, onDeletingItem, setIsDeleteOverlay }) {
   return (
-    <div className="details w-10/12 bg-white overflow-auto fixed z-50 p-10 shadow-lg rounded-lg text-center md:w-7/12 xl:w-1/3">
+    <div
+      className={`details w-10/12 bg-white overflow-auto fixed z-50 p-10 shadow-lg rounded-lg text-center md:w-7/12 ${
+        msg ? 'xl:w-5/12' : 'xl:w-1/3'
+      }`}>
       <h2 className="text-primaryText text-lg">
-        Are you sure to delete <span className="font-bold">{name}</span> ?
+        {msg ? (
+          <span>
+            Are you sure you want to remove <span className="font-bold">{name}</span> as your friend
+            ?
+          </span>
+        ) : (
+          <span>
+            Are you sure to delete <span className="font-bold">{name}</span> ?
+          </span>
+        )}
       </h2>
       <div className="mt-6 w-full">
         <button
