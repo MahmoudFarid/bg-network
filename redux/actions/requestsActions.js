@@ -11,7 +11,7 @@ export const GetRequests = (offset, limit) => async (dispatch) => {
       })
     })
     .catch((ex) => {
-      if (ex.response.data.details) toast.error(ex.response.data.details[0])
+      if (ex.response?.data.details) toast.error(ex.response.data.details[0])
     })
 }
 export const GetPendingList = (offset, limit) => async (dispatch) => {
@@ -23,7 +23,7 @@ export const GetPendingList = (offset, limit) => async (dispatch) => {
       })
     })
     .catch((ex) => {
-      if (ex.response.data.details) toast.error(ex.response.data.details[0])
+      if (ex.response?.data.details) toast.error(ex.response.data.details[0])
     })
 }
 
@@ -36,7 +36,7 @@ export const SendRequest = (user_id) => async (dispatch) => {
       })
     })
     .catch((ex) => {
-      if (ex.response.data.details) toast.error(ex.response.data.details[0])
+      if (ex.response?.data.details) toast.error(ex.response.data.details[0])
     })
 }
 

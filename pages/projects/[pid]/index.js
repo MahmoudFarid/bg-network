@@ -32,6 +32,7 @@ export default function Project() {
   const [isCarouselOverlay, setIsCarouselOverlay] = useState(false)
   const [cid, setCid] = useState()
   const [project, setProject] = useState({})
+  const [types, setTypes] = useState([])
   const [units, setUnits] = useState([])
   const [unitsCount, setUnitsCount] = useState(Number)
   const dispatch = useDispatch()
@@ -149,6 +150,12 @@ export default function Project() {
         fetchUnits()
         fetchProject()
       }
+      async function fetchTypes() {
+        await API.get(`projects/unit_types/`).then((res) => {
+          setTypes(res.data.results)
+        })
+      }
+      fetchTypes()
     }
   }, [pid])
 
@@ -172,7 +179,7 @@ export default function Project() {
           <div onClick={(e) => e.stopPropagation()}>
             <AdvancedFilter
               preventShowLetter={preventShowLetter}
-              dropdownOptions={dropdownOptions}
+              dropdownOptions={types}
               itemSelectedFunc={itemSelectedFunc}
               onAdvancedSearch={onAdvancedSearch}
             />
@@ -250,10 +257,11 @@ export default function Project() {
                   </p>
                   <DropdownMenu
                     order="first"
+                    placeholder="Types"
                     name="Types"
                     classes="py-1"
                     dropdownWidth="w-full"
-                    options={dropdownOptions}
+                    options={types}
                     itemSelectedFunc={itemSelectedFunc}
                   />
                 </div>

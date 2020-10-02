@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import Spinner from '../core/spinner'
 
 export default function DropdownMenu({
   id,
@@ -12,6 +13,7 @@ export default function DropdownMenu({
   multiple,
   defaultValue,
   itemSelectedFunc,
+  allunits,
 }) {
   const [openDropdown, toggleDropdown] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -41,9 +43,9 @@ export default function DropdownMenu({
   return (
     <div className="relative">
       <div
-        className={`block appearance-none w-full px-4 rounded border cursor-pointer focus:outline-none border-gray-400 ${
+        className={`block appearance-none px-4 rounded border cursor-pointer focus:outline-none border-gray-400 ${
           classes ? classes : 'py-2'
-        }`}
+        } ${dropdownWidth}`}
         onClick={(e) => {
           e.stopPropagation()
           toggleDropdown(order)
@@ -61,13 +63,13 @@ export default function DropdownMenu({
         <i className="fas fa-angle-down fa-lg mt-2 text-primaryLight float-right"></i>
       </div>
       <div
-        className={`dropdownOptions absolute left-0 z-40 rounded-lg border-2 border-gray-100 shadow-lg overflow-auto focus:outline-none ${dropdownWidth} ${
+        className={`dropdownOptions absolute left-0 z-40 rounded-lg shadow-lg overflow-auto focus:outline-none ${dropdownWidth} ${
           openDropdown === order && isOpen ? 'block' : 'hidden'
         }`}>
         {options.length > 0 ? (
           options?.map((option) => (
             <div
-              className={`item block px-4 py-1 border-b cursor-pointer transition duration-500 ease-in-out hover:text-primaryText ${
+              className={`item flex items-baseline px-4 py-1 border-b cursor-pointer transition duration-500 ease-in-out hover:text-primaryText ${
                 multiple && name.trim().split(',').includes(option.name)
                   ? 'border border-primaryText bg-gray-100 text-primaryText'
                   : 'bg-white text-gray-400'
@@ -81,20 +83,24 @@ export default function DropdownMenu({
               key={option.id}
               onClick={() => onItemSelecting(option)}>
               <i className="fas fa-circle fal-lg mr-5"></i>
-              <span
-                className={`inline-block w-10/12 py-3 hover:text-primaryText ${
+              <p
+                className={`py-3 hover:text-primaryText ${
                   (multiple && name.trim().split(',').includes(option.name)) ||
                   item === option.name.toUpperCase()
                     ? 'text-primaryText'
                     : 'text-primary'
                 }`}>
                 {option.name}
-              </span>
+              </p>
               {multiple && name.trim().split(',').includes(option.name) && (
                 <i className="fas fa-check-circle fa-lg text-success"></i>
               )}
             </div>
           ))
+        ) : allunits ? (
+          <div className="bg-white p-2">
+            <Spinner />
+          </div>
         ) : (
           <div className="item block px-4 py-3 bg-white"></div>
         )}
@@ -102,7 +108,8 @@ export default function DropdownMenu({
       <style jsx>{`
         .dropdownOptions {
           max-height: 20rem !important;
-        }
+        }import Spinner from './../core/spinner';
+
       `}</style>
     </div>
   )

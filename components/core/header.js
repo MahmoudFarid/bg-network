@@ -126,6 +126,17 @@ function Header({ requests }) {
                   My Projects
                 </a>
               </Link>
+              {account.is_broker && (
+                <Link href="/units">
+                  <a
+                    onClick={() => setActive('/units')}
+                    className={`block mt-4 mr-8 font-semibold hover:text-primaryText lg:inline-block lg:mt-0 focus:outline-none ${
+                      active === '/units' ? 'text-primaryText' : 'text-primaryLight'
+                    }`}>
+                    My Units
+                  </a>
+                </Link>
+              )}
               {!account.is_broker && (
                 <Link href="/plans">
                   <a
