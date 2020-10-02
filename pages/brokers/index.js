@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import API from '../../api'
-import Loading from '../../components/core/loading'
 import Pagination from '../../components/features/pagination'
 import DataCard from './../../components/cards/dataCard'
+import DataCardSkeleton from '../../components/skeletons/dataCardSkeleton'
 
 export default function Brokers() {
   const [isLoading, setIsLoading] = useState(true)
@@ -48,37 +48,40 @@ export default function Brokers() {
       <Head>
         <title>All Brokers</title>
       </Head>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div className="container mb-16">
-          <div className="relative w-2/3 mx-auto mt-8 mb-6 md:w-1/2 lg:w-5/12">
-            <i className="icon fas fa-search fa-2x absolute inline-block text-gray-300"></i>
-            <input
-              className="appearance-none block w-full bg-white text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
-              id="search"
-              type="search"
-              name="search"
-              autoComplete="off"
-              placeholder="Type Broker name"
-            />
-          </div>
-
-          <div className="bg-white p-5 rounded-lg shadow-lg">
-            <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {brokers.map((broker) => (
-                <DataCard
-                  key={broker.id}
-                  data={broker}
-                  isBroker={true}
-                  onSendRequest={onSendRequest}
-                />
-              ))}
-            </div>
-          </div>
-          <Pagination count={brokersCount} limit={20} setPageItem={setPageItem} />
+      <div className="container mb-16">
+        <div
+          className={`relative w-2/3 mx-auto mt-8 mb-6 md:w-1/2 lg:w-5/12 ${
+            isLoading && 'invisible'
+          }`}>
+          <i className="icon fas fa-search fa-2x absolute inline-block text-gray-300"></i>
+          <input
+            className="appearance-none block w-full bg-white text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
+            id="search"
+            type="search"
+            name="search"
+            autoComplete="off"
+            placeholder="Type Broker name"
+          />
         </div>
-      )}
+
+        <div className="bg-white p-5 rounded-lg shadow-lg">
+          <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {isLoading
+              ? Array(12)
+                  .fill()
+                  .map((item, i) => <DataCardSkeleton isBroker={'false'} key={i} />)
+              : brokers.map((broker) => (
+                  <DataCard
+                    key={broker.id}
+                    data={broker}
+                    isBroker={true}
+                    onSendRequest={onSendRequest}
+                  />
+                ))}
+          </div>
+        </div>
+        {!isLoading && <Pagination count={brokersCount} limit={20} setPageItem={setPageItem} />}
+      </div>
       <style jsx>{`
         .icon {
           top: 10px;

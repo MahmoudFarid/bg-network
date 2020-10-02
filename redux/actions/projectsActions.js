@@ -15,7 +15,6 @@ export const AddProject = (formData, config) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('Something is error')
-      console.log(ex.response)
     })
 }
 
@@ -31,7 +30,6 @@ export const DeleteProject = (id) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('Something is error')
-      console.log(ex.response)
     })
 }
 
@@ -47,6 +45,5 @@ export const EditProject = (id, formData, config) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('Something is error')
-      console.log(ex.response)
     })
 }

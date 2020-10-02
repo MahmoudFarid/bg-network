@@ -55,7 +55,6 @@ export default function Units() {
     setIsBroker(isBroker)
 
     if (pid) {
-      console.log('units of company id -> ', cid, ' in project id -> ', pid)
       if (isBroker == 'true') {
         async function fetchUnits() {
           await API.get(`reds/${cid}/projects/${pid}/units/`).then((res) => {

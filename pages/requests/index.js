@@ -1,13 +1,14 @@
 import Head from 'next/head'
 import Router from 'next/router'
 import { useState, useEffect } from 'react'
-import FollowCard from '../../components/cards/followCard'
 import { connect, useDispatch } from 'react-redux'
-import { GetRequests, GetPendingList } from './../../redux/actions/requestsActions'
+import FollowCard from '../../components/cards/followCard'
 import Pagination from '../../components/features/pagination'
+import { GetRequests } from './../../redux/actions/requestsActions'
+import FollowCardSkeleton from './../../components/skeletons/followCardSkeleton'
 
 function Requests({ requests }) {
-  const [isRequests, setIsRequests] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const dispatch = useDispatch()
 
   const setPageItem = (offset, limit) => {
@@ -15,23 +16,8 @@ function Requests({ requests }) {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // const requestsList = () => {
-  //   setIsRequests(true)
-  //   setTimeout(() => {
-  //     dispatch(GetRequests())
-  //   }, 1000)
-  // }
-  // console.log(requests)
-
-  // const pendingList = () => {
-  //   setIsRequests(false)
-  //   setTimeout(() => {
-  //     dispatch(GetPendingList())
-  //   }, 1000)
-  // }
-
   useEffect(() => {
-    dispatch(GetRequests())
+    dispatch(GetRequests()).then((res) => setIsLoading(false))
   }, [])
 
   return (
@@ -42,22 +28,22 @@ function Requests({ requests }) {
       <div className="container my-12">
         <div>
           <button
-            className={`py-3 px-10 bg-white rounded-tl-lg focus:outline-none ${
-              isRequests ? 'bg-primaryText text-white' : 'bg-white'
-            }`}
+            className="py-3 px-10 rounded-tl-lg focus:outline-none bg-primaryText text-white"
             onClick={() => Router.push('/requests')}>
             Requests
           </button>
           <button
-            className={`py-3 px-10 bg-white rounded-tr-lg focus:outline-none ${
-              isRequests ? 'bg-white' : 'bg-primaryText text-white'
-            }`}
+            className="py-3 px-10 bg-white rounded-tr-lg focus:outline-none"
             onClick={() => Router.push('/requests/pending')}>
             Pending list
           </button>
         </div>
         <div className="bg-white p-5 pt-0 rounded-lg shadow-lg">
-          {requests?.length === 0 || !requests ? (
+          {isLoading ? (
+            Array(5)
+              .fill()
+              .map((item, i) => <FollowCardSkeleton isRequests={true} key={i} />)
+          ) : requests?.length === 0 || !requests ? (
             <div className="text-primary text-4xl text-center mx-auto py-16 w-8/12">
               You don't have any Requests
             </div>
@@ -67,7 +53,7 @@ function Requests({ requests }) {
                 key={request.from_user.id}
                 account={request.from_user}
                 request={request}
-                isRequests={isRequests}
+                isRequests={true}
                 isBroker={request.from_user.is_broker}
               />
             ))

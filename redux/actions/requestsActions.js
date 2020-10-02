@@ -41,7 +41,6 @@ export const SendRequest = (user_id) => async (dispatch) => {
 }
 
 export const AcceptRequest = (user_id) => async (dispatch) => {
-  console.log(user_id)
   const acc = await API.post('followers/friend_requests/accept/', { user_id })
     .then((res) => {
       dispatch({
@@ -51,12 +50,10 @@ export const AcceptRequest = (user_id) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('something is error')
-      console.log(ex)
     })
 }
 
 export const RejectRequest = (user_id) => async (dispatch) => {
-  console.log(user_id)
   const acc = await API.post('followers/friend_requests/cancel/', { user_id })
     .then(() => {
       dispatch({
@@ -66,12 +63,10 @@ export const RejectRequest = (user_id) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('something is error')
-      console.log(ex.response)
     })
 }
 
 export const DeleteFriend = (id) => async (dispatch) => {
-  console.log(id)
   const acc = await API.delete(`followers/${id}`)
     .then(() => {
       dispatch({
@@ -81,6 +76,5 @@ export const DeleteFriend = (id) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('something is error')
-      console.log(ex.response)
     })
 }

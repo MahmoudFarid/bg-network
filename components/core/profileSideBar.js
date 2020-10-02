@@ -7,7 +7,7 @@ import { SendRequest, RejectRequest } from '../../redux/actions/requestsActions'
 import { DeleteFriend } from './../../redux/actions/requestsActions'
 import Spinner from './spinner'
 
-export default function ProfileSideBar({ cid, bid }) {
+export default function ProfileSideBar({ cid, bid, details }) {
   const [isBroker, setIsBroker] = useState()
   const [isSpinner, setIsSpinner] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -86,7 +86,6 @@ export default function ProfileSideBar({ cid, bid }) {
       fetchBroker()
     }
   }, [cid, bid])
-  console.log(changeState)
 
   return (
     <div
@@ -133,6 +132,24 @@ export default function ProfileSideBar({ cid, bid }) {
                   <span className="details text-xs text-secondary font-semibold">
                     {profile.units_count ? profile.units_count : '0'}{' '}
                     {profile.units_count <= 1 ? 'Unit' : 'Units'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+          {cid == 0 && (
+            <div className="w-3/4 mx-auto mt-5 text-center">
+              <div className="flex justify-around">
+                <div className="inline-block py-1 pt-0 px-3 ml-5 bg-white text-black rounded-full">
+                  <i className="fas fa-city fa-xs text-black mr-2"></i>
+                  <span className="details text-xs text-secondary font-semibold">
+                    {details[0] !== 0 ? details[0] : '0'} {details[0] <= 1 ? 'Project' : 'Projects'}
+                  </span>
+                </div>
+                <div className="inline-block py-1 pt-0 px-3 ml-5 bg-white text-black rounded-full">
+                  <i className="fas fa-home fa-xs text-black mr-2"></i>
+                  <span className="details text-xs text-secondary font-semibold">
+                    {details[1] !== 0 ? details[1] : '0'} {details[1] <= 1 ? 'Unit' : 'Units'}
                   </span>
                 </div>
               </div>

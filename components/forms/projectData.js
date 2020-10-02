@@ -32,7 +32,6 @@ export default function ProjectData({ pid }) {
   const dispatch = useDispatch()
 
   const itemSelectedFunc = (choices) => {
-    console.log(choices)
     let plansIDs = []
     let plansNames = []
     choices.map((choice) => {
@@ -124,8 +123,6 @@ export default function ProjectData({ pid }) {
       ? dispatch(AddProject(formData, config))
       : null
   }
-
-  console.log(project)
 
   useEffect(() => {
     if (pid) {

@@ -15,7 +15,6 @@ export const PatchProfile = (formData, config) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('Something is error')
-      console.log(ex.response)
     })
 }
 
@@ -30,7 +29,6 @@ export const changePassword = (password) => async (dispatch) => {
       })
     })
     .catch((ex) => {
-      console.log(ex.response.data)
       if (ex.response.data.current_password) toast.info('Current password is not correct')
       if (ex.response.data.new_password) toast.info(ex.response.data.new_password[0])
     })

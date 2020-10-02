@@ -2,10 +2,11 @@ import Head from 'next/head'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import API from '../../api'
-import Loading from '../../components/core/loading'
+import Pagination from '../../components/features/pagination'
 import ProjectCard from '../../components/cards/projectCard'
 import ProfileSideBar from '../../components/core/profileSideBar'
-import Pagination from '../../components/features/pagination'
+import ProjectCardSkeleton from './../../components/skeletons/projectCardSkeleton'
+import ProfileSideBarSkeleton from '../../components/skeletons/profileSideBarSkeleton'
 
 export default function Company() {
   const [isLoading, setIsLoading] = useState(true)
@@ -31,7 +32,6 @@ export default function Company() {
   useEffect(() => {
     if (cid) {
       localStorage.setItem('CID', cid)
-      console.log('company id -> ', cid)
       async function fetchProjects() {
         await API.get(`reds/${cid}/projects/?limit=12`).then((res) => {
           setProjects(res.data.results)
@@ -48,23 +48,40 @@ export default function Company() {
       <Head>
         <title>Company Details</title>
       </Head>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <div className="container-fluid grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-7 lg:ml-0">
-          <ProfileSideBar cid={cid} />
+      <div className="container-fluid grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-7 lg:ml-0">
+        {isLoading ? (
+          <ProfileSideBarSkeleton cid={cid} isBroker={'true'} />
+        ) : (
+          <ProfileSideBar cid={cid} isBroker={'true'} />
+        )}
 
-          <div className="col-span-5 mt-6 mb-16 ml-8 mr-16">
-            <h2 className="text-black font-bold text-md mb-3">Projects</h2>
+        <div className="col-span-5 mt-6 mb-16 ml-8 mr-16">
+          <h2 className="text-black font-bold text-md mb-3">Projects</h2>
+
+          {isLoading ? (
             <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
-              {projects.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
+              {Array(12)
+                .fill()
+                .map((item, i) => (
+                  <ProjectCardSkeleton key={i} />
+                ))}
             </div>
-            <Pagination count={projectsCount} limit={12} setPageItem={setPageItem} />
-          </div>
+          ) : projects?.length === 0 ? (
+            <div className="text-primary text-4xl text-center mx-auto my-10">
+              This company doesn't have any project
+            </div>
+          ) : (
+            <div>
+              <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
+                {projects?.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+              <Pagination count={projectsCount} limit={12} setPageItem={setPageItem} />
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 }

@@ -2,7 +2,6 @@ import Link from 'next/link'
 import Router from 'next/router'
 
 export default function ProjectCard({ project, company }) {
-  console.log(company)
   const setCompanyId = (id) => {
     localStorage.setItem('CID', id)
   }
@@ -18,7 +17,7 @@ export default function ProjectCard({ project, company }) {
               ? company.avatar
                 ? company.avatar
                 : '/assets/company-pict.png'
-              : project.cover_image
+              : project?.cover_image
           }
           alt="Image"
           className="w-full h-full rounded-md"

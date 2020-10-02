@@ -11,7 +11,7 @@ function FollowCard({ isBroker, account, request, isRequests, acceptRequest, rej
 
   return (
     <div
-      className={`grid grid-cols-9 lg:grid-cols-11 border-b border-gray-300 py-4 ${
+      className={`grid grid-cols-9 lg:grid-cols-11 border-b border-gray-300 py-2 ${
         isAction && 'animate__animated animate__fadeOut'
       }`}>
       <div className="w-20 h-16 mr-2 mt-2">

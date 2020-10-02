@@ -38,7 +38,7 @@ export default function ProjectSideBar({ project, toggleProjectImgs, deleteProje
       <div className="py-10">
         <div className="w-48 h-40 mx-auto">
           <img
-            src={project.cover_image ? project.cover_image : '/assets/profile-pic.png'}
+            src={project?.cover_image ? project.cover_image : '/assets/profile-pic.png'}
             alt="project"
             className="block w-10/12 h-full rounded-full mx-auto"
           />
@@ -82,7 +82,8 @@ export default function ProjectSideBar({ project, toggleProjectImgs, deleteProje
       <style>
         {`
         .profile {
-          width: 91%
+          width: 91%;
+          min-height: 88vh;
         }
       `}
       </style>

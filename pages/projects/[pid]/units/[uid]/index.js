@@ -12,6 +12,7 @@ import Carousel2 from '../../../../../components/features/carousel2'
 import DeleteObj from './../../../../../components/popup/deleteObj'
 import GoogleMap from '../../../../../components/features/googleMap'
 import { DeleteUnit } from './../../../../../redux/actions/unitsActions'
+import UnitDetailsSkeleton from '../../../../../components/skeletons/unitDetailsSkeletons'
 
 export default function Unit() {
   const {
@@ -55,7 +56,6 @@ export default function Unit() {
     setIsBroker(isBroker)
 
     if (pid && uid) {
-      console.log('company -> ', cid, ' in project -> ', pid, ' in unit -> ', uid)
       if (isBroker == 'true') {
         async function fetchUnit() {
           await API.get(`reds/${cid}/projects/${pid}/units/${uid}`).then((res) => {
@@ -84,7 +84,7 @@ export default function Unit() {
         <title>Unit Details</title>
       </Head>
       {isLoading ? (
-        <Loading />
+        <UnitDetailsSkeleton />
       ) : (
         <div
           className="container my-16"
@@ -197,7 +197,7 @@ export default function Unit() {
                 </span>
               </div>
               <div className="w-3/12 py-2 border-r-2 border-gray-200">
-                <img src="/assets/units/m2.jpg" alt="m2" className="block w-8 mx-auto mb-2" />
+                <img src="/assets/units/m2.jpg" alt="area" className="block w-8 mx-auto mb-2" />
                 <span>
                   {unit.area} M<sup>2</sup>
                 </span>

@@ -40,14 +40,7 @@ export default function DataInfo({ data, isBroker, onSendRequest }) {
           <p className="desc text-primaryLight text-xs tracking-wide font-semibold mb-2 mt-1 overflow-hidden">
             {data.description && data.description !== 'null' ? data.description : 'No Description'}
           </p>
-          {isBroker ? (
-            <div className="inline-block mr-2 mb-1 py-1 pt-0 px-3 bg-bgLight text-black rounded-full">
-              <i className="fas fa-city fa-xs text-black mr-2"></i>
-              <span className="details text-xs text-secondary font-semibold">
-                {data.reds_count} {data.reds_count <= 1 ? 'Company' : 'Companies'}
-              </span>
-            </div>
-          ) : (
+          {isBroker == 'true' ? (
             <div>
               <div className="inline-block mr-2 mb-1 py-1 pt-0 px-3 bg-bgLight text-black rounded-full">
                 <i className="fas fa-city fa-xs text-black mr-2"></i>
@@ -61,6 +54,13 @@ export default function DataInfo({ data, isBroker, onSendRequest }) {
                   {data.units_count} {data.units_count <= 1 ? 'Unit' : 'Units'}
                 </span>
               </div>
+            </div>
+          ) : (
+            <div className="inline-block mr-2 mb-1 py-1 pt-0 px-3 bg-bgLight text-black rounded-full">
+              <i className="fas fa-city fa-xs text-black mr-2"></i>
+              <span className="details text-xs text-secondary font-semibold">
+                {data.reds_count} {data.reds_count <= 1 ? 'Company' : 'Companies'}
+              </span>
             </div>
           )}
           <button

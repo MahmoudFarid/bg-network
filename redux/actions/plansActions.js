@@ -4,16 +4,12 @@ import Router from 'next/router'
 import { toast } from 'react-toastify'
 
 export const GetPlans = (offset, limit) => async (dispatch) => {
-  const acc = await API.get(`plans/?limit=${offset}&offset=${offset * limit}`)
-    .then((res) => {
-      dispatch({
-        type: types.GET_PLANS,
-        payload: res.data,
-      })
+  const acc = await API.get(`plans/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+    dispatch({
+      type: types.GET_PLANS,
+      payload: res.data,
     })
-    .catch((ex) => {
-      if (ex.response.data.details) toast.error(ex.response.data.details[0])
-    })
+  })
 }
 
 export const AddPlan = (plan) => async (dispatch) => {
@@ -44,7 +40,6 @@ export const PatchPlan = (id, plan) => async (dispatch) => {
     .catch((ex) => {
       if (ex.response.data.installments) toast.info(ex.response.data.installments[0])
       else toast.error('Something is error')
-      console.log(ex.response)
     })
 }
 

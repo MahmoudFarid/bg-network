@@ -38,9 +38,6 @@ export default function DropdownMenu({
     if (defaultValue) setItem(defaultValue.toUpperCase())
   }, [defaultValue])
 
-  console.log(openDropdown)
-  console.log(order)
-  console.log(isOpen)
   return (
     <div className="relative">
       <div

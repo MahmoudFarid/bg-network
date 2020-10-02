@@ -15,7 +15,6 @@ export const AddUnit = (pid, formData, config) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('Something is error')
-      console.log(ex.response)
     })
 }
 
@@ -31,21 +30,16 @@ export const EditUnit = (pid, uid, formData, config) => async (dispatch) => {
     })
     .catch((ex) => {
       toast.error('Something is error')
-      console.log(ex.response)
     })
 }
 
 export const DeleteUnit = (pid, uid) => async (dispatch) => {
-  const acc = await API.delete(`projects/${pid}/units/${uid}/`)
-    .then(() => {
-      toast.success('Your unit is deleted successfully')
-      Router.push('/projects/[pid]/units', `/projects/${pid}/units`)
-      dispatch({
-        type: types.DELETE_UNIT,
-        payload: id,
-      })
+  const acc = await API.delete(`projects/${pid}/units/${uid}/`).then(() => {
+    toast.success('Your unit is deleted successfully')
+    Router.push('/projects/[pid]/units', `/projects/${pid}/units`)
+    dispatch({
+      type: types.DELETE_UNIT,
+      payload: id,
     })
-    .catch((ex) => {
-      console.log(ex.response)
-    })
+  })
 }

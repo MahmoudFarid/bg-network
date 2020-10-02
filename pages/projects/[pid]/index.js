@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 import Router, { useRouter } from 'next/router'
 import API from '../../../api'
-import Loading from './../../../components/core/loading'
 import Filter from '../../../components/features/filter'
 import UnitCard from '../../../components/cards/unitCard'
 import Overlay from '../../../components/features/overlay'
@@ -15,6 +14,9 @@ import AdvancedFilter from '../../../components/features/advancedFilter'
 import CarouselOverlay from '../../../components/features/carouselOverlay'
 import { DeleteProject } from './../../../redux/actions/projectsActions'
 import Pagination from '../../../components/features/pagination'
+import ProfileSideBarSkeleton from '../../../components/skeletons/profileSideBarSkeleton'
+import UnitCardSkeleton from './../../../components/skeletons/unitCardSkeleton'
+import Skeleton from 'react-loading-skeleton'
 
 export default function Project() {
   const {
@@ -114,7 +116,6 @@ export default function Project() {
     setIsBroker(isBroker)
 
     if (pid) {
-      console.log('company -> ', cid, ' with project -> ', pid)
       if (cid == 0) {
         async function fetchProject() {
           await API.get(`projects/${pid}/`).then((res) => {
@@ -132,15 +133,21 @@ export default function Project() {
         fetchProject()
         fetchUnits()
       } else {
+        async function fetchProject() {
+          await API.get(`reds/${cid}/projects/${pid}/`).then((res) => {
+            setProject(res.data)
+            setIsProjectLoading(false)
+          })
+        }
         async function fetchUnits() {
           await API.get(`reds/${cid}/projects/${pid}/units/?limit=9`).then((res) => {
-            setProject(res.data.results[0].project)
             setUnits(res.data.results)
             setUnitsCount(res.data.count)
             setIsLoading(false)
           })
         }
         fetchUnits()
+        fetchProject()
       }
     }
   }, [pid])
@@ -150,132 +157,142 @@ export default function Project() {
       <Head>
         <title>Project Details</title>
       </Head>
-      {isLoading && isProjectLoading ? (
-        <Loading />
-      ) : (
-        <div
-          onClick={() => {
-            setIsOverlay(false)
-            setIsDeleteOverlay(false)
-            setIsCarouselOverlay(false)
-          }}>
-          <Overlay opacity={isOverlay} />
-          <Overlay opacity={isDeleteOverlay} />
-          <Overlay opacity={isCarouselOverlay} />
 
-          {isOverlay && (
-            <div onClick={(e) => e.stopPropagation()}>
-              <AdvancedFilter
-                preventShowLetter={preventShowLetter}
-                dropdownOptions={dropdownOptions}
-                itemSelectedFunc={itemSelectedFunc}
-                onAdvancedSearch={onAdvancedSearch}
-              />
-            </div>
-          )}
-          {isDeleteOverlay && <DeleteObj onDeletingItem={onDeletingItem} name={project.name} />}
+      <div
+        onClick={() => {
+          setIsOverlay(false)
+          setIsDeleteOverlay(false)
+          setIsCarouselOverlay(false)
+        }}>
+        <Overlay opacity={isOverlay} />
+        <Overlay opacity={isDeleteOverlay} />
+        <Overlay opacity={isCarouselOverlay} />
 
-          {isCarouselOverlay && (
-            <CarouselOverlay sources={project.images} setIsOverlayFunc={setIsCarouselOverlayFunc} />
-          )}
+        {isOverlay && (
+          <div onClick={(e) => e.stopPropagation()}>
+            <AdvancedFilter
+              preventShowLetter={preventShowLetter}
+              dropdownOptions={dropdownOptions}
+              itemSelectedFunc={itemSelectedFunc}
+              onAdvancedSearch={onAdvancedSearch}
+            />
+          </div>
+        )}
+        {isDeleteOverlay && <DeleteObj onDeletingItem={onDeletingItem} name={project.name} />}
 
-          <div className="container-fluid grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-7 lg:ml-0">
+        {isCarouselOverlay && (
+          <CarouselOverlay sources={project.images} setIsOverlayFunc={setIsCarouselOverlayFunc} />
+        )}
+
+        <div className="container-fluid grid grid-cols-1 gap-0 ml-8 mr-8 lg:grid-cols-7 lg:ml-0">
+          {isProjectLoading ? (
+            <ProfileSideBarSkeleton isProject={true} />
+          ) : (
             <ProjectSideBar
               project={project}
               toggleProjectImgs={toggleProjectImgs}
               deleteProject={deleteProject}
               isBroker={isBroker}
             />
+          )}
 
-            <div className="col-span-5 mt-10 mb-16 mr-12">
-              <div className="w-full mb-5 clearfix">
-                {isBroker != 'true' && units.length > 0 && (
+          <div className="col-span-5 mt-10 mb-16 mr-12">
+            <div className="w-full mb-5 clearfix">
+              {isBroker != 'true' && units.length > 0 && (
+                <button
+                  className="float-right py-2 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+                  onClick={() =>
+                    Router.push('/projects/[pid]/units/add', `/projects/${pid}/units/add`)
+                  }>
+                  <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
+                  Add Unit
+                </button>
+              )}
+            </div>
+
+            <div className={`bg-white p-3 rounded-lg w-full xl:pb-0 ${isLoading && 'invisible'}`}>
+              <div className="grid grid-cols-1 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
+                <Filter
+                  register={register}
+                  errors={errors}
+                  name="Price"
+                  label1="from"
+                  labelTxt1="From"
+                  label2="to"
+                  labelTxt2="To"
+                  width="w-5/12"
+                  preventShowLetter={preventShowLetter}
+                />
+                <Filter
+                  register={register}
+                  errors={errors}
+                  name="Area"
+                  label1="from"
+                  labelTxt1="From"
+                  label2="to"
+                  labelTxt2="To"
+                  width="w-5/12"
+                  preventShowLetter={preventShowLetter}
+                />
+                <div>
+                  <p
+                    className="text-black text-xs text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
+                    onClick={(e) => {
+                      setIsOverlay(true)
+                      setIsDeleteOverlay(false)
+                      setIsCarouselOverlayFunc(false)
+                      e.stopPropagation()
+                    }}>
+                    Advanced filters
+                  </p>
+                  <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                    Types
+                  </p>
+                  <DropdownMenu
+                    order="first"
+                    name="Types"
+                    classes="py-1"
+                    dropdownWidth="w-full"
+                    options={dropdownOptions}
+                    itemSelectedFunc={itemSelectedFunc}
+                  />
+                </div>
+              </div>
+            </div>
+            {isLoading ? (
+              <div className="grid grid-cols-1 col-gap-10 row-gap-6 mt-5 md:grid-cols-2 xl:grid-cols-3">
+                {Array(3)
+                  .fill()
+                  .map((item, i) => (
+                    <UnitCardSkeleton key={i} />
+                  ))}
+              </div>
+            ) : units.length === 0 ? (
+              <div className="bg-white p-5 rounded-lg shadow-lg mt-20">
+                <div className="text-primary text-4xl text-center mx-auto my-10">
+                  This project has no Units yet
                   <button
-                    className="float-right py-2 px-5 bg-primary text-gray-400 text-xs font-semibold rounded-full hover:text-white focus:outline-none"
+                    className="block bg-primary text-gray-400 text-sm font-semibold w-1/4 py-3 mt-5 mx-auto rounded-full hover:text-white focus:outline-none"
                     onClick={() =>
                       Router.push('/projects/[pid]/units/add', `/projects/${pid}/units/add`)
                     }>
-                    <i className="fas fa-plus-circle fa-lg text-white mr-5"></i>
                     Add Unit
                   </button>
-                )}
+                </div>
               </div>
-              {units.length === 0 ? (
-                <div className="bg-white p-5 rounded-lg shadow-lg mt-20">
-                  <div className="text-primary text-4xl text-center mx-auto my-10">
-                    This project has no Units yet
-                    <button
-                      className="block bg-primary text-gray-400 text-sm font-semibold w-1/4 py-3 mt-5 mx-auto rounded-full hover:text-white focus:outline-none"
-                      onClick={() =>
-                        Router.push('/projects/[pid]/units/add', `/projects/${pid}/units/add`)
-                      }>
-                      Add Unit
-                    </button>
-                  </div>
+            ) : (
+              <div>
+                <div className="grid grid-cols-1 col-gap-10 row-gap-6 mt-5 md:grid-cols-2 xl:grid-cols-3">
+                  {units.map((unit) => (
+                    <UnitCard key={unit.id} unit={unit} pid={pid} />
+                  ))}
                 </div>
-              ) : (
-                <div>
-                  <div className="bg-white p-3 rounded-lg w-full xl:pb-0">
-                    <div className="grid grid-cols-1 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
-                      <Filter
-                        register={register}
-                        errors={errors}
-                        name="Price"
-                        label1="from"
-                        labelTxt1="From"
-                        label2="to"
-                        labelTxt2="To"
-                        width="w-5/12"
-                        preventShowLetter={preventShowLetter}
-                      />
-                      <Filter
-                        register={register}
-                        errors={errors}
-                        name="Area"
-                        label1="from"
-                        labelTxt1="From"
-                        label2="to"
-                        labelTxt2="To"
-                        width="w-5/12"
-                        preventShowLetter={preventShowLetter}
-                      />
-                      <div>
-                        <p
-                          className="text-black text-xs text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
-                          onClick={(e) => {
-                            setIsOverlay(true)
-                            setIsDeleteOverlay(false)
-                            setIsCarouselOverlayFunc(false)
-                            e.stopPropagation()
-                          }}>
-                          Advanced filters
-                        </p>
-                        <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                          Types
-                        </p>
-                        <DropdownMenu
-                          order="first"
-                          name="Types"
-                          classes="py-1"
-                          dropdownWidth="w-full"
-                          options={dropdownOptions}
-                          itemSelectedFunc={itemSelectedFunc}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 col-gap-10 row-gap-6 mt-5 md:grid-cols-2 xl:grid-cols-3">
-                    {units.map((unit) => (
-                      <UnitCard key={unit.id} unit={unit} pid={pid} />
-                    ))}
-                  </div>
-                  <Pagination count={unitsCount} limit={9} setPageItem={setPageItem} />
-                </div>
-              )}
-            </div>
+                <Pagination count={unitsCount} limit={9} setPageItem={setPageItem} />
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   )
 }

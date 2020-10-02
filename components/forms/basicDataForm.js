@@ -29,8 +29,6 @@ export default function BasicDataForm({ profile }) {
   }
 
   const onSubmit = (data) => {
-    console.log(data)
-    console.log(uploadImg)
     const token = localStorage.getItem('accessToken')
     const config = {
       headers: {
