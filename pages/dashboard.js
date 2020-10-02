@@ -1,10 +1,12 @@
 import Head from 'next/head'
 import { useState, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import Link from 'next/link'
 import Router from 'next/router'
 import API from '../api'
 import DataCard from './../components/cards/dataCard'
 import DataInfo from './../components/cards/dataInfo'
+import NotFoundSearch from '../components/notFoundSearch'
 import Pagination from '../components/features/pagination'
 import CountSkeleton from '../components/skeletons/countSkeleton'
 import DataInfoSkeleton from './../components/skeletons/dataInfoSkeleton'
@@ -22,10 +24,16 @@ export default function Dashboard() {
   const [brokers, setBrokers] = useState([])
   const [brokersCount, setBrokersCount] = useState(Number)
 
+  const { register, getValues } = useForm({
+    mode: 'onChange',
+  })
+
   const setPageItem = (offset, limit) => {
     if (isBroker == 'true') {
       async function fetchCompanies() {
-        await API.get(`reds/friends/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+        await API.get(
+          `reds/friends/?limit=${offset}&offset=${offset * limit}&name=${getValues().name}`
+        ).then((res) => {
           setCompanies(res.data.results)
         })
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -33,7 +41,9 @@ export default function Dashboard() {
       fetchCompanies()
     } else {
       async function fetchBrokers() {
-        await API.get(`brokers/friends/?limit=${offset}&offset=${offset * limit}`).then((res) => {
+        await API.get(
+          `brokers/friends/?limit=${offset}&offset=${offset * limit}&name=${getValues().name}`
+        ).then((res) => {
           setCompanies(res.data.results)
         })
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -58,13 +68,36 @@ export default function Dashboard() {
     }
   }
 
+  const onSearch = () => {
+    setIsFriendsLoading(true)
+    if (isBroker == 'true') {
+      async function fetchCompanies() {
+        await API.get(`reds/friends/?limit=20&name=${getValues().name}`).then((res) => {
+          setCompanies(res.data.results)
+          setCompaniesCount(res.data.count)
+          setIsFriendsLoading(false)
+        })
+      }
+      fetchCompanies()
+    } else {
+      async function fetchBrokers() {
+        await API.get(`brokers/friends/?limit=12&name=${getValues().name}`).then((res) => {
+          setBrokers(res.data.results)
+          setBrokersCount(res.data.count)
+          setIsFriendsLoading(false)
+        })
+      }
+      fetchBrokers()
+    }
+  }
+
   useEffect(() => {
     const isBroker = localStorage.getItem('isBroker')
     setIsBroker(isBroker)
 
     if (isBroker == 'true') {
       async function fetchCompanies() {
-        await API.get('reds/friends/?limit=12').then((res) => {
+        await API.get(`reds/friends/?limit=12&name=${getValues().name}`).then((res) => {
           setCompanies(res.data.results)
           setCompaniesCount(res.data.count)
           setIsFriendsLoading(false)
@@ -87,7 +120,7 @@ export default function Dashboard() {
       fetchSuggestedCompanies()
     } else {
       async function fetchBrokers() {
-        await API.get('brokers/friends/?limit=12').then((res) => {
+        await API.get(`brokers/friends/?limit=12&name=${getValues().name}`).then((res) => {
           setBrokers(res.data.results)
           setBrokersCount(res.data.count)
           setIsFriendsLoading(false)
@@ -123,14 +156,16 @@ export default function Dashboard() {
               <div>
                 <div
                   className={`relative w-full mx-auto mt-2 mb-8 md:w-1/2 lg:w-8/12 ${
-                    isFriendsLoading && 'invisible'
+                    companies.length === 0 && !getValues().name && 'invisible'
                   }`}>
                   <i className="icon fas fa-search fa-2x absolute inline-block text-gray-300"></i>
                   <input
+                    ref={register({ required: false })}
+                    onKeyUp={onSearch}
                     className="appearance-none block w-full text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
                     id="search"
-                    type="search"
-                    name="search"
+                    type="text"
+                    name="name"
                     autoComplete="off"
                     placeholder="Type Company name"
                   />
@@ -143,6 +178,8 @@ export default function Dashboard() {
                         <DataCardSkeleton isBroker={isBroker} key={i} />
                       ))}
                   </div>
+                ) : companies.length === 0 && getValues().name ? (
+                  <NotFoundSearch />
                 ) : companies.length === 0 ? (
                   <div className="text-primary text-4xl text-center mx-auto mt-40 w-8/12">
                     You don't have any Companies yet start by adding ones
@@ -167,14 +204,16 @@ export default function Dashboard() {
               <div>
                 <div
                   className={`relative w-full mx-auto mt-2 mb-8 md:w-1/2 lg:w-8/12 ${
-                    isFriendsLoading && 'invisible'
+                    brokers.length === 0 && !getValues().name && 'invisible'
                   }`}>
                   <i className="icon fas fa-search fa-2x absolute inline-block text-gray-300"></i>
                   <input
+                    ref={register({ required: false })}
+                    onKeyUp={onSearch}
                     className="appearance-none block w-full text-secondary placeholder-gray-400 border border-gray-400 rounded-full p-3 pl-20 focus:outline-none focus:border-gray-600"
                     id="search"
-                    type="search"
-                    name="search"
+                    type="text"
+                    name="name"
                     autoComplete="off"
                     placeholder="Type Broker name"
                   />
@@ -187,6 +226,8 @@ export default function Dashboard() {
                         <DataCardSkeleton isBroker={true} key={i} />
                       ))}
                   </div>
+                ) : brokers.length === 0 && getValues().name ? (
+                  <NotFoundSearch />
                 ) : brokers.length === 0 ? (
                   <div className="text-primary text-4xl text-center mx-auto mt-40 w-8/12">
                     You don't have any brokers yet start by adding ones

@@ -43,18 +43,7 @@ export default function ProjectCard({ project, company }) {
           <p className="text-white text-xl font-semibold">
             {company ? company.name : project.name}
           </p>
-        ) : (
-          <Link
-            href={{
-              pathname: '/projects/[pid]',
-              query: { pid: project?.id },
-            }}
-            as={`/projects/${project?.id}`}>
-            <a className="text-white text-xl font-semibold block hover:underline focus:outline-none">
-              {project?.name}
-            </a>
-          </Link>
-        )}
+        ) : null}
         {!company && (
           <span className="text-gray-300 font-semibold text-sm">
             <i className="fas fa-home fa-sm text-white mr-3"></i>
