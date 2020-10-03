@@ -212,7 +212,7 @@ export default function Units() {
         ) : units.length === 0 ? (
           <div className="bg-white p-5 rounded-lg shadow-lg mt-20">
             <div className="text-primary text-4xl text-center mx-auto my-10">
-              This project has no Units yet
+              You don't have any Units yet
             </div>
           </div>
         ) : (
