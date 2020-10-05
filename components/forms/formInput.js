@@ -14,11 +14,12 @@ export default function FormInput({
   currentPass,
   onKeyUp,
   onKeyPress,
+  onBlur,
   req,
   controlType,
 }) {
   return (
-    <div className="control-group relative mb-5 flex flex-col">
+    <div className={`control-group relative flex flex-col ${classes ? classes : 'mb-5'}`}>
       <label
         className={`control-label block text-primaryLight font-semibold mb-1 transition ease-in duration-300 ${
           labelClasses ? labelClasses : 'text-sm'
@@ -50,6 +51,7 @@ export default function FormInput({
           placeholder={placeholder}
           onKeyUp={onKeyUp}
           onKeyPress={onKeyPress}
+          onBlur={onBlur}
           ref={
             label === 'email' && req !== false
               ? register({
@@ -70,22 +72,26 @@ export default function FormInput({
           }
         />
       )}
-      <p className="text-red-500 text-sm italic font-semibold">
-        {errors[label] && errors[label].type === 'required'
-          ? errorMsg
+      {req && (
+        <p className="text-red-500 text-sm italic font-semibold">
+          {errors[label] && errors[label].type === 'required'
             ? errorMsg
-            : 'This field is required'
-          : ''}
-        {label === 'email' &&
-          errors.email &&
-          errors.email.type === 'pattern' &&
-          "It's not valid email"}
-        {type === 'password' &&
-          errors[label] &&
-          errors[label].type === 'minLength' &&
-          'Password must be at least 8 characters'}
-        {label === 'confirm_password' && errors.confirm_password && errors.confirm_password.message}
-      </p>
+              ? errorMsg
+              : 'This field is required'
+            : ''}
+          {label === 'email' &&
+            errors.email &&
+            errors.email.type === 'pattern' &&
+            "It's not valid email"}
+          {type === 'password' &&
+            errors[label] &&
+            errors[label].type === 'minLength' &&
+            'Password must be at least 8 characters'}
+          {label === 'confirm_password' &&
+            errors.confirm_password &&
+            errors.confirm_password.message}
+        </p>
+      )}
       <style jsx>{`
         .control-group:focus-within .control-label {
           color: ${theme.extend.colors.primaryText};

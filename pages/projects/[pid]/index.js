@@ -8,15 +8,13 @@ import Filter from '../../../components/features/filter'
 import UnitCard from '../../../components/cards/unitCard'
 import Overlay from '../../../components/features/overlay'
 import DeleteObj from '../../../components/popup/deleteObj'
-import DropdownMenu from '../../../components/features/dropdownMenu'
+import Pagination from '../../../components/features/pagination'
 import ProjectSideBar from './../../../components/core/projectSideBar'
 import AdvancedFilter from '../../../components/features/advancedFilter'
 import CarouselOverlay from '../../../components/features/carouselOverlay'
-import { DeleteProject } from './../../../redux/actions/projectsActions'
-import Pagination from '../../../components/features/pagination'
-import ProfileSideBarSkeleton from '../../../components/skeletons/profileSideBarSkeleton'
 import UnitCardSkeleton from './../../../components/skeletons/unitCardSkeleton'
-import Skeleton from 'react-loading-skeleton'
+import ProfileSideBarSkeleton from '../../../components/skeletons/profileSideBarSkeleton'
+import { DeleteProject } from './../../../redux/actions/projectsActions'
 
 export default function Project() {
   const {
@@ -27,7 +25,6 @@ export default function Project() {
   const [isLoading, setIsLoading] = useState(true)
   const [isProjectLoading, setIsProjectLoading] = useState(true)
   const [inputVal, setInputVal] = useState(0)
-  const [isOverlay, setIsOverlay] = useState(false)
   const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
   const [isCarouselOverlay, setIsCarouselOverlay] = useState(false)
   const [cid, setCid] = useState()
@@ -37,33 +34,8 @@ export default function Project() {
   const [unitsCount, setUnitsCount] = useState(Number)
   const dispatch = useDispatch()
 
-  const { register, errors, getValues } = useForm({
-    mode: 'onChange',
-    reValidateMode: 'onChange',
-  })
-
-  const dropdownOptions = [
-    { id: 1, name: 'type 1' },
-    { id: 2, name: 'type 2' },
-  ]
-
   const itemSelectedFunc = (id, name) => {
     console.log(id, name)
-  }
-
-  const preventShowLetter = (e) => {
-    const char = String.fromCharCode(e.which)
-    if (!/[0-9]/.test(char)) {
-      e.preventDefault()
-    } else {
-      setInputVal(getValues())
-    }
-    console.log(inputVal)
-  }
-
-  const onAdvancedSearch = (e) => {
-    console.log(inputVal)
-    setIsOverlay(!isOverlay)
   }
 
   const setIsCarouselOverlayFunc = (bool) => {
@@ -107,6 +79,36 @@ export default function Project() {
       fetchUnits()
     }
     window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const onBlur = () => {
+    console.log(inputVal)
+    for (const item in inputVal) {
+      if (inputVal[item]) {
+        setIsLoading(true)
+        if (cid) {
+          async function fetchUnits() {
+            await API.get(`reds/${cid}/projects/${pid}/units/?${item}=${inputVal[item]}`).then(
+              (res) => {
+                setUnits(res.data.results)
+                setUnitsCount(res.data.count)
+                setIsLoading(false)
+              }
+            )
+          }
+          fetchUnits()
+        } else {
+          async function fetchUnits() {
+            await API.get(`projects/${pid}/units/?${item}=${inputVal[item]}`).then((res) => {
+              setUnits(res.data.results)
+              setUnitsCount(res.data.count)
+              setIsLoading(false)
+            })
+          }
+          fetchUnits()
+        }
+      }
+    }
   }
 
   useEffect(() => {
@@ -167,24 +169,12 @@ export default function Project() {
 
       <div
         onClick={() => {
-          setIsOverlay(false)
           setIsDeleteOverlay(false)
           setIsCarouselOverlay(false)
         }}>
-        <Overlay opacity={isOverlay} />
         <Overlay opacity={isDeleteOverlay} />
         <Overlay opacity={isCarouselOverlay} />
 
-        {isOverlay && (
-          <div onClick={(e) => e.stopPropagation()}>
-            <AdvancedFilter
-              preventShowLetter={preventShowLetter}
-              dropdownOptions={types}
-              itemSelectedFunc={itemSelectedFunc}
-              onAdvancedSearch={onAdvancedSearch}
-            />
-          </div>
-        )}
         {isDeleteOverlay && <DeleteObj onDeletingItem={onDeletingItem} name={project.name} />}
 
         {isCarouselOverlay && (
@@ -217,55 +207,14 @@ export default function Project() {
               )}
             </div>
 
-            <div className={`bg-white p-3 rounded-lg w-full xl:pb-0 ${isLoading && 'invisible'}`}>
-              <div className="grid grid-cols-1 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
-                <Filter
-                  register={register}
-                  errors={errors}
-                  name="Price"
-                  label1="from"
-                  labelTxt1="From"
-                  label2="to"
-                  labelTxt2="To"
-                  width="w-5/12"
-                  preventShowLetter={preventShowLetter}
-                />
-                <Filter
-                  register={register}
-                  errors={errors}
-                  name="Area"
-                  label1="from"
-                  labelTxt1="From"
-                  label2="to"
-                  labelTxt2="To"
-                  width="w-5/12"
-                  preventShowLetter={preventShowLetter}
-                />
-                <div>
-                  <p
-                    className="text-black text-xs text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
-                    onClick={(e) => {
-                      setIsOverlay(true)
-                      setIsDeleteOverlay(false)
-                      setIsCarouselOverlayFunc(false)
-                      e.stopPropagation()
-                    }}>
-                    Advanced filters
-                  </p>
-                  <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                    Types
-                  </p>
-                  <DropdownMenu
-                    order="first"
-                    placeholder="Types"
-                    name="Types"
-                    classes="py-1"
-                    dropdownWidth="w-full"
-                    options={types}
-                    itemSelectedFunc={itemSelectedFunc}
-                  />
-                </div>
-              </div>
+            <div>
+              <Filter
+                types={types}
+                directions={types}
+                itemSelectedFunc={itemSelectedFunc}
+                setInputVal={setInputVal}
+                onBlur={onBlur}
+              />
             </div>
             {isLoading ? (
               <div className="grid grid-cols-1 col-gap-10 row-gap-6 mt-5 md:grid-cols-2 xl:grid-cols-3">

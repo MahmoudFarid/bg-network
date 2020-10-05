@@ -69,6 +69,7 @@ export default function ProjectData({ pid }) {
   }
 
   const handleChangeProjectImgs = ({ meta }, status, files) => {
+    console.log(files)
     if (status === 'headers_received') {
       setProjectImgs(files.map((f, i) => files[i].file))
     } else if (submit && status === 'aborted') {

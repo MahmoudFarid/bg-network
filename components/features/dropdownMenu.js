@@ -66,7 +66,7 @@ export default function DropdownMenu({
         className={`dropdownOptions absolute left-0 z-40 rounded-lg shadow-lg overflow-auto focus:outline-none ${dropdownWidth} ${
           openDropdown === order && isOpen ? 'block' : 'hidden'
         }`}>
-        {options.length > 0 ? (
+        {options?.length > 0 ? (
           options?.map((option) => (
             <div
               className={`item flex items-baseline px-4 py-1 border-b cursor-pointer transition duration-500 ease-in-out hover:text-primaryText ${

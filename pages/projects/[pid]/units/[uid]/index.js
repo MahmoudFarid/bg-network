@@ -5,7 +5,6 @@ import Router, { useRouter } from 'next/router'
 import ReactPlayer from 'react-player'
 import NumberFormat from 'react-number-format'
 import API from '../../../../../api'
-import Loading from '../../../../../components/core/loading'
 import Overlay from '../../../../../components/features/overlay'
 import Carousel from '../../../../../components/features/carousel'
 import Carousel2 from '../../../../../components/features/carousel2'
@@ -126,23 +125,13 @@ export default function Unit() {
                   </div>
                 )}
               </div>
-              <p className="desc w-11/12 text-primary my-4 overflow-y-auto">
-                Talaat Mustafa Group (TMG) Holding is the leading community real estate developer in
-                Egypt, with a land bank of 50 million square meters. The group has a strong track
-                record of over 40 years in the housing and real-estate development industry, having
-                developed 8.5 million sqm of land so far. Talaat Mustafa Group (TMG) Holding is the
-                leading community real estate developer in Egypt, with a land bank of 50 million
-                square meters. The group has a strong track record of over 40 years in the housing
-                and real-estate development industry, having developed 8.5 million sqm of land so
-                far. Talaat Mustafa Group (TMG) Holding is the leading community real estate
-                developer in Egypt, with a land bank of 50 million square meters. The group has a
-                strong track record of over 40 years in the housing and real-estate development
-                industry, having developed 8.5 million sqm of land so far. Talaat Mustafa Group
-                (TMG) Holding is the leading community real estate developer in Egypt, with a land
-                bank of 50 million square meters. The group has a strong track record of over 40
-                years in the housing and real-estate development industry, having developed 8.5
-                million sqm of land so far.
-              </p>
+              {unit.description ? (
+                <p className="desc w-11/12 text-primary my-4 overflow-y-auto">{unit.description}</p>
+              ) : (
+                <div className="text-primary text-3xl text-center mx-auto my-12">
+                  This unit has no description
+                </div>
+              )}
             </div>
             <div className="imgs w-full lg:w-7/12">
               <Carousel2

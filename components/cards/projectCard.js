@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import Router from 'next/router'
 
-export default function ProjectCard({ project, company }) {
+export default function ProjectCard({ project, company, cid, friendStatus }) {
   const setCompanyId = (id) => {
     localStorage.setItem('CID', id)
   }
@@ -25,7 +24,7 @@ export default function ProjectCard({ project, company }) {
       </div>
 
       <div className="absolute bottom-0 ml-5 mb-3">
-        {project?.red?.friend_status === 'Friends' ? (
+        {friendStatus === 'Friends' ? (
           <Link
             href={{
               pathname: '/projects/[pid]',
@@ -34,16 +33,28 @@ export default function ProjectCard({ project, company }) {
             as={`/projects/${project?.id}`}>
             <a
               className="text-white text-xl font-semibold block hover:underline focus:outline-none"
-              onClick={() => setCompanyId(project?.red.id)}>
+              onClick={() => setCompanyId(cid)}>
               {project?.name}
             </a>
           </Link>
-        ) : company ||
-          (project?.red?.friend_status && project?.red?.friend_status !== 'Friends') ? (
+        ) : company || (friendStatus && friendStatus !== 'Friends') ? (
           <p className="text-white text-xl font-semibold">
             {company ? company.name : project.name}
           </p>
-        ) : null}
+        ) : (
+          <Link
+            href={{
+              pathname: '/projects/[pid]',
+              query: { pid: project?.id },
+            }}
+            as={`/projects/${project?.id}`}>
+            <a
+              className="text-white text-xl font-semibold block hover:underline focus:outline-none"
+              onClick={() => setCompanyId(cid)}>
+              {project?.name}
+            </a>
+          </Link>
+        )}
         {!company && (
           <span className="text-gray-300 font-semibold text-sm">
             <i className="fas fa-home fa-sm text-white mr-3"></i>

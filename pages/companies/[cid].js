@@ -11,6 +11,7 @@ import ProfileSideBarSkeleton from '../../components/skeletons/profileSideBarSke
 export default function Company() {
   const [isLoading, setIsLoading] = useState(true)
   const [projects, setProjects] = useState([])
+  const [friendStatus, setFriendStatus] = useState(Boolean)
   const [projectsCount, setprojectsCount] = useState(Number)
 
   const {
@@ -39,6 +40,12 @@ export default function Company() {
           setIsLoading(false)
         })
       }
+      async function fetchFriendStatus() {
+        await API.post('users/friend_status/', { user_id: cid }).then((res) => {
+          setFriendStatus(res.data.status)
+        })
+      }
+      fetchFriendStatus()
       fetchProjects()
     }
   }, [cid])
@@ -74,7 +81,12 @@ export default function Company() {
             <div>
               <div className="grid grid-cols-1 col-gap-8 row-gap-5 md:grid-cols-2 xl:grid-cols-3">
                 {projects?.map((project) => (
-                  <ProjectCard key={project.id} project={project} />
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    cid={cid}
+                    friendStatus={friendStatus}
+                  />
                 ))}
               </div>
               <Pagination count={projectsCount} limit={12} setPageItem={setPageItem} />

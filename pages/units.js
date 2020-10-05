@@ -9,10 +9,12 @@ import DropdownMenu from '../components/features/dropdownMenu'
 import AdvancedFilter from '../components/features/advancedFilter'
 import UnitCardSkeleton from './../components/skeletons/unitCardSkeleton'
 import Overlay from './../components/features/overlay'
+import FormInput from '../components/forms/formInput'
 
 export default function Units() {
   const [isOverlay, setIsOverlay] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [isAdvanced, setIsAdvanced] = useState(false)
   const [isFilterLoading, setIsFilterLoading] = useState(true)
   const [inputVal, setInputVal] = useState(0)
   const [types, setTypes] = useState([])
@@ -59,6 +61,23 @@ export default function Units() {
     setIsOverlay(!isOverlay)
   }
 
+  const onBlur = () => {
+    console.log(inputVal)
+    for (const item in inputVal) {
+      if (inputVal[item]) {
+        setIsLoading(true)
+        async function fetchUnits() {
+          await API.get(`reds/units/?${item}=${inputVal[item]}`).then((res) => {
+            setUnits(res.data.results)
+            setUnitsCount(res.data.count)
+            setIsLoading(false)
+          })
+        }
+        fetchUnits()
+      }
+    }
+  }
+
   const setPageItem = (offset, limit) => {
     async function fetchUnits() {
       await API.get(`reds/units/?limit=${offset}&offset=${offset * limit}`).then((res) => {
@@ -103,27 +122,14 @@ export default function Units() {
         <title>All Units</title>
       </Head>
 
-      <Overlay opacity={isOverlay} />
-
       <div className="container my-12">
-        {isOverlay && (
-          <div onClick={(e) => e.stopPropagation()}>
-            <AdvancedFilter
-              dropdownOptions={types}
-              preventShowLetter={preventShowLetter}
-              itemSelectedFunc={itemSelectedFunc}
-              onAdvancedSearch={onAdvancedSearch}
-            />
-          </div>
-        )}
-
         <div
-          className={`bg-white p-3 rounded-lg w-full xl:pb-0 ${
+          className={`bg-white p-3 rounded-lg w-full ${
             isLoading && isFilterLoading && 'invisible'
           }`}>
-          <div className="grid grid-cols-1 row-gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+          <div className="grid grid-cols-1 row-gap-2 items-end sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7">
             <div>
-              <p className="text-primaryLight text-sm font-semibold mb-1 mt-8 transition ease-in duration-300">
+              <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
                 Companies
               </p>
               <DropdownMenu
@@ -138,7 +144,7 @@ export default function Units() {
             </div>
 
             <div>
-              <p className="text-primaryLight text-sm font-semibold mb-1 mt-8 transition ease-in duration-300">
+              <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
                 Projects
               </p>
               <DropdownMenu
@@ -153,51 +159,146 @@ export default function Units() {
               />
             </div>
 
-            <Filter
+            <FormInput
               register={register}
               errors={errors}
-              name="Price"
-              label1="from"
-              labelTxt1="From"
-              label2="to"
-              labelTxt2="To"
-              width="w-5/12"
-              preventShowLetter={preventShowLetter}
+              label="area_from"
+              labelTxt="Area"
+              placeholder="From"
+              type="text"
+              classes="w-11/12 py-1 text-sm"
+              req={false}
+              onKeyUp={preventShowLetter}
+              onKeyPress={preventShowLetter}
+              onBlur={onBlur}
             />
-            <div className="md:col-span-2 lg:col-span-1">
-              <Filter
-                register={register}
-                errors={errors}
-                name="Area"
-                label1="from"
-                labelTxt1="From"
-                label2="to"
-                labelTxt2="To"
-                width="w-5/12"
-                preventShowLetter={preventShowLetter}
-              />
-            </div>
-            <div>
-              <p
-                className="text-black text-xs text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
-                onClick={(e) => {
-                  setIsOverlay(true)
-                  e.stopPropagation()
-                }}>
-                Advanced filters
-              </p>
-              <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+            <FormInput
+              register={register}
+              errors={errors}
+              label="area_to"
+              placeholder="To"
+              type="text"
+              classes="w-11/12 py-1 text-sm"
+              req={false}
+              onKeyUp={preventShowLetter}
+              onKeyPress={preventShowLetter}
+              onBlur={onBlur}
+            />
+            <FormInput
+              register={register}
+              errors={errors}
+              label="price_from"
+              labelTxt="Price"
+              placeholder="From"
+              type="text"
+              classes="w-11/12 py-1 text-sm"
+              req={false}
+              onKeyUp={preventShowLetter}
+              onKeyPress={preventShowLetter}
+              onBlur={onBlur}
+            />
+            <FormInput
+              register={register}
+              errors={errors}
+              label="price_to"
+              placeholder="To"
+              type="text"
+              classes="w-11/12 py-1 text-sm"
+              req={false}
+              onKeyUp={preventShowLetter}
+              onKeyPress={preventShowLetter}
+              onBlur={onBlur}
+            />
+            <div className="self-center">
+              <p className="text-primaryLight text-sm font-semibold my-1 transition ease-in duration-300">
                 Types
               </p>
               <DropdownMenu
                 order="first"
                 placeholder="Types"
-                classes="py-1"
+                name="Types"
+                classes="w-11/12 py-1 text-sm"
                 dropdownWidth="w-full"
                 options={types}
                 itemSelectedFunc={itemSelectedFunc}
               />
             </div>
+          </div>
+
+          <p
+            className="text-black text-xs text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
+            onClick={() => setIsAdvanced(!isAdvanced)}>
+            Advanced filters
+          </p>
+        </div>
+
+        <div
+          className={`search bg-white p-3 w-full grid grid-cols-1 row-gap-2 items-end md:grid-cols-2 xl:grid-cols-6 ${
+            isAdvanced
+              ? 'animate__slideInDown animate__animated opacity-1'
+              : 'animate__slideOutUp animate__animated opacity-0'
+          } `}>
+          <FormInput
+            register={register}
+            errors={errors}
+            label="bedroom"
+            labelTxt="Bedrooms"
+            type="text"
+            classes="w-11/12 py-1 text-sm"
+            req={false}
+            onKeyUp={preventShowLetter}
+            onKeyPress={preventShowLetter}
+            onBlur={onBlur}
+          />
+          <FormInput
+            register={register}
+            errors={errors}
+            label="bathrooms"
+            labelTxt="Bathrooms"
+            type="text"
+            classes="w-11/12 py-1 text-sm"
+            req={false}
+            onKeyUp={preventShowLetter}
+            onKeyPress={preventShowLetter}
+            onBlur={onBlur}
+          />
+          <FormInput
+            register={register}
+            errors={errors}
+            label="floor"
+            labelTxt="Floors"
+            type="text"
+            classes="w-11/12 py-1 text-sm"
+            req={false}
+            onKeyUp={preventShowLetter}
+            onKeyPress={preventShowLetter}
+            onBlur={onBlur}
+          />
+          <FormInput
+            register={register}
+            errors={errors}
+            label="reception"
+            labelTxt="Receptions"
+            type="text"
+            classes="w-11/12 py-1 text-sm"
+            req={false}
+            onKeyUp={preventShowLetter}
+            onKeyPress={preventShowLetter}
+            onBlur={onBlur}
+          />
+          <div className="col-span-2 self-center">
+            <p className="text-primaryLight text-sm font-semibold my-1 transition ease-in duration-300">
+              Directions
+            </p>
+            <DropdownMenu
+              order="first"
+              placeholder="Directions"
+              name="Types"
+              classes="w-11/12 py-1 text-sm"
+              dropdownWidth="w-full"
+              options={types}
+              itemSelectedFunc={itemSelectedFunc}
+            />
           </div>
         </div>
 

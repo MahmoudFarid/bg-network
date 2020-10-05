@@ -85,10 +85,10 @@ function Header({ requests }) {
               <p className="font-semibold">Account Management</p>
               <span className="text-gray-600 text-sm">Team members and Company Settings.</span>
             </div>
-            <div className="p-3 transition duration-500 ease-in-out cursor-pointer hover:text-danger">
-              <button className="font-semibold focus:outline-non" onClick={logout}>
-                Logout
-              </button>
+            <div
+              className="p-3 transition duration-500 ease-in-out cursor-pointer hover:text-danger"
+              onClick={logout}>
+              <button className="font-semibold focus:outline-non">Logout</button>
             </div>
           </div>
         )}
