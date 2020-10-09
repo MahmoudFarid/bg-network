@@ -81,16 +81,6 @@ export default function BasicDataForm({ profile }) {
           type="text"
         />
 
-        <FormInput
-          register={register}
-          errors={errors}
-          defaultValue={profile.description}
-          label="description"
-          labelTxt="About"
-          controlType="textarea"
-          req={false}
-        />
-
         <Dropzone
           maxFiles={1}
           multiple={false}
@@ -116,7 +106,7 @@ export default function BasicDataForm({ profile }) {
         />
       </div>
 
-      <div className="border-t-2 border-gray-200 mt-5 pt-3 w-full">
+      <div className="absolute bottom-0 border-t-2 border-gray-200 mb-5 pt-3 w-full">
         <button
           className="float-right bg-primary text-gray-400 text-xs font-semibold rounded-lg py-3 px-12 mr-6 hover:text-white focus:outline-none"
           type="submit">

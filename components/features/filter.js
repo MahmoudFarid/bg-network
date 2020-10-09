@@ -5,11 +5,13 @@ import DropdownMenu from './dropdownMenu'
 
 export default function Filter({
   types,
-  directions,
   setInputVal,
   itemSelectedFunc,
   onBlur,
-  allUnits,
+  isAllUnits,
+  companies,
+  projects,
+  companySelected,
 }) {
   const [isAdvanced, setIsAdvanced] = useState(false)
 
@@ -24,8 +26,18 @@ export default function Filter({
     'bedroom',
     'bathroom',
     'floor',
+    'reception',
     'direction',
+    'type',
+    'red',
+    'project',
   ])
+
+  const directionsOptions = [
+    { id: 1, name: 'Frontal' },
+    { id: 2, name: 'Rear' },
+    { id: 3, name: 'Sidy' },
+  ]
 
   const preventShowLetter = (e) => {
     const char = String.fromCharCode(e.which)
@@ -39,7 +51,47 @@ export default function Filter({
   return (
     <div>
       <div className="bg-white p-3 w-full ">
-        <div className="grid grid-cols-1 row-gap-2 items-end md:grid-cols-2 xl:grid-cols-6">
+        <div
+          className={`${
+            isAllUnits
+              ? 'grid grid-cols-1 row-gap-2 items-end sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7'
+              : 'grid grid-cols-1 row-gap-2 items-end md:grid-cols-2 xl:grid-cols-6'
+          }`}>
+          {isAllUnits && (
+            <div>
+              <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                Companies
+              </p>
+              <DropdownMenu
+                order="first"
+                placeholder="Companies"
+                name="Companies"
+                classes="py-1"
+                dropdownWidth="w-11/12"
+                options={companies}
+                itemSelectedFunc={itemSelectedFunc}
+              />
+            </div>
+          )}
+
+          {isAllUnits && (
+            <div>
+              <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                Projects
+              </p>
+              <DropdownMenu
+                order="second"
+                placeholder="Projects"
+                name="Projects"
+                classes="py-1"
+                dropdownWidth="w-11/12"
+                allunits={companySelected}
+                options={projects}
+                itemSelectedFunc={itemSelectedFunc}
+              />
+            </div>
+          )}
+
           <FormInput
             register={register}
             errors={errors}
@@ -90,7 +142,7 @@ export default function Filter({
             onKeyPress={preventShowLetter}
             onBlur={onBlur}
           />
-          <div className="col-span-2 self-center">
+          <div className={`${!isAllUnits && 'col-span-2'} self-center`}>
             <p className="text-primaryLight text-sm font-semibold my-1 transition ease-in duration-300">
               Types
             </p>
@@ -133,7 +185,7 @@ export default function Filter({
         <FormInput
           register={register}
           errors={errors}
-          label="bathrooms"
+          label="bathroom"
           labelTxt="Bathrooms"
           type="text"
           classes="w-11/12 py-1 text-sm"
@@ -173,10 +225,10 @@ export default function Filter({
           <DropdownMenu
             order="first"
             placeholder="Directions"
-            name="Types"
+            name="Directions"
             classes="w-11/12 py-1 text-sm"
             dropdownWidth="w-full"
-            options={types}
+            options={directionsOptions}
             itemSelectedFunc={itemSelectedFunc}
           />
         </div>

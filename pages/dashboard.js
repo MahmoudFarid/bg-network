@@ -44,7 +44,7 @@ export default function Dashboard() {
         await API.get(
           `brokers/friends/?limit=${offset}&offset=${offset * limit}&name=${getValues().name}`
         ).then((res) => {
-          setCompanies(res.data.results)
+          setBrokers(res.data.results)
         })
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }

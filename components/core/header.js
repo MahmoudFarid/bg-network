@@ -77,7 +77,11 @@ function Header({ requests }) {
         )}
         {isSettingsOpen && (
           <div className="navigation absolute top-0 z-40 w-3/5 bg-white px-2 rounded-lg shadow-lg border border-gray-400 left-0 xl:w-1/4 lg:right-0 lg:left-auto">
-            <div className="border-b p-3 border-gray-300 cursor-pointer hover:text-primaryText">
+            <div
+              className="border-b p-3 border-gray-300 cursor-pointer hover:text-primaryText"
+              onClick={() => {
+                Router.push('/settings'), setIsSettingsOpen(false), setIsNotificationnOpen(false)
+              }}>
               <p className="font-semibold">Profile</p>
               <span className="text-gray-600 text-sm">Profile, Avatar, Password and Email.</span>
             </div>
@@ -96,7 +100,9 @@ function Header({ requests }) {
           <div className="flex items-center justify-between flex-wrap">
             <div
               className="logo flex flex-grow items-center flex-shrink-0 text-white mr-6"
-              onClick={() => setActive('/dashboard')}>
+              onClick={() => {
+                setActive('/dashboard'), setIsSettingsOpen(false), setIsNotificationnOpen(false)
+              }}>
               <Link href="/dashboard">
                 <img src="/assets/logo.svg" alt="logo" className="cursor-pointer" />
               </Link>

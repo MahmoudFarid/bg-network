@@ -5,18 +5,14 @@ import API from '../api'
 import Filter from '../components/features/filter'
 import UnitCard from './../components/cards/unitCard'
 import Pagination from './../components/features/pagination'
-import DropdownMenu from '../components/features/dropdownMenu'
-import AdvancedFilter from '../components/features/advancedFilter'
+import NotFoundSearch from './../components/notFoundSearch'
 import UnitCardSkeleton from './../components/skeletons/unitCardSkeleton'
-import Overlay from './../components/features/overlay'
-import FormInput from '../components/forms/formInput'
 
 export default function Units() {
-  const [isOverlay, setIsOverlay] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  const [isAdvanced, setIsAdvanced] = useState(false)
   const [isFilterLoading, setIsFilterLoading] = useState(true)
-  const [inputVal, setInputVal] = useState(0)
+  const [params, setParams] = useState('')
+  const [inputVal, setInputVal] = useState({})
   const [types, setTypes] = useState([])
   const [units, setUnits] = useState([])
   const [projects, setProjects] = useState([])
@@ -30,10 +26,11 @@ export default function Units() {
     reValidateMode: 'onChange',
   })
 
-  const itemSelectedFunc = (id, name) => {
+  const itemSelectedFunc = (id, name, option) => {
     if (name === 'Companies') {
       setCompanySelected(id)
       setProjects([])
+      inputVal.red = id
       async function fetchProjects() {
         await API.get(`reds/${id}/projects/`).then((res) => {
           setProjects(res.data.results)
@@ -42,40 +39,32 @@ export default function Units() {
       }
       fetchProjects()
     } else if (name === 'Projects') {
-      console.log(id, name)
+      inputVal.project = id
+    } else if (name === 'Types') {
+      inputVal.type = option
+    } else if (name === 'Directions') {
+      inputVal.direction = option.toUpperCase()
     }
-  }
-
-  const preventShowLetter = (e) => {
-    const char = String.fromCharCode(e.which)
-    if (!/[0-9]/.test(char)) {
-      e.preventDefault()
-    } else {
-      setInputVal(getValues())
-    }
-    console.log(inputVal)
-  }
-
-  const onAdvancedSearch = (e) => {
-    console.log(inputVal)
-    setIsOverlay(!isOverlay)
+    onBlur()
   }
 
   const onBlur = () => {
-    console.log(inputVal)
+    let paramsUrl = ''
     for (const item in inputVal) {
       if (inputVal[item]) {
+        paramsUrl += `${item}=${inputVal[item]}&`
+        setParams(paramsUrl)
         setIsLoading(true)
-        async function fetchUnits() {
-          await API.get(`reds/units/?${item}=${inputVal[item]}`).then((res) => {
-            setUnits(res.data.results)
-            setUnitsCount(res.data.count)
-            setIsLoading(false)
-          })
-        }
-        fetchUnits()
       }
     }
+    async function fetchUnits() {
+      await API.get(`reds/units/?${paramsUrl}`).then((res) => {
+        setUnits(res.data.results)
+        setUnitsCount(res.data.count)
+        setIsLoading(false)
+      })
+    }
+    fetchUnits()
   }
 
   const setPageItem = (offset, limit) => {
@@ -123,183 +112,17 @@ export default function Units() {
       </Head>
 
       <div className="container my-12">
-        <div
-          className={`bg-white p-3 rounded-lg w-full ${
-            isLoading && isFilterLoading && 'invisible'
-          }`}>
-          <div className="grid grid-cols-1 row-gap-2 items-end sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-7">
-            <div>
-              <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                Companies
-              </p>
-              <DropdownMenu
-                order="first"
-                placeholder="Companies"
-                name="Companies"
-                classes="py-1"
-                dropdownWidth="w-11/12"
-                options={companies}
-                itemSelectedFunc={itemSelectedFunc}
-              />
-            </div>
-
-            <div>
-              <p className="text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                Projects
-              </p>
-              <DropdownMenu
-                order="second"
-                placeholder="Projects"
-                name="Projects"
-                classes="py-1"
-                dropdownWidth="w-11/12"
-                allunits={companySelected}
-                options={projects}
-                itemSelectedFunc={itemSelectedFunc}
-              />
-            </div>
-
-            <FormInput
-              register={register}
-              errors={errors}
-              label="area_from"
-              labelTxt="Area"
-              placeholder="From"
-              type="text"
-              classes="w-11/12 py-1 text-sm"
-              req={false}
-              onKeyUp={preventShowLetter}
-              onKeyPress={preventShowLetter}
-              onBlur={onBlur}
-            />
-            <FormInput
-              register={register}
-              errors={errors}
-              label="area_to"
-              placeholder="To"
-              type="text"
-              classes="w-11/12 py-1 text-sm"
-              req={false}
-              onKeyUp={preventShowLetter}
-              onKeyPress={preventShowLetter}
-              onBlur={onBlur}
-            />
-            <FormInput
-              register={register}
-              errors={errors}
-              label="price_from"
-              labelTxt="Price"
-              placeholder="From"
-              type="text"
-              classes="w-11/12 py-1 text-sm"
-              req={false}
-              onKeyUp={preventShowLetter}
-              onKeyPress={preventShowLetter}
-              onBlur={onBlur}
-            />
-            <FormInput
-              register={register}
-              errors={errors}
-              label="price_to"
-              placeholder="To"
-              type="text"
-              classes="w-11/12 py-1 text-sm"
-              req={false}
-              onKeyUp={preventShowLetter}
-              onKeyPress={preventShowLetter}
-              onBlur={onBlur}
-            />
-            <div className="self-center">
-              <p className="text-primaryLight text-sm font-semibold my-1 transition ease-in duration-300">
-                Types
-              </p>
-              <DropdownMenu
-                order="first"
-                placeholder="Types"
-                name="Types"
-                classes="w-11/12 py-1 text-sm"
-                dropdownWidth="w-full"
-                options={types}
-                itemSelectedFunc={itemSelectedFunc}
-              />
-            </div>
-          </div>
-
-          <p
-            className="text-black text-xs text-right font-bold mb-3 underline cursor-pointer hover:text-primaryText"
-            onClick={() => setIsAdvanced(!isAdvanced)}>
-            Advanced filters
-          </p>
-        </div>
-
-        <div
-          className={`search bg-white p-3 w-full grid grid-cols-1 row-gap-2 items-end md:grid-cols-2 xl:grid-cols-6 ${
-            isAdvanced
-              ? 'animate__slideInDown animate__animated opacity-1'
-              : 'animate__slideOutUp animate__animated opacity-0'
-          } `}>
-          <FormInput
-            register={register}
-            errors={errors}
-            label="bedroom"
-            labelTxt="Bedrooms"
-            type="text"
-            classes="w-11/12 py-1 text-sm"
-            req={false}
-            onKeyUp={preventShowLetter}
-            onKeyPress={preventShowLetter}
+        <div className={`${isLoading && isFilterLoading && 'invisible'}`}>
+          <Filter
+            types={types}
+            companies={companies}
+            projects={projects}
+            companySelected={companySelected}
+            itemSelectedFunc={itemSelectedFunc}
+            setInputVal={setInputVal}
             onBlur={onBlur}
+            isAllUnits={true}
           />
-          <FormInput
-            register={register}
-            errors={errors}
-            label="bathrooms"
-            labelTxt="Bathrooms"
-            type="text"
-            classes="w-11/12 py-1 text-sm"
-            req={false}
-            onKeyUp={preventShowLetter}
-            onKeyPress={preventShowLetter}
-            onBlur={onBlur}
-          />
-          <FormInput
-            register={register}
-            errors={errors}
-            label="floor"
-            labelTxt="Floors"
-            type="text"
-            classes="w-11/12 py-1 text-sm"
-            req={false}
-            onKeyUp={preventShowLetter}
-            onKeyPress={preventShowLetter}
-            onBlur={onBlur}
-          />
-          <FormInput
-            register={register}
-            errors={errors}
-            label="reception"
-            labelTxt="Receptions"
-            type="text"
-            classes="w-11/12 py-1 text-sm"
-            req={false}
-            onKeyUp={preventShowLetter}
-            onKeyPress={preventShowLetter}
-            onBlur={onBlur}
-          />
-          <div className="col-span-2 self-center">
-            <p className="text-primaryLight text-sm font-semibold my-1 transition ease-in duration-300">
-              Directions
-            </p>
-            <DropdownMenu
-              order="first"
-              placeholder="Directions"
-              name="Types"
-              classes="w-11/12 py-1 text-sm"
-              dropdownWidth="w-full"
-              options={types}
-              itemSelectedFunc={itemSelectedFunc}
-            />
-          </div>
         </div>
 
         {isLoading ? (
@@ -310,11 +133,15 @@ export default function Units() {
                 <UnitCardSkeleton key={i} />
               ))}
           </div>
-        ) : units.length === 0 ? (
+        ) : units.length === 0 && params === '' ? (
           <div className="bg-white p-5 rounded-lg shadow-lg mt-20">
             <div className="text-primary text-4xl text-center mx-auto my-10">
               You don't have any Units yet
             </div>
+          </div>
+        ) : units.length === 0 && params !== '' ? (
+          <div className="bg-white p-5 rounded-lg shadow-lg mt-20">
+            <NotFoundSearch />
           </div>
         ) : (
           <div>

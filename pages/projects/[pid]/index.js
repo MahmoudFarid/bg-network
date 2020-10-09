@@ -15,6 +15,7 @@ import CarouselOverlay from '../../../components/features/carouselOverlay'
 import UnitCardSkeleton from './../../../components/skeletons/unitCardSkeleton'
 import ProfileSideBarSkeleton from '../../../components/skeletons/profileSideBarSkeleton'
 import { DeleteProject } from './../../../redux/actions/projectsActions'
+import NotFoundSearch from './../../../components/notFoundSearch'
 
 export default function Project() {
   const {
@@ -24,19 +25,16 @@ export default function Project() {
   const [isBroker, setIsBroker] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [isProjectLoading, setIsProjectLoading] = useState(true)
-  const [inputVal, setInputVal] = useState(0)
+  const [inputVal, setInputVal] = useState({})
   const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
   const [isCarouselOverlay, setIsCarouselOverlay] = useState(false)
   const [cid, setCid] = useState()
+  const [params, setParams] = useState('')
   const [project, setProject] = useState({})
   const [types, setTypes] = useState([])
   const [units, setUnits] = useState([])
   const [unitsCount, setUnitsCount] = useState(Number)
   const dispatch = useDispatch()
-
-  const itemSelectedFunc = (id, name) => {
-    console.log(id, name)
-  }
 
   const setIsCarouselOverlayFunc = (bool) => {
     setIsCarouselOverlay(bool)
@@ -81,33 +79,42 @@ export default function Project() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const itemSelectedFunc = (id, name, option) => {
+    if (name === 'Types') {
+      inputVal.type = option
+    } else if (name === 'Directions') {
+      inputVal.direction = option.toUpperCase()
+    }
+    onBlur()
+  }
+
   const onBlur = () => {
-    console.log(inputVal)
+    let paramsUrl = ''
     for (const item in inputVal) {
       if (inputVal[item]) {
+        paramsUrl += `${item}=${inputVal[item]}&`
+        setParams(paramsUrl)
         setIsLoading(true)
-        if (cid) {
-          async function fetchUnits() {
-            await API.get(`reds/${cid}/projects/${pid}/units/?${item}=${inputVal[item]}`).then(
-              (res) => {
-                setUnits(res.data.results)
-                setUnitsCount(res.data.count)
-                setIsLoading(false)
-              }
-            )
-          }
-          fetchUnits()
-        } else {
-          async function fetchUnits() {
-            await API.get(`projects/${pid}/units/?${item}=${inputVal[item]}`).then((res) => {
-              setUnits(res.data.results)
-              setUnitsCount(res.data.count)
-              setIsLoading(false)
-            })
-          }
-          fetchUnits()
-        }
       }
+    }
+    if (cid) {
+      async function fetchUnits() {
+        await API.get(`reds/${cid}/projects/${pid}/units/?${paramsUrl}`).then((res) => {
+          setUnits(res.data.results)
+          setUnitsCount(res.data.count)
+          setIsLoading(false)
+        })
+      }
+      fetchUnits()
+    } else {
+      async function fetchUnits() {
+        await API.get(`projects/${pid}/units/?${paramsUrl}`).then((res) => {
+          setUnits(res.data.results)
+          setUnitsCount(res.data.count)
+          setIsLoading(false)
+        })
+      }
+      fetchUnits()
     }
   }
 
@@ -210,7 +217,6 @@ export default function Project() {
             <div>
               <Filter
                 types={types}
-                directions={types}
                 itemSelectedFunc={itemSelectedFunc}
                 setInputVal={setInputVal}
                 onBlur={onBlur}
@@ -224,7 +230,7 @@ export default function Project() {
                     <UnitCardSkeleton key={i} />
                   ))}
               </div>
-            ) : units.length === 0 ? (
+            ) : units.length === 0 && params === '' ? (
               <div className="bg-white p-5 rounded-lg shadow-lg mt-20">
                 <div className="text-primary text-4xl text-center mx-auto my-10">
                   This project has no Units yet
@@ -236,6 +242,10 @@ export default function Project() {
                     Add Unit
                   </button>
                 </div>
+              </div>
+            ) : units.length === 0 && params !== '' ? (
+              <div className="bg-white p-5 rounded-lg shadow-lg mt-20">
+                <NotFoundSearch />
               </div>
             ) : (
               <div>

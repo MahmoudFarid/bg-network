@@ -72,7 +72,7 @@ export default function FormInput({
           }
         />
       )}
-      {req && (
+      {!req && (
         <p className="text-red-500 text-sm italic font-semibold">
           {errors[label] && errors[label].type === 'required'
             ? errorMsg
