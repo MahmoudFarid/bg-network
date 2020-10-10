@@ -1,8 +1,7 @@
 import Head from 'next/head'
-import Router from 'next/router'
 import { useState, useEffect } from 'react'
 import API from '../api'
-import PasswordForm from '../components/forms/passwordForm'
+import TeamManagement from './../components/teamManagement'
 import BasicDataForm from '../components/forms/basicDataForm'
 import SettingsSkeleton from './../components/skeletons/settingsSkeleton'
 
@@ -12,6 +11,7 @@ export default function Settings() {
   const [isBasicData, setIsBasicData] = useState(true)
 
   useEffect(() => {
+    // This is for Testing !!!
     async function fetchProfile() {
       await API.get('users/me/').then((res) => {
         setProfile(res.data)
@@ -24,16 +24,16 @@ export default function Settings() {
   return (
     <div>
       <Head>
-        <title>Profile Settings</title>
+        <title>Account Management</title>
       </Head>
       <div className="container my-12">
         {isLoading ? (
           <SettingsSkeleton />
         ) : (
           <div>
-            <h2 className="text-black font-bold text-md mb-3">Profile</h2>
+            <h2 className="text-black font-bold text-md mb-3">Company</h2>
             <div className="block lg:flex lg:justify-between">
-              <div className="w-full menu bg-white text-primary text-sm shadow-lg rounded-lg mb-5 lg:w-1/5">
+              <div className="w-full menu bg-white text-sm shadow-lg rounded-lg mb-5 lg:w-1/5">
                 <div
                   className={`p-4 border-b border-gray-300 ${
                     isBasicData
@@ -44,22 +44,21 @@ export default function Settings() {
                   <p>Basic data</p>
                 </div>
                 <div
-                  className={`p-4 border-b border-gray-300 ${
+                  className={`p-4 ${
                     !isBasicData
                       ? 'text-primaryText font-semibold'
                       : ' cursor-pointer text-primary hover:text-primaryText'
                   } `}
                   onClick={() => setIsBasicData(false)}>
-                  <p>Password</p>
-                </div>
-                <div
-                  className="p-4 cursor-pointer hover:text-primaryText"
-                  onClick={() => Router.push('/profile')}>
-                  <p>View profile as</p>
+                  <p>Team Management</p>
                 </div>
               </div>
               <div className="w-full form relative bg-white py-5 shadow-lg rounded-lg lg:w-9/12">
-                {isBasicData ? <BasicDataForm profile={profile} /> : <PasswordForm />}
+                {isBasicData ? (
+                  <BasicDataForm profile={profile} isCompany={true} />
+                ) : (
+                  <TeamManagement />
+                )}
               </div>
             </div>
           </div>
@@ -67,10 +66,10 @@ export default function Settings() {
       </div>
       <style jsx>{`
         .form {
-          min-height: 26rem;
+          min-height: 29rem;
         }
         .menu {
-          height: 10rem;
+          height: 6.8rem;
         }
       `}</style>
     </div>

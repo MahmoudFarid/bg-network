@@ -18,7 +18,7 @@ export default function PasswordForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-7/12 px-10">
+      <div className="w-full px-10 lg:w-7/12">
         <FormInput
           register={register}
           errors={errors}

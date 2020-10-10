@@ -85,7 +85,11 @@ function Header({ requests }) {
               <p className="font-semibold">Profile</p>
               <span className="text-gray-600 text-sm">Profile, Avatar, Password and Email.</span>
             </div>
-            <div className="border-b p-3 border-gray-300 cursor-pointer hover:text-primaryText">
+            <div
+              className="border-b p-3 border-gray-300 cursor-pointer hover:text-primaryText"
+              onClick={() => {
+                Router.push('/company'), setIsSettingsOpen(false), setIsNotificationnOpen(false)
+              }}>
               <p className="font-semibold">Account Management</p>
               <span className="text-gray-600 text-sm">Team members and Company Settings.</span>
             </div>

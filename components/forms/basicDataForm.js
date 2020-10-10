@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone-uploader'
 import FormInput from './formInput'
 import { PatchProfile } from './../../redux/actions/profileActions'
 
-export default function BasicDataForm({ profile }) {
+export default function BasicDataForm({ profile, isCompany }) {
   const { register, errors, handleSubmit } = useForm({
     mode: 'onBlur',
   })
@@ -16,6 +16,13 @@ export default function BasicDataForm({ profile }) {
 
   const getUploadParams = () => {
     return { url: 'https://httpbin.org/post' }
+  }
+
+  const preventShowLetter = (e) => {
+    const char = String.fromCharCode(e.which)
+    if (!/[0-9]/.test(char)) {
+      e.preventDefault()
+    }
   }
 
   const handleChangeImg = ({ meta }, status, files) => {
@@ -62,7 +69,7 @@ export default function BasicDataForm({ profile }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="w-7/12 px-10">
+      <div className="w-full px-10 lg:w-7/12">
         <FormInput
           register={register}
           errors={errors}
@@ -71,15 +78,37 @@ export default function BasicDataForm({ profile }) {
           labelTxt="Name*"
           type="text"
         />
-
-        <FormInput
-          register={register}
-          errors={errors}
-          defaultValue={profile.email}
-          label="email"
-          labelTxt="Email*"
-          type="text"
-        />
+        {isCompany ? (
+          <div>
+            <FormInput
+              register={register}
+              errors={errors}
+              defaultValue={profile.email}
+              label="phone"
+              labelTxt="Phone*"
+              type="text"
+              onKeyPress={preventShowLetter}
+            />
+            <FormInput
+              register={register}
+              errors={errors}
+              defaultValue={profile.description}
+              label="description"
+              labelTxt="About"
+              controlType="textarea"
+              req={false}
+            />
+          </div>
+        ) : (
+          <FormInput
+            register={register}
+            errors={errors}
+            defaultValue={profile.email}
+            label="email"
+            labelTxt="Email*"
+            type="text"
+          />
+        )}
 
         <Dropzone
           maxFiles={1}
@@ -106,7 +135,10 @@ export default function BasicDataForm({ profile }) {
         />
       </div>
 
-      <div className="absolute bottom-0 border-t-2 border-gray-200 mb-5 pt-3 w-full">
+      <div
+        className={`${
+          isCompany ? 'relative' : 'absolute'
+        } bottom-0 border-t-2 border-gray-200 my-5 pt-3 w-full`}>
         <button
           className="float-right bg-primary text-gray-400 text-xs font-semibold rounded-lg py-3 px-12 mr-6 hover:text-white focus:outline-none"
           type="submit">
