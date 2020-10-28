@@ -84,7 +84,7 @@ export default function DropdownMenu({
               onClick={() => onItemSelecting(option)}>
               <i className="fas fa-circle fal-lg mr-5"></i>
               <p
-                className={`py-3 hover:text-primaryText ${
+                className={`py-3 w-5/6 hover:text-primaryText ${
                   (multiple && name.trim().split(',').includes(option.name)) ||
                   item === option.name.toUpperCase()
                     ? 'text-primaryText'

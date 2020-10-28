@@ -3,11 +3,11 @@ import API from '../../api'
 import Router from 'next/router'
 import { toast } from 'react-toastify'
 
-export const AddProject = (formData, config) => async (dispatch) => {
+export const AddProject = (formData, config, isSetup) => async (dispatch) => {
   const acc = await API.post('projects/', formData, config)
     .then(() => {
       toast.success('Your project is added successfully')
-      Router.push('/projects')
+      isSetup ? Router.push('/setup/add-unit') : Router.push('/projects')
       dispatch({
         type: types.ADD_PROJECT,
         payload: formData,

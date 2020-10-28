@@ -12,10 +12,11 @@ export const GetPlans = (offset, limit) => async (dispatch) => {
   })
 }
 
-export const AddPlan = (plan) => async (dispatch) => {
+export const AddPlan = (plan, isSetup) => async (dispatch) => {
   const acc = await API.post('plans/', plan)
     .then(() => {
-      Router.push('/plans')
+      isSetup ? Router.push('/setup/add-project') : Router.push('/plans')
+
       dispatch({
         type: types.ADD_PLAN,
         payload: plan,

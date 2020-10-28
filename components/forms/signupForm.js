@@ -12,6 +12,13 @@ export default function SignUpForm({ isDeveloper }) {
   password.current = watch('password', '')
   const dispatch = useDispatch()
 
+  const preventShowLetter = (e) => {
+    const char = String.fromCharCode(e.which)
+    if (e.which != 8 && !/[0-9]/.test(char)) {
+      e.preventDefault()
+    }
+  }
+
   const onSubmit = (data) => {
     dispatch(Signup(data, isDeveloper))
   }
@@ -25,6 +32,16 @@ export default function SignUpForm({ isDeveloper }) {
         labelTxt="Name*"
         type="text"
         placeholder="Enter your Name"
+      />
+
+      <FormInput
+        register={register}
+        errors={errors}
+        label="phone"
+        labelTxt="Phone*"
+        type="text"
+        placeholder="Enter your Phone"
+        onKeyPress={preventShowLetter}
       />
 
       <FormInput

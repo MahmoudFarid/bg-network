@@ -3,10 +3,11 @@ import API from '../../api'
 import { toast } from 'react-toastify'
 import Router from 'next/router'
 
-export const Login = (account) => async (dispatch) => {
+export const Login = (account, setup) => async (dispatch) => {
   const acc = await API.post('auth/token/login/', account)
     .then((res) => {
-      Router.push('/dashboard')
+      setup ? Router.push('/setup') : Router.push('/dashboard')
+
       localStorage.setItem('accessToken', res.data.auth_token)
       localStorage.setItem('isBroker', res.data.is_broker)
       dispatch({
@@ -29,10 +30,13 @@ export const Signup = (account, isDeveloper) => async (dispatch) => {
         payload: account,
       })
       dispatch(
-        Login({
-          email: account.email,
-          password: account.password,
-        })
+        Login(
+          {
+            email: account.email,
+            password: account.password,
+          },
+          true
+        )
       )
     })
     .catch((ex) => {
@@ -59,8 +63,8 @@ export const ResetPassword = (email) => async (dispatch) => {
 export const Logout = () => async (dispatch) => {
   Router.push('/')
   // await API.post('auth/token/destroy/')
-  setTimeout(() => {
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('isBroker')
-  }, 1000)
+  // setTimeout(() => {
+  localStorage.removeItem('accessToken')
+  localStorage.removeItem('isBroker')
+  // }, 1000)
 }

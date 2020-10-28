@@ -15,7 +15,7 @@ import GoogleMap from '../features/googleMap'
 import DropdownMenu from './../features/dropdownMenu'
 import { AddProject, EditProject, DeleteProject } from './../../redux/actions/projectsActions'
 
-export default function ProjectData({ pid }) {
+export default function ProjectData({ pid, isSetup }) {
   const { register, errors, handleSubmit } = useForm({
     mode: 'onBlur',
   })
@@ -121,7 +121,7 @@ export default function ProjectData({ pid }) {
     pid && plansIDs.length > 0
       ? dispatch(EditProject(pid, formData, config))
       : plansIDs.length > 0 && uploadProjectImgs.length > 0 && typeof uploadCoverImg == 'object'
-      ? dispatch(AddProject(formData, config))
+      ? dispatch(AddProject(formData, config, isSetup))
       : null
   }
 
@@ -160,12 +160,14 @@ export default function ProjectData({ pid }) {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container my-12">
+        <div className={`${!isSetup && 'container my-12'}`}>
           <Overlay opacity={isDeleteOverlay} />
           {isDeleteOverlay && <DeleteObj name={project.name} onDeletingItem={onDeletingItem} />}
 
           <div className="flex justify-between">
-            <h2 className="text-black font-bold text-md mb-3">{pid ? 'Edit' : 'Add'} Project</h2>
+            {!isSetup && (
+              <h2 className="text-black font-bold text-md mb-3">{pid ? 'Edit' : 'Add'} Project</h2>
+            )}
             {pid && (
               <button
                 className="py-2 px-10 text-danger text-sm border border-danger font-semibold rounded-lg mb-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"
@@ -331,30 +333,50 @@ export default function ProjectData({ pid }) {
                   <GoogleMap height="12.6rem" />
                 </div>
               </div>
-
-              <div className="border-t-2 border-gray-200 pt-3 mt-10 w-full">
-                <button
-                  className="float-right py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
-                  type="submit"
-                  onClick={() => setSubmit(true)}>
-                  Save
-                </button>
-                {pid ? (
+              {isSetup ? (
+                <div className="flex justify-between border-t-2 border-gray-200 pt-3 mt-10 w-full">
+                  <div>
+                    <button
+                      type="button"
+                      className="py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                      onClick={() => Router.push('/dashboard')}>
+                      Skip
+                    </button>
+                    <span className="text-danger text-xs italic">
+                      If you skip, you will skip all the next steps
+                    </span>
+                  </div>
                   <button
-                    className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
-                    type="button"
-                    onClick={() => Router.push('/projects/[pid]', `/projects/${pid}`)}>
-                    Cancel
+                    className="py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
+                    type="submit">
+                    Continue
                   </button>
-                ) : (
+                </div>
+              ) : (
+                <div className="border-t-2 border-gray-200 pt-3 mt-10 w-full">
                   <button
-                    className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
-                    type="button"
-                    onClick={() => Router.push('/projects')}>
-                    Cancel
+                    className="float-right py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
+                    type="submit"
+                    onClick={() => setSubmit(true)}>
+                    Save
                   </button>
-                )}
-              </div>
+                  {pid ? (
+                    <button
+                      className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                      type="button"
+                      onClick={() => Router.push('/projects/[pid]', `/projects/${pid}`)}>
+                      Cancel
+                    </button>
+                  ) : (
+                    <button
+                      className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                      type="button"
+                      onClick={() => Router.push('/projects')}>
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              )}
             </form>
           </div>
         </div>

@@ -10,7 +10,7 @@ import Overlay from './../features/overlay'
 import DeleteObj from './../popup/deleteObj'
 import { AddPlan, PatchPlan, DeletePlan } from '../../redux/actions/plansActions'
 
-export default function PlanData({ pid }) {
+export default function PlanData({ pid, isSetup }) {
   const [isDeleteOverlay, setIsDeleteOverlay] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [plan, setPlan] = useState({})
@@ -50,7 +50,7 @@ export default function PlanData({ pid }) {
       description: data.description,
       installments: installments,
     }
-    pid ? dispatch(PatchPlan(pid, result)) : dispatch(AddPlan(result))
+    pid ? dispatch(PatchPlan(pid, result)) : dispatch(AddPlan(result, isSetup))
   }
 
   useEffect(() => {
@@ -86,7 +86,6 @@ export default function PlanData({ pid }) {
         <Loading />
       ) : (
         <div
-          className="container my-12"
           onClick={(e) => {
             e.stopPropagation()
             setIsDeleteOverlay(false)
@@ -95,7 +94,9 @@ export default function PlanData({ pid }) {
           {isDeleteOverlay && <DeleteObj name={plan.name} onDeletingItem={onDeletingItem} />}
 
           <div className="flex justify-between">
-            <h2 className="text-black font-bold text-md mb-3">{pid ? 'Edit' : 'Add'} Plan</h2>
+            {!isSetup && (
+              <h2 className="text-black font-bold text-md mb-3">{pid ? 'Edit' : 'Add'} Plan</h2>
+            )}
             {pid && (
               <button
                 className="py-2 px-10 text-danger text-sm border border-danger font-semibold rounded-lg mb-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"
@@ -210,18 +211,39 @@ export default function PlanData({ pid }) {
                 <i className="fas fa-plus-circle fa-lg mr-2"></i>
                 Add new Installment
               </button>
-              <div className="border-t-2 border-gray-200 pt-3 mt-10 w-full">
-                <button
-                  className="float-right py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
-                  type="submit">
-                  Save
-                </button>
-                <button
-                  className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
-                  onClick={() => Router.push('/plans')}>
-                  Cancel
-                </button>
-              </div>
+              {isSetup ? (
+                <div className="flex justify-between border-t-2 border-gray-200 pt-3 mt-10 w-full">
+                  <div>
+                    <button
+                      type="button"
+                      className="py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                      onClick={() => Router.push('/dashboard')}>
+                      Skip
+                    </button>
+                    <span className="text-danger text-xs italic">
+                      If you skip, you will skip all the next steps
+                    </span>
+                  </div>
+                  <button
+                    className="py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
+                    type="submit">
+                    Continue
+                  </button>
+                </div>
+              ) : (
+                <div className="border-t-2 border-gray-200 pt-3 mt-10 w-full">
+                  <button
+                    className="float-right py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
+                    type="submit">
+                    Save
+                  </button>
+                  <button
+                    className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                    onClick={() => Router.push('/plans')}>
+                    Cancel
+                  </button>
+                </div>
+              )}
             </form>
           </div>
         </div>

@@ -8,10 +8,9 @@ import { GetRequests } from './../../redux/actions/requestsActions'
 import NotificationCard from './../cards/notificationCard'
 import HeaderSideBar from './headerSideBar'
 
-function Header({ requests }) {
-  const router = useRouter()
+function Header({ requests, router, isSetup }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [active, setActive] = useState(router.pathname)
+  const [active, setActive] = useState(router)
   const [isNotificationOpen, setIsNotificationnOpen] = useState(false)
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
   const [account, setAccount] = useState({})
@@ -44,7 +43,9 @@ function Header({ requests }) {
 
   return (
     <div>
-      <HeaderSideBar isBroker={account.is_broker} active={active} setActive={setActive} />
+      {!isSetup && (
+        <HeaderSideBar isBroker={account.is_broker} active={active} setActive={setActive} />
+      )}
 
       <div className="bg-white p-3 z-50 fixed top-0 w-full border-b border-gray-300 shadow-sm">
         {isNotificationOpen && (
@@ -131,20 +132,22 @@ function Header({ requests }) {
                 isOpen ? 'block' : 'hidden'
               }`}>
               <div onClick={() => setIsOpen(false)} className="block lg:flex">
-                <div
-                  className={`block relative mt-4 mr-8 py-1 transition duration-500 ease-in-out cursor-pointer hover:text-primaryText lg:inline-block lg:mt-0 ${
-                    isNotificationOpen ? 'text-primaryText' : 'text-gray-400'
-                  }`}
-                  onClick={() => {
-                    setIsNotificationnOpen(!isNotificationOpen), setIsSettingsOpen(false)
-                  }}>
-                  <span className="hidden lg:inline">
-                    <i className="fas fa-bell fa-lg"></i>
-                    {requests?.length !== 0 && (
-                      <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
-                    )}
-                  </span>
-                </div>
+                {!isSetup && (
+                  <div
+                    className={`block relative mt-4 mr-8 py-1 transition duration-500 ease-in-out cursor-pointer hover:text-primaryText lg:inline-block lg:mt-0 ${
+                      isNotificationOpen ? 'text-primaryText' : 'text-gray-400'
+                    }`}
+                    onClick={() => {
+                      setIsNotificationnOpen(!isNotificationOpen), setIsSettingsOpen(false)
+                    }}>
+                    <span className="hidden lg:inline">
+                      <i className="fas fa-bell fa-lg"></i>
+                      {requests?.length !== 0 && (
+                        <span className="absolute top-0 left-0 h-2 w-2 rounded-full bg-danger"></span>
+                      )}
+                    </span>
+                  </div>
+                )}
 
                 <div className="lg:hidden">
                   <Link href="/dashboard">

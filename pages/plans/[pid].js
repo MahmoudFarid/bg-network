@@ -6,5 +6,9 @@ export default function Edit() {
     query: { pid },
   } = useRouter()
 
-  return <PlanData pid={pid} />
+  return (
+    <div className="container my-12">
+      <PlanData pid={pid} />
+    </div>
+  )
 }

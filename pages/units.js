@@ -32,7 +32,7 @@ export default function Units() {
       setProjects([])
       inputVal.red = id
       async function fetchProjects() {
-        await API.get(`reds/${id}/projects/`).then((res) => {
+        await API.get(`reds/${id}/projects/?limit=10000000`).then((res) => {
           setProjects(res.data.results)
         })
         window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -79,7 +79,7 @@ export default function Units() {
 
   useEffect(() => {
     async function fetchCompanies() {
-      await API.get(`reds/friends/`).then((res) => {
+      await API.get(`reds/friends/?limit=10000000`).then((res) => {
         setCompanies(res.data.results)
         setIsFilterLoading(false)
       })

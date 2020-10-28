@@ -13,7 +13,7 @@ import DeleteObj from './../popup/deleteObj'
 import DropdownMenu from './../features/dropdownMenu'
 import { AddUnit, EditUnit, DeleteUnit } from './../../redux/actions/unitsActions'
 
-export default function UnitData({ pid, uid }) {
+export default function UnitData({ pid, uid, isSetup }) {
   const { register, errors, handleSubmit } = useForm({
     mode: 'onBlur',
   })
@@ -119,7 +119,7 @@ export default function UnitData({ pid, uid }) {
     uid
       ? dispatch(EditUnit(pid, uid, formData, config))
       : uploadUnitImgs.length > 0 && Object.keys(type).length > 0
-      ? dispatch(AddUnit(pid, formData, config))
+      ? dispatch(AddUnit(pid, formData, config, isSetup))
       : null
   }
 
@@ -151,12 +151,14 @@ export default function UnitData({ pid, uid }) {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="container my-12">
+        <div className={`${!isSetup && 'container my-12'}`}>
           <Overlay opacity={isDeleteOverlay} />
           {isDeleteOverlay && <DeleteObj name={unit.name} onDeletingItem={onDeletingItem} />}
 
           <div className="flex justify-between">
-            <h2 className="text-black font-bold text-md mb-3">{uid ? 'Edit' : 'Add'} Unit</h2>
+            {!isSetup && (
+              <h2 className="text-black font-bold text-md mb-3">{uid ? 'Edit' : 'Add'} Unit</h2>
+            )}
             {uid && (
               <button
                 className="py-2 px-10 text-danger text-sm border border-danger font-semibold rounded-lg mb-5 transition duration-500 ease-in-out hover:bg-danger hover:text-white focus:outline-none"
@@ -201,21 +203,23 @@ export default function UnitData({ pid, uid }) {
                     labelTxt="Code*"
                     type="text"
                   />
-                  <div className="mt-5">
-                    <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
-                      Status
-                    </label>
-                    <DropdownMenu
-                      id="status"
-                      order="first"
-                      name={unit.status}
-                      placeholder="status"
-                      defaultValue={unit.status}
-                      dropdownWidth="w-full"
-                      options={statusOptions}
-                      itemSelectedFunc={itemSelectedFunc}
-                    />
-                  </div>
+                  {uid && (
+                    <div className="mt-5">
+                      <label className="control-label block text-primaryLight text-sm font-semibold mb-1 transition ease-in duration-300">
+                        Status
+                      </label>
+                      <DropdownMenu
+                        id="status"
+                        order="first"
+                        name={unit.status}
+                        placeholder="status"
+                        defaultValue={unit.status}
+                        dropdownWidth="w-full"
+                        options={statusOptions}
+                        itemSelectedFunc={itemSelectedFunc}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -371,20 +375,38 @@ export default function UnitData({ pid, uid }) {
                 </p>
               </div>
 
-              <div className="border-t-2 border-gray-200 pt-3 mt-10 w-full">
-                <button
-                  className="float-right py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
-                  type="submit"
-                  onClick={() => setSubmit(true)}>
-                  Save
-                </button>
-                <button
-                  className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
-                  type="button"
-                  onClick={() => Router.push('/projects/[pid]/units', `/projects/${pid}/units`)}>
-                  Cancel
-                </button>
-              </div>
+              {isSetup ? (
+                <div className="flex justify-between border-t-2 border-gray-200 pt-3 mt-10 w-full">
+                  <div>
+                    <button
+                      type="button"
+                      className="py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                      onClick={() => Router.push('/dashboard')}>
+                      Skip
+                    </button>
+                  </div>
+                  <button
+                    className="py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
+                    type="submit">
+                    Finish
+                  </button>
+                </div>
+              ) : (
+                <div className="border-t-2 border-gray-200 pt-3 mt-10 w-full">
+                  <button
+                    className="float-right py-3 px-12 bg-primary text-gray-400 text-xs font-semibold rounded-lg hover:text-white focus:outline-none"
+                    type="submit"
+                    onClick={() => setSubmit(true)}>
+                    Save
+                  </button>
+                  <button
+                    className="float-right py-3 px-12 mr-5 text-primary border border-primary text-xs font-semibold rounded-lg hover:bg-gray-100 focus:outline-none"
+                    type="button"
+                    onClick={() => Router.push('/projects/[pid]/units', `/projects/${pid}/units`)}>
+                    Cancel
+                  </button>
+                </div>
+              )}
             </form>
           </div>
         </div>
